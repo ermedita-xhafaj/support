@@ -238,14 +238,40 @@ hesk_handle_messages();
 			</div><!-- end contact-info-support-request -->
 
 			<br/><br/>
+			
+			
+			<?php hesk_load_database_functions();
+			hesk_dbConnect();
+			?>
+			
+			<div class="form-inline" id="show-hide-kontrata">
+				<label class="col-sm-2 control-label" for="select-kontrata">Kontrata:</label>
+				<?php					//var_dump( $_SESSION['id'] ); ?>
+				<select class="form-control" id="select-kontrata" name="contract_id" style="width: 336px;">
+					<option></option>
+			<?php
+				$res_client = hesk_dbQuery('SELECT contract_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$_SESSION["id"]["id"]);
+				$i=1;
+				while ($row_client = mysqli_fetch_array($res_client)) 
+				{
+				$result_contract = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row_client['contract_id']);
+				$cont_result = mysqli_fetch_array($result_contract);
+					echo 
+						'<option value="' .$cont_result['id'] .'">' .$cont_result['contract_name'] .'</option>';
+						}
+				
+			?>		
+			</select>
+				<?php  
+						/*var_dump($res_cont);*/
+				?>
+				</div>
+			
+			
 			<!-- Department and priority -->
 			<?php
 			$is_table = 0;
-
-			hesk_load_database_functions();
-
 			// Get categories
-			hesk_dbConnect();
 			$res = hesk_dbQuery("SELECT `id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' ORDER BY `cat_order` ASC");
 
 			/*if (hesk_dbNumRows($res) == 1)
