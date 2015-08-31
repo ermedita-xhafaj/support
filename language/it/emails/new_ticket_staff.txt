@@ -1,0 +1,33 @@
+Salve,
+
+E' stato inserito un nuovo ticket. Dettagli Ticket:
+
+Oggetto Ticket: %%SUBJECT%%
+Tracking ID: %%TRACK_ID%%
+
+Potete gestire il ticket al seguente URL:
+%%TRACK_URL%%
+
+
+Distinti Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+***** ENGLISH *****
+
+Hello,
+
+A new support ticket has been submitted. Ticket details:
+
+Ticket subject: %%SUBJECT%%
+Tracking ID: %%TRACK_ID%%
+
+You can manage this ticket here:
+%%TRACK_URL%%
+
+
+Regards,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

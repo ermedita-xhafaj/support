@@ -1,0 +1,31 @@
+Salve,
+
+Avete ricevuto un messaggio privato da %%NAME%% con il seguente oggetto:
+
+%%SUBJECT%%
+
+Potete visualizzare il nuovo messaggio dalla URL sottostante:
+%%TRACK_URL%%
+
+
+Distinti Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+***** ENGLISH *****
+
+Hello,
+
+You have received a new private message from %%NAME%% with the following subject:
+
+%%SUBJECT%%
+
+You can view your new message by clicking on the following link:
+%%TRACK_URL%%
+
+
+Sincerely,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

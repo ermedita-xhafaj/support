@@ -1,0 +1,51 @@
+Gentile %%NAME%%,
+
+Abbiamo inserito la richiesta con oggetto "%%SUBJECT%%" nel nostro sistema di supporto.
+
+Cerchiamo di rispondere a tutte le richieste che riceviamo il prima possibile, solitamente in 24/48 ore. 
+Se la lavorazione richiederà più tempo sarà nostra cura informarvi.
+
+Il vostro Ticket tracking ID: %%TRACK_ID%%
+
+
+
+Potete visualizzare lo stato del ticket da qui:
+%%TRACK_URL%%
+
+Apprezziamo la tua pazienza mentre il nostro team valuta e risponde alle richieste nell’ordine in cui sono state ricevute.
+Riceverai una email di notifica quando il nostro staff risponderà al tuo ticket.
+
+
+Grazie per averci contattato!
+
+
+Distinti Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+
+
+
+***** ENGLISH *****
+
+Dear %%NAME%%,
+
+Your support ticket "%%SUBJECT%%" has been submitted.
+
+We reply to all tickets as soon as possible, within 24 to 48 hours. If we expect your ticket will take additional time, we will update you by sending you an email.
+
+Ticket tracking ID: %%TRACK_ID%%
+
+You can view the status of your ticket here:
+%%TRACK_URL%%
+
+You will receive an email notification when our staff replies to your ticket.
+
+
+
+
+Sincerely,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

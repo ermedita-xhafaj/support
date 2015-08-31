@@ -1,0 +1,37 @@
+Salve,
+
+Una nuova nota è stata aggiunta al ticket con oggetto "%%SUBJECT%%" che è attualmente assegnato a voi.
+
+Nota da %%NAME%%:
+
+%%MESSAGE%%
+
+
+Potete gestire il ticket dalla URL sottostante:
+%%TRACK_URL%%
+
+
+Distinti Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+***** ENGLISH *****
+
+Hello,
+
+A new note has been added to ticket "%%SUBJECT%%" that is currently assigned to you.
+
+Note by %%NAME%%:
+
+%%MESSAGE%%
+
+
+You can manage this ticket here:
+%%TRACK_URL%%
+
+
+Regards,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

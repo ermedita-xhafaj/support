@@ -1,0 +1,27 @@
+Salve,
+
+Un cliente ha appena risposto al ticket con oggetto "%%SUBJECT%%".
+
+Potete gestire il ticket dalla URL sottostante:
+%%TRACK_URL%%
+
+
+Distinti Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+***** ENGLISH *****
+
+Hello,
+
+A customer has just replied to ticket "%%SUBJECT%%".
+
+You can manage this ticket here:
+%%TRACK_URL%%
+
+
+Regards,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

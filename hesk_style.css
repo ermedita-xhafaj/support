@@ -1,0 +1,985 @@
+ html, body {
+    height: 100%;
+	background-color: #F1F1F2;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding-bottom: 60px;
+}
+
+td.notes {
+	background-color: #fffbf2;
+	color : #4a5571;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border: #ffe6b8 1px solid;
+}
+
+th.tDetailsHead {
+	background-color: #F7F7F7;
+	color : #4a5571;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: center;
+}
+
+td.tDetailsBody {
+	background-color: #FFFFFF;
+	color : #4a5571;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border-bottom: #F7F7F7 1px solid;
+	text-align: center;
+}
+
+.noborder {
+border: none;
+}
+
+.important {
+	color: Red;
+}
+
+.medium {
+	color: #FF9900;
+}
+
+.open {color : #FF0000;}
+.waitingreply {color : #FF9933;}
+.replied {color : #0000FF;}
+.resolved {color : #008000;}
+.allbutresolved {color : #000000;}
+
+.success {color : #008000;}
+.error {color : #FF0000;}
+.notice {color : #FF9900}
+
+#ok {
+	border: 1px solid #679800;
+}
+
+#error {
+	border: 1px solid #ba3225;
+}
+
+
+a.article {
+	color : Black;
+	text-decoration: none;
+	font-size: 11px;
+}
+
+.kb_published {
+	color: #009900;
+}
+
+.kb_private {
+	color: #4a5571;
+}
+
+.kb_draft {
+	color: #cc9933;
+}
+
+.searchbutton {
+	cursor:pointer;
+	width:70px;
+	height:27px;
+	text-indent:-999px;
+	text-transform: capitalize;
+	color: transparent;
+	background: url(img/ico-search.png) no-repeat #4d90fe center;
+	border: 1px solid #3079ED;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;	
+}
+
+.searchbutton:hover {
+	background: url(img/ico-search.png) no-repeat center #357AE8;
+	border: 1px solid #2F5BB7;
+}
+
+.searchfield {
+	width:400px;
+	height:21px;
+	font-size:14px;
+	text-indent:2px; 
+	vertical-align: bottom;
+}
+
+.sbsmall {
+	width:50px; 
+	height:22px; 
+	margin-top:2px;
+}
+
+.sfsmall {
+	width:200px; 
+	height:16px; 
+	font-size:12px; 
+	margin-top:2px;
+}
+
+/* New styles in HESK version 2.6 */
+
+div.info {
+	border: 1px solid #9acfea; 
+	background: #d9edf7; 
+	color: #363636;
+	padding: 10px;
+	vertical-align: middle;
+}
+
+div.none {
+	color: #363636;
+	padding: 10px;
+	vertical-align: middle;
+}
+
+/*shtuar 6/4/2015 tao*/
+.copyright {
+color: black;
+font-size: 12px;
+text-align: center;
+}
+
+
+
+html { position: absolute;
+ top: 0; 
+ bottom: 0;
+ left: 0; 
+ right: 0; 
+ min-height:100%;
+} 
+
+
+
+table.enclosing {
+height: 100%;
+}
+
+
+
+a {color : black; text-decoration: none;}
+a:hover {color : blue; text-decoration: none;}
+a:visited, a:active, a:link {text-decoration: none;}
+
+
+
+form  .form-control .btn {background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
+				background:-o-linear-gradient(#F5F5F6, #E6E7E8);
+				background: -moz-linear-gradient(#F5F5F6, #E6E7E8);
+				background: linear-gradient(#F5F5F6, #E6E7E8);}
+				
+
+				
+/* start style for support/index.php */
+#showTopBar-indexPhp{background-color: white; border-color: transparent; border: 0px; margin-bottom: 0px;}
+.menu-links-header {/*margin-top: 20px;*/}
+.menu-wrapper   {border-bottom: 10px solid #37B992;}
+
+.showPageTitle {font-weight: bold; font-size: 29pt;}
+			
+.siteUrl-title-indexPhp {margin-top: 10px;}
+.siteUrl-title-indexPhp span {font-weight: normal; font-size: 12pt;}
+.glyphicon-search {color: #37B992;}
+
+#kbformsearch {display: inline; margin: 0;}
+#buttonhelp {border-radius: 5px 0px 0px 5px; 
+			border-color: #BEBEBE; 
+			background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
+			background:-o-linear-gradient(#F5F5F6, #E6E7E8);
+			background: -moz-linear-gradient(#F5F5F6, #E6E7E8);
+			background: linear-gradient(#F5F5F6, #E6E7E8);}
+#searchhelp {border-radius: 0px 5px 5px 0px; border-left: 0px;}
+
+.submit-ticket-col {padding-left: 0px; margin-left: 14.4%; width: 35%;}
+.view-ticket-col{padding-right: 0px; width: 35%}
+.submit-ticket, .view-ticket {border: 1px solid #BEBEBE; border-radius: 5px; padding: 10px 0px;}
+.submit-ticket span, .view-ticket span {font-weight: bold; font-size: 15pt; padding-left: 5px;}
+.submit-ticket #op-ticket, .view-ticket #vw-ticket {font-weight: normal; font-size: 12pt; padding-left: 5px;}
+.submit-ticket a:hover, .view-ticket a:hover {color : black; text-decoration : none;}
+.submit-ticket, .view-ticket{background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
+				background:-o-linear-gradient(#F5F5F6, #E6E7E8);
+				background: -moz-linear-gradient(#F5F5F6, #E6E7E8);
+				background: linear-gradient(#F5F5F6, #E6E7E8);
+				}
+.submit-ticket:hover, .view-ticket:hover {background: -webkit-linear-gradient(#E6E7E8, #F5F5F6);
+				background:-o-linear-gradient(#E6E7E8, #F5F5F6);
+				background: -moz-linear-gradient(#E6E7E8, #F5F5F6);
+				background: linear-gradient(#E6E7E8, #F5F5F6);
+				}
+				
+.knowledgebase-text span {font-weight: bold; font-size: 15pt; vertical-align: bottom;}
+.kb-top-latest-view-art {margin-left: -25px; margin-right: -7px; margin-bottom: 28px;}
+td > .top-kb-views1  a, td > .latest-kb-date-added1 a{font-weight: normal; font-size: 14pt;}
+td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: #6D6E70; font-size: 12pt;}
+.tab-content {margin-left: 25px; margin-right: 25px;}
+
+.form-submit-support-request {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 68.8%; margin-left: 15.1%; margin-bottom: 20px;}
+.form-submit-support-request p {text-align:center;}
+#view-submitTicket  span{font-weight: bold; font-size: 15pt; vertical-align: bottom; margin-left: 5px;}
+#view-submitTicket{padding-left: 50px;}
+.form-submit-support-request form {margin-left: -10px;}
+.contact-support-request{margin-left: -50px;}
+.submit-view-existing-ticket {margin-bottom: 50px;}
+.submit-ticket-btn {margin-bottom: 50px; width: 178px; margin-left: -24px;}
+.submit-ticket-btn {color: white; 
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.submit-ticket-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+						
+						
+						
+
+/*start style for support/ticket.php*/
+.existing-ticket {  height: 400px;
+  width: 400px;
+  margin: auto;}
+.view-existing-ticket-ticketPhp {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white;}
+.forgotTicketId {border-top: 1px solid #BEBEBE;}
+.forgot-tid a {color: #00A5D8 ; text-decoration: underline;}
+#button-tid, #button-forgot-tid {color: white;
+				background: -webkit-linear-gradient(#00A79D, #008981);
+				background:-o-linear-gradient(#00A79D, #008981);
+				background: -moz-linear-gradient(#00A79D, #008981);
+				background: linear-gradient(#00A79D, #008981);}
+#button-tid:hover, #button-forgot-tid:hover  {color: white;
+				background: -webkit-linear-gradient(#008981, #00A79D);
+				background:-o-linear-gradient(#008981, #00A79D);
+				background: -moz-linear-gradient(#008981, #00A79D);
+				background: linear-gradient(#008981, #00A79D);}
+#button-tid {width: 178px;}
+#tickeIdRadio {padding-left: 5px;}
+.tickeIdRadio {text-align: -webkit-auto; display: table;}
+.start-helpDesk-ticket {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #FFFFFF; width: 69%; margin-left: 15.1%;  margin-bottom: 50px;}
+hr {border: 0; border-top: 1px dashed #BEBEBE; margin: 0px;}
+.ticket-name {color: #37B992; margin-left: 15.3%;}
+.add-reply{color: #37B992;}
+#addreply-title {font-size: 14pt; color: #37B992;}
+.important {margin-left: 5px;}
+.addreply-message, .addreply-attachments {padding-left: 0px;}
+.attachments-support-request .form-group {margin-left: 0px;}
+#print-ticketPhp {float: right; margin-right: 60px;}
+#submit-addReply {width: 178px; color: white; margin-right: 4.4%;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+				}
+#submit-addReply:hover {width: 178px; color: white; margin-right: 4.4%;
+					background: -webkit-linear-gradient(#008981, #00A79D);
+					background:-o-linear-gradient(#008981, #00A79D);
+					background: -moz-linear-gradient(#008981, #00A79D);
+					background: linear-gradient(#008981, #00A79D);
+				}
+
+
+
+
+/*start style for support/knowledgebase.php*/
+.article-text-kb a {font-weight: normal; font-size: 14pt;}
+#showKnowledgebase span {font-weight: bold; font-size: 15pt; vertical-align: bottom;}
+#showKnowledgebase {padding-left: 8px;}
+.kb-popart-latest {width: 73.666667%; margin-left: 12.67%}
+.siteUrl-title-knowledgebasePhp {padding-left: 0px;}
+.solution-knowledgebasePhp, .article-details-knowledgebasePhp, .serach_result_kb_table {border: 1px solid #BEBEBE; border-radius: 5px; padding: 10px; background-color: white; margin-left: 15.1%; width: 68.8%;}
+.subject-art, .art-deails {font-size: 12pt; font-weight: bold; margin-left: 14.9%;}
+.rate {margin-left: 65.3%}
+#rate-article {margin-right: 15px;}
+.rate-yes {margin-right: 5px;}
+.rate-yes, .rate-no {width: 60px;}
+.rate-yes, .rate-no, .goback-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+			}
+.rate-yes:hover, .rate-no:hover, .goback-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);
+				}
+.goback-btn {width:128px; margin-bottom: 50px}				
+#content-kb {word-wrap: break-word;}
+.serach_result_kb {font-weight: bold; font-size: 15pt; margin-bottom: 5px;}
+.serach_result_kb_table {margin-bottom: 50px;}
+
+
+
+/* start style for support/admin/index.php */					
+.admin-login {border: 1px solid #BEBEBE; border-radius: 5px; padding: 10px; width: 78%; background-color: white;}
+.admin-login-top-latest-kb {margin-left: -15px;}
+.help-staf {margin-left: -15px;}
+#ad-log {font-weight: bold; font-size: 15pt;}
+#submit-login {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+				}
+#submit-login:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);
+					}
+#forgotpassw a {color: #00A5D8; text-decoration: underline;}
+#top-kb-button, #latest-kb-button {width: 172px; padding-top: 40px;}
+.top-latest-kb-button .btn-default {color: #37B992; border: 1px solid #BEBEBE; background-color: white; background-image: url("img/knowledgebase.png"); background-repeat: no-repeat; background-position: 67px 5px; font-weight: normal;}
+.top-latest-kb-button .btn:hover {color: #37B992; border: 1px solid #37B992; background-color: white; background-image: url("img/knowledgebase.png"); background-repeat: no-repeat; background-position: 67px 5px;}
+.top-latest-kb-button .btn:active {color: white; border: 1px solid #37B992; background-color: #37B992; background-image: url("img/kb_white.jpg"); background-repeat: no-repeat; background-position: 67px 5px; background-color: #37B992;}
+
+
+
+/* start style for support/inc/knowledgebase_functions.inc.php */	
+.top-lt-kb {border-bottom: 1px solid #37B992;}
+#home, #profile {border: 1px solid #37B992; border-top:0px; background-color: white;}
+#home > table > tbody > tr > td, #profile > table > tbody > tr > td {border-bottom: 0px}
+#topkb {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#latestkb{background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#kb-details{background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+.top-lt-kb li a { margin:0px; color:#fff; }
+.top-lt-kb li.active { background-color:#fff!important; bottom:-1px; }
+.top-lt-kb li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.top-lt-kb li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; }
+.top-lt-kb li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.noarticles {font-weight: bold; font-size: 12pt; padding-left: 20px;}	
+
+
+
+/* start style for support/inc/footer.inc.php */	
+footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px; bottom: 0px;}
+
+
+
+/* start style for support/inc/show_admin_nav.inc.php */
+.adminMenu {background-color: #37B992;}
+#admin-nav-menu { margin-top: -5px; margin-bottom: 5px;}	
+#admin-nav-menu > li {display: table-cell; width: 0%;}
+#admin-nav-menu > li a {color: white; margin-right: 5px;}
+#admin-nav-menu > li > a:hover, #admin-nav-menu> li > a:focus, #admin-nav-menu > li > a:active, #admin-nav-menu > li > a:visited {text-decoration: none; background-color: #009175; padding-bottom: 5px; border-radius: 5px; height: 40px;}
+.ico-button, .ico-button:hover, .ico-button:active, .ico-button:focus {width: 108.8px; height: 90px; font-size: 10pt; font-weight: normal; border-radius: 5px; margin-bottom: 4px;}
+#main-page, #menu-users, #menu-cat, #menu-can , #menu-kb, #menu-reports, #menu-tools, #menu-settings, #menu-profile, #menu-msg , #menu-logout {padding-top: 40px;}
+#menu-cat {margin-left: -10px;}
+
+.ico-button {color: #37B992; border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; background-repeat: no-repeat; background-position: 36px 10px; }
+.ico-button:hover {color: #37B992; border: 1px solid #37B992; border-radius: 5px; background-color: white; background-repeat: no-repeat; background-position: 36px 10px;}
+.ico-button:active {color: white; border: 1px solid #37B992; border-radius: 5px; background-color: #37B992; background-repeat: no-repeat; background-position: 36px 10px;}
+
+#ico-button-home, #ico-button-home:hover {background-image: url("img/ico_home.png");}
+#ico-button-home:active, #ico-button-home:focus {background-image: url("img/home-2.png");}
+
+#ico-button-users, #ico-button-users:hover  {background-image: url("img/ico_users.png");}
+#ico-button-users:active, #ico-button-users:focus {background-image: url("img/users-1.png");}
+
+#ico-button-categories, #ico-button-categories:hover  {background-image: url("img/ico_categories.png");}
+#ico-button-categories:active, #ico-button-categories:focus {background-image: url("img/categories-1.png");}
+
+#ico-button-canned, #ico-button-canned:hover  {background-image: url("img/ico_canned.png");}
+#ico-button-canned:active, #ico-button-canned:focus {background-image: url("img/canned-1.png");}
+
+#ico-button-kb, #ico-button-kb:hover{background-image: url("img/ico_kb.png");}
+#ico-button-kb:active, #ico-button-kb:focus {background-image: url("img/knouledgebase-1.png");}
+
+#ico-button-reports, #ico-button-reports:hover {background-image: url("img/ico_reports.png");}
+#ico-button-reports:active, #ico-button-reports:focus {background-image: url("img/reports-1.png");}
+
+#ico-button-tools, #ico-button-tools:hover {background-image: url("img/ico_tools.png");}
+#ico-button-tools:active, #ico-button-tools:focus {background-image: url("img/tools-1.png");}
+
+#ico-button-settings, #ico-button-settings:hover{background-image: url("img/ico_settings.png");}
+#ico-button-settings:active, #ico-button-settings:focus {background-image: url("img/settings-1.png");}
+
+#ico-button-profile, #ico-button-profile:hover  {background-image: url("img/ico_profile.png");}
+#ico-button-profile:active, #ico-button-profile:focus  {background-image: url("img/profile-1.png");}
+
+#ico-button-contracts, #ico-button-contracts:hover  {background-image: url("img/ico_profile.png");}
+#ico-button-contracts:active, #ico-button-contracts:focus  {background-image: url("img/profile-1.png");}
+
+#ico-button-mail, #ico-button-mail:hover  {background-image: url("img/ico_mail.png");}
+#ico-button-mail:active, #ico-button-mail:focus  {background-image: url("img/email-2.png");}
+
+#ico-button-logout, #ico-button-logout:hover  {background-image: url("img/ico_logout.png");}
+#ico-button-logout:active, #ico-button-logout:focus  {background-image: url("img/logout-2.png");}
+
+
+
+/* start style for support/inc/show_search_form.inc.php */
+#show-ticket-title, #find-ticket-title {font-size: 14pt; font-weight: bold; vertical-align: bottom; margin-left: 15px;}
+.show-tickets, .find-tickets {padding-left: 28px;}
+.show-ticket-form, .start-search-tickets-form {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 69%; margin-left: 15.1%}
+.show-ticket-form {margin-bottom: 20px;}
+
+#show-ticket, #find-ticket {margin-top: 10px; border-bottom: 1px solid #BEBEBE;}
+
+#form-status-title, #form-priority-title, #form-show-title, #form-sortby-title, #form-groupby-title, #form-category-title, #form-display-title, #form-order-title, #form-option-title, 
+#searchfor-title, #search-category-title , #form-owner-title, #form-date-title, #form-searchwithin-title, #find-form-display-title {margin-left: 20px;}
+
+#form-status-title, #form-status {margin-right: 80px;}
+#form-priority-title, #form-priority {margin-right: 75px;}
+#form-priority1 {margin-right: 44px;}
+#form-priority2{margin-right: 77px;}
+#priority-important {margin-left: 0px;}
+#form-priority3{margin-right: 126px;}
+.show-ticket-btn, .find-ticket-btn, .options-btn {width: 105px;}
+.show-ticket-btn, .find-ticket-btn {margin: 15px 9px 15px 35px}
+.show-ticket-btn, .options-btn, .find-ticket-btn{color: white; 
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+				}
+.show-ticket-btn:hover, .options-btn:hover, .find-ticket-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);
+					}
+.options-btn {margin: 15px 0px 15px 9px}					
+
+.start-search-tickets-form {margin-bottom: 20px;}
+#form-show-title  {margin-right: 85px;} #form-show1 {margin-right: 80px;} #form-show3 {margin-left: 102px; margin-right: 39px;}
+#form-sortby-title  {margin-right: 75px;}	#form-sortby1, #form-sortby2 {margin-right: 50px;}
+#form-groupby-title {margin-right: 60px;}	#form-groupby2 {margin: 0 87px 0 29px;}	#form-groupby4 {margin-left: 95px;}
+#form-search-category{margin-left: 62px; margin-bottom: 15px; vertical-align: sub;}
+#form-display-input{margin-left: 73px; margin-bottom: 15px; vertical-align: sub;}
+#form-order1 {margin: 0 36px 0 86px;}
+#form-option1 {margin: 0 36px 0 69px;}
+
+#searchfor-ticket, #searchin-ticket {margin-left: 24px; margin-bottom: 15px; vertical-align: sub;}					
+#searchin-title {margin-left: 36px;}
+#search-category {margin-left: 32px; margin-bottom: 15px; vertical-align: sub;}
+#form-owner1 {margin-left: 49px; margin-bottom: 15px; vertical-align: sub;}
+#form-date1 {margin-left: 67px;}
+#form-searchwithin1 {margin: 0 36px 0 5px;}		
+#form-searchwithin3 {margin: 0 40px;}
+#find-form-display1{margin-left: 47px; margin-bottom: 15px; vertical-align: sub;}
+
+
+
+
+/* start style for support/admin/find_tickets.php */
+.tickets-found {font-size: 14pt; font-weight: bold; margin-top: 40px; margin-bottom: 40px;}
+
+
+
+/* start style for support/admin/show_tickets.php */
+.showTicket-newTicket {margin-top: 20px;}	/*hapesira midis table*/
+#ticket-title-showTicket {font-size: 14pt; font-weight: bold;}
+#new-ticket-showTicket {padding-left: 71px;}
+	
+
+	
+/* start style for support/admin/admin_main.php */
+.open-new-ticket {margin-bottom: 5px; margin-top: -27px;}
+#openTicket {font-size: 14pt; font-weight: bold; vertical-align: bottom; margin-left: 14px;}
+.new-ticket-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+				}
+.new-ticket-btn:hover  {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);
+					}
+.newTicket {padding-left: 71px;}
+
+
+/* start style for support/admin/manage_categories.php */
+.manage-categories-add-new-category, .manage-categories-rename-category, .manage-categories-set-category-priority {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 97.2%; margin-left: 15px}
+.add-cat-title, .ren-cat-title, .set-cat-pri-title {font-size: 15pt; font-weight: bold; margin-top: 10px;}
+.manage-categories-title {font-size: 15pt; font-weight: bold; padding-top: 10px;}
+.manage-categories-table{background: white; width: 95.5%; margin-bottom: 15px;}
+#category-name, #new-name-category {width: 368px;}
+#old-name-category, #set-category {width: 112px;}
+.create-cat-btn, .rename-cat-btn, .set-cat-pri-btn {margin-bottom: 10px;}
+.manage-categories-set-category-priority {margin-bottom: 20px;}
+.create-cat-btn, .rename-cat-btn, .set-cat-pri-btn{color: white; width: 178px;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.create-cat-btn:hover, .rename-cat-btn:hover, .set-cat-pri-btn:hover {color: white; width: 178px;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.category-row, .new-name-category-row, .manage-category-row {margin-bottom: 5px;}
+.options-category-row {vertical-align: top;}
+.options-category-row  label {margin-bottom: 0px;}			
+#name-category-row {margin-top: 10px; }
+.old-new-name-category, .manage-category-priority {margin: 10px 0px 5px;}
+#hr_for_category {margin: 0px 5px;}
+
+.manage-config-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
+.manage-config {border-bottom: 1px solid #37B992;}
+.manage-config li a { margin:0px; color:#fff; }
+.manage-config  li.active {background-color:#fff!important; bottom:-1px;}
+.manage-config li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.manage-config li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.manage-config li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+#configuration-info, #department-info, #company-info, #project-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#config-info, #dep-info, #comp-info, #proj-info {border: 1px solid #37B992; border-top:0px; background-color: white; margin-bottom: 20px;}
+
+.manage-projects-table {background: white; width: 95.5%; margin-top: 5px; margin-bottom: 15px;}
+.create-projects {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 97.2%; margin-left: 15px; margin-bottom: 20px;}
+#project_row {margin-bottom: 5px;}
+.project-submit-btn {width: 128px; margin-bottom: 10px;}
+.project-submit-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.project-submit-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.manage-project-title {padding-top: 10px;}
+.project-row1 {margin-top: 10px;}
+.manage-project-title, .create-project-title {font-size: 15pt; font-weight: bold;}
+
+
+
+			
+						
+/* start style for support/admin/new_ticket.php */
+.insert-new-ticket {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 68.8%; margin-left: 15.1%; margin-bottom: 20px;}
+.hesk-title-newTicket {margin-top: 10px; margin-bottom: 8px; font-size: 12pt; font-weight: normal;}
+.insert-ticekt {font-size: 15pt; font-weight: bold;}
+.insert-new-ticket form {margin-left: -10px;}
+.contact-newTicket {margin-left: -50px;}
+.new-ticket-attachments {margin-bottom: 5px;}
+#new-ticket-select-owner {margin-left: 5px;}
+.submit-new-ticket-btn {width: 178px; margin-bottom: 10px;}
+.submit-new-ticket-btn {color: white; 
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.submit-new-ticket-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.nti3 {margin: 10px 10px 10px 20px;}
+.new-ticket-contact-row {margin-bottom: 5px;}
+#attach-new-ticket {margin-bottom: 5px;}
+#new-ticket-category {width: 112px;}
+.print-templates {width:50%; background: #E0EEEE;}
+
+
+/* start style for support/admin/manage_canned.php */
+.new-canned-response{border-top: 1px solid #BEBEBE; background-color: white; margin-bottom: 5px;}
+.manage-canned-tab, #reports-tab {margin-left: 14.2%; margin-top: 13px;}
+.manage-canned, .run-exp-reports{border-bottom: 1px solid #37B992; width: 98.5%;}
+#home-canned{border: 1px solid #37B992; border-top:0px; background-color: white; width: 98.5%; margin-bottom: 20px;}
+#canned-responses, #ticket-templates{background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+.manage-canned li a {margin:0px; color:#fff;}
+#canned-responses a, #ticket-templates a, #canned-responses a:hover, #ticket-templates a:hover  {border-radius: 5px 5px 0px 0px;}
+.manage-canned li.active { background-color:#fff!important; bottom:-1px; }
+.manage-canned li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.manage-canned li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; }
+.manage-canned li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.cann-res-table {background: white; width: 95.6%; margin: 10px 0px 5px;}
+.new-canned-title{font-size: 15pt; font-weight: bold; margin-top: 10px; margin-bottom: 5px;}
+.title-canned-res, .msg-canned {padding-left: 0px;}
+.save-response-btn {width: 178px; margin-bottom: 10px;}
+.save-response-btn, .save-ticket-tpl-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.save-response-btn:hover, .save-ticket-tpl-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+#c-responses {padding-top: 10px;}
+.title-canned {margin-bottom: 5px;}
+.create-canned-title {margin-top: 5px; margin-bottom: 5px;}
+.radio + .edit-selected-canned {margin: -10px 0px -5px;}
+#message-canned-response {width: 533px; height: 310px;}
+
+
+/* start style for support/admin/manage_ticket_templates.php */
+.manage-ticket-templates {border-top: 1px solid #BEBEBE; background-color: white; margin-bottom: 5px;}
+.new-ticket-tpl-title {font-size: 15pt; font-weight: bold; margin-top: 10px; margin-bottom: 5px;}
+.ticket-temp-table {background: white; width: 95.6%; margin: 10px 0px 5px;}
+.save-ticket-tpl-btn {width: 178px; margin-bottom: 10px;}
+.title-tpl, .msg-tpl {padding-left: 0px;}
+#t-templates {padding-top: 10px;}
+.create-ticket-tpl-title {margin-top: 5px; margin-bottom: 5px;}
+.title-template {margin-bottom: 5px;}
+.radio + .edit-selected-tpl {margin: -10px 0px -5px;}
+
+/* start style for support/admin/reports.php */
+#reports-tab {margin-left: 14.2%; margin-top: 40px;}
+.run-exp-reports{border-bottom: 1px solid #37B992; width: 98.5%;}
+#r-reports, #exp-reports {border: 1px solid #37B992; border-top:0px; background-color: white; width: 98.5%; margin-left: 0px;}
+#r-reports {margin-bottom: 30px;}
+#exp-reports {margin-bottom: 50px;}
+#run-reports, #export-reports {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+.run-exp-reports li a { margin:0px; color:#fff; }
+.run-exp-reports li.active { background-color:#fff!important; bottom:-1px; }
+.run-exp-reports li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.run-exp-reports li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; }
+.run-exp-reports li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.display-reports-btn {width: 178px;}
+.export-tickets-btn{width: 178px; margin-top: 10px;}
+.display-reports-btn, .export-tickets-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.display-reports-btn:hover, .export-tickets-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+
+
+						
+/* start style for support/admin/banned_emails.php */						
+#tools-tab, #admin-settings-tab {margin-left: 14.2%; margin-top: 40px;}						
+.banned-servicemsg-tools {border-bottom: 1px solid #37B992; width: 98.5%;}				
+#b-email, #b-ips, #sm-tools {border: 1px solid #37B992; border-top:0px; background-color: white; width: 98.5%; margin-left: 0px; margin-bottom: 50px;}						
+#banned-email, #banned-ips, #service-msg-tools{background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#banned-email a, #banned-ips a, #service-msg-tools a {margin-right: 0px; border-radius: 5px 5px 0 0}
+.banned-servicemsg-tools li a {margin:0px; color:#fff;}
+.banned-servicemsg-tools li.active  { background-color:#fff!important; bottom:-1px;}
+.banned-servicemsg-tools li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; margin-right: 0px;}
+.banned-servicemsg-tools li.active a:hover { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; }
+.banned-servicemsg-tools li.active a:focus { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.table-banned-emails, .table-banned-ips {margin-top: 20px;}
+.bananemail-title, .bananip-title {padding-left: 0px;}
+.perm-email-title, .iptemp-title, .perm-ip-title{font-size: 15pt; font-weight: bold; margin-top: 20px;}
+.perm-email-banned , .iptemp-table, .perm-ip-banned {background: white}
+
+					
+/* start style for support/admin/service_messages.php */
+.new-service-messages-ticket {border-top: 1px solid #BEBEBE; margin-bottom: 30px; padding-top: 20px; background-color: white; }
+.new-smsg-title {font-size: 15pt; font-weight: bold; padding-top: 20px; padding-bottom: 5px;}
+#type-smsg {margin-left: -7px;}
+.smsg-save-btn, .smsg-preview-btn {width: 178px;}
+.smsg-preview-btn {padding-left: 7px;}
+.smsg-save-btn, .smsg-preview-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.smsg-save-btn:hover, .smsg-preview-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+#sm-save-preview {margin-left: -14px;}
+
+
+
+/* start style for support/admin/admin_settings.php */
+.settings-intro-title {font-size: 18pt; font-weight: bold; padding-top: 30px; padding-bottom: 30px;}
+.check-status {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 68.8%; margin-left: 15.1%}
+.check-status-title {font-size: 15pt; font-weight: bold; padding-bottom: 5px;}
+#admin-settings-tab {margin-left: 15.1%; margin-top: 40px; width: 69.87%;}						
+.admin-settings-info {border-bottom: 1px solid #37B992; width: 98.5%;}				
+#g-tab1, #hd-tab2, #kb-tab3, #cf-tab4, #e-tab6, #tl-tab7, #m-tab5 {border: 1px solid #37B992; border-top:0px; background-color: white; width: 98.5%; margin-left: 0px; margin-bottom: 20px; padding-top: 20px; padding-bottom: 20px;}						
+#general-tab, #helpdesk-tab, #knowledgebase-tab, #custom-fields-tab, #email-tab, #ticket-list, #misc-tab{background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#general-tab a, #helpdesk-tab a , #knowledgebase-tab a, #custom-fields-tab a, #email-tab a, #ticket-list a, #misc-tab a {margin-right: 0px; border-radius: 5px 5px 0 0}
+.admin-settings-info li a{margin:0px; color:#fff;}
+.admin-settings-info li.active{ background-color:#fff!important; bottom:-1px;}
+.admin-settings-info li.active a{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; margin-right: 0px;}
+.admin-settings-info li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; }
+.admin-settings-info li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.mysqltest-btn {width: 178px;}
+.gs-title, .lgs-title, .db-title, .hd-title, .features-title, .spam-prevention-title, .security-title, .attachments-title, 
+.sett-kb-title, .generate-random-question, .custom-fields-title, .emlsend-title, .emlpipe-title, .pop3-title, .email-loops-title, 
+.suge-title, .custnot-title, .other-title, .ticket-list-title, .misc-dat-title{font-size: 12pt; font-weight: normal;}
+
+
+.admin-settings-btn{width: 178px; margin-bottom: 50px; }
+.mysqltest-btn {margin-left: 53px;}
+.admin-settings-btn, .mysqltest-btn, .smtptest-btn {color:white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+					}
+.admin-settings-btn:hover, .mysqltest-btn:hover , .smtptest-btn:hover{color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.cf-tab4-table {width: 98%; margin-left: 10px;}
+.gs-row, .hd-row, .sett-kb-row, .emlsend-row, .emlpipe-row, .pop3-row, .email-loops-row, .misc-dat-row{margin-bottom: 5px;}					
+						
+						
+						
+
+/* start style for support/admin/mail.php */
+.mail-from-user-table, .mail-new-text-message-table {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 69%; margin-left: 15.1%; margin-bottom: 50px;}
+.mail-btn {width: 128px; margin-bottom: 10px;}
+.mail-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.mail-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+
+
+
+/* start style for support/inc/ticket_list.inc.php */
+.ticket-list .table-striped > tbody> tr {background-color: white; color: black; text-align: center;}
+.ticket-list .table-striped > tbody> tr > th {background-color: white; color: black; text-align: center;}
+.table-bordered {border: 1px solid white;}
+.num-page {text-align: center; margin-bottom: 5px;}
+.tagged-ticket-list {margin-bottom: -10px;}
+.tagged-ticket-list, .ticket-list{padding: 0px 30px 0px 15px;}
+.ticket-list .table {margin-bottom: 10px;}
+.set-priorityTicket {float: right;}
+.execute-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);
+				}
+.execute-btn:hover  {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);
+					}
+
+
+
+/* start style for support/admin/manage_users.php */					
+.manage-users-table{background: white; width: 98.5%; margin-bottom: 10px;}
+.manage-clients-table {background: white; width: 98.5%; margin-bottom: 15px;}
+.manage-user-title, .ex-sm-title {font-size: 15pt; font-weight: bold; margin-top: 10px;}
+.manage-client-title {margin-top: 5px; margin-bottom: 5px; font-size: 15pt; font-weight: bold;}
+.addUser {font-size: 15pt; font-weight: bold; margin: 0px 5px 5px 0;}
+.create-user-btn, .reset-data-btn {width: 178px; margin: 20px 0px;}
+.create-user-btn, .reset-data-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.create-user-btn:hover, .reset-data-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.ex-sm-table {width: 97%;}
+.report-table {background: white; width: 98.5%;}
+
+
+
+						
+/* start style for support/inc/profile_functions.inc.php */						
+.profile-functions-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
+.profile-functions {border-bottom: 1px solid #37B992;}
+#p-info, #permissions, #signature, #preferences, #notifications{border: 1px solid #37B992; border-top:0px; background-color: white;}
+#profile-info, #permissions-info, #signature-info, #preferences-info, #notifications-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+.profile-functions li a { margin:0px; color:#fff; }
+.profile-functions li.active {background-color:#fff!important; bottom:-1px;}
+.profile-functions li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.profile-functions li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992; }
+.profile-functions li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.notifications-profile-func {padding-left: 15px; margin-bottom: 15px;}
+.manage-users-title{font-size: 15pt; font-weight: normal; margin-top: 30px;}
+.editing-users-title {font-size: 15pt; font-weight: normal; margin-top: 20px; margin-bottom: 10px;}
+.permissions {margin: 0 0 10px -15px;}
+#profile-information-row{margin-bottom: 5px;}
+#profile-information-pwdst-row {margin-bottom: 15px;}
+#show-hide-optionsClient, #show-hide-kontrata {margin-top: -15px; margin-bottom: 15px;}
+.permissions-category-features {margin-top: -15px; margin-bottom: 10px;}
+#permissions-features {margin-top: -5px;}
+.signature-profile-func, .preferences-profile-func {padding-top: 15px; margin-bottom: 15px;}
+.preferences-profile-defaults {margin-top: 5px;}
+.notif-mw {padding: 15px 0 5px 15px;}
+
+/*start style for support/index.php */
+.user-login-help-staf {margin-left: -15px;}
+.user-login {border: 1px solid #BEBEBE; border-radius: 5px; padding: 10px; width: 78%; background-color: white;}
+.form-signin-heading {font-weight: bold; font-size: 15pt; padding: 35px 0px;}
+.signin-username, .signin-password, .signin-remember {padding-bottom: 35px;}
+.login-user-btn{color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.login-user-btn:hover{color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+
+#showTopBar-indexPhp-user {border: 0px;}
+.userMenu {background-color: #37B992; border: 0px; border-radius: 0px; min-height: 40px;}
+.userMenu ul {float: right;}
+#userMenu-logout  a, #client-username a, #userMenu-home a, #userMenu-submitTicket a, #userMenu-viewTicket a{color: white; padding-top: 5px; padding-bottom: 5px; border-radius: 5px;}
+#userMenu-logout  a:hover, #userMenu-logout a:focus, #userMenu-logout  a:active, #userMenu-logout  a:visited {text-decoration: none; background-color: #009175; padding-top: 5px; padding-bottom: 5px; border-radius: 5px; height: 30px;}
+#client-username a:hover, #client-username a:focus, #client-username a:active, #client-username a:visited{text-decoration: none; background-color: #009175; padding-top: 5px; padding-bottom: 5px; border-radius: 5px; height: 30px;}
+#userMenu-home a:hover, #userMenu-home a:focus, #userMenu-home a:active, #userMenu-home a:visited {text-decoration: none; background-color: #009175; padding-top: 5px; padding-bottom: 5px; border-radius: 5px; height: 30px;}
+#userMenu-submitTicket a:hover, #userMenu-submitTicket a:focus, #userMenu-submitTicket a:active, #userMenu-submitTicket a:visited {text-decoration: none; background-color: #009175; padding-top: 5px; padding-bottom: 5px; border-radius: 5px; height: 30px;}
+#userMenu-viewTicket a:hover, #userMenu-viewTicket a:focus, #userMenu-viewTicket a:active, #userMenu-viewTicket a:visited {text-decoration: none; background-color: #009175; padding-top: 5px; padding-bottom: 5px; border-radius: 5px; height: 30px;}
+
+
+/* start style for support/admin/contracts.php */
+.manage-contracts-table {background: white; width: 98.6%; margin-top: 5px;}
+.create-contract {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 68.8%; margin-left: 15.1%; margin-bottom: 20px;}
+#contract_row {margin-bottom: 5px;}
+.contract-submit-btn {width: 128px; margin-bottom: 10px;}
+.contract-submit-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.contract-submit-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.manage-contract-title, .contr-row1 {margin-top: 10px;}
+.manage-contract-title, .create-contract-title {font-size: 15pt; font-weight: bold;}
+
+
+
+
+
+
+/* start style for support/client_profile.php */
+.client-submit-btn {width: 128px; margin-left: 8%;}
+.client-submit-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.client-submit-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}					
+
+						
+/* start style for support/admin/admin_ticket.php */						
+.adminTicket-settings, .replyTicket-form, .ticketHistory-admin, .edit-post-table {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 68.8%; margin-left: 15.1%}
+.ticketHistory-admin {margin-bottom: 50px;}
+#adminTicket-settings-title {margin-top: 24px;}
+#adminTicket-settings-title, .addReply-title, .edtt-title{font-size: 15pt; font-weight: bold; margin-bottom: 5px;}
+.addReply-title  {margin-top: 12px;}
+.HeskMsg-addReply {vertical-align: text-top;}
+.message-ticketReplies {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 20%;  padding: 5px;}
+#msg-ticketReplies{word-wrap: break-word;}
+#attachments-addReply {vertical-align: text-top;}
+#chooseFile-addReply {padding-bottom: 10px;}
+
+.submit_reply_btn, .sacl_btn, .sasc_btn, .submit_as_closed_btn, 
+.submit_as_in_progress_btn, .submit_as_on_hold_btn, .go-btn, .note-btn {color: white;
+													background: -webkit-linear-gradient(#00A79D, #008981);
+													background:-o-linear-gradient(#00A79D, #008981);
+													background: -moz-linear-gradient(#00A79D, #008981);
+													background: linear-gradient(#00A79D, #008981);}
+													
+.submit_reply_btn:hover, .sacl_btn:hover, .submit_as_closed_btn:hover, 
+.sasc_btn:hover, .submit_as_in_progress_btn:hover, .submit_as_on_hold_btn:hover, .go-btn:hover, .note-btn:hover {color: white;
+																background: -webkit-linear-gradient(#008981, #00A79D);
+																background:-o-linear-gradient(#008981, #00A79D);
+																background: -moz-linear-gradient(#008981, #00A79D);
+																background: linear-gradient(#008981, #00A79D);}
+
+
+
+
+/* start style for support/admin/manage_knowledgebase.php */	
+.manage-kb-title, .kb_art_edit_title, .revision-history-title, .category-kb, .category-settings-title, .kb_cat_art_title {font-size: 15pt; /*font-weight: bold;*/ margin-top: 9px;}
+.new-kb-article-title, .new-kb-category-title, .artd-title{font-size: 15pt; font-weight: bold; margin-bottom: 5px;}
+.kbstruct-title{font-size: 15pt; font-weight: normal;}
+.kb-tools-title {font-size: 15pt; font-weight: normal; margin-top: 12px;}
+.new-manage-kb-title, .manage-kb-category-title, .manage-view-kb-title {font-size: 15pt; font-weight: normal; margin-top: 8px;}
+.new-kb-article-form, .new-kb-category-form, .kb-structure, .kb_art_edit_title_form, .kb-tools, .revision-history, .category-settings-form {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 68.8%; margin-left: 15.1%}
+#save-article{margin-left: 14px;}
+.new-kb-article-form {margin-bottom: 50px;}
+.save-article-btn, .cancel-article-btn, .save-category-btn, .cancel-category-btn {width: 128px;}
+.save-article-btn, .cancel-article-btn, .save-category-btn, .cancel-category-btn, .save-cat-changes-btn {color: white;
+				background: -webkit-linear-gradient(#00A79D, #008981);
+				background:-o-linear-gradient(#00A79D, #008981);
+				background: -moz-linear-gradient(#00A79D, #008981);
+				background: linear-gradient(#00A79D, #008981);
+				}
+.save-article-btn:hover, .cancel-article-btn:hover, .save-category-btn:hover, .cancel-category-btn:hover, .save-cat-changes-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);
+						}
+#add_category {margin-left: 26px;}							
+.revision-history {margin-bottom: 50px;}				
+.save-cat-changes-btn {margin-bottom: 50px;}
+.kb_cat_art_table {background-color: white; width: 99.8%;}				
+.show-cta-tree {margin-top: 10px;}			
+.kb-structure-tree {margin-top: 10px;}	
+.kb-structure-list, .kb-tools-list {margin: 10px 0px;}			
+
+
+	
+
+/* start style for support/admin/profile.php */
+.update-btn {width: 128px;}
+.update-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.update-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}	
+
+
+						
+/* start style for support/admin/edit_post.php */						
+.save-changes-btn {color: white;
+					background: -webkit-linear-gradient(#00A79D, #008981);
+					background:-o-linear-gradient(#00A79D, #008981);
+					background: -moz-linear-gradient(#00A79D, #008981);
+					background: linear-gradient(#00A79D, #008981);}
+.save-changes-btn:hover {color: white;
+						background: -webkit-linear-gradient(#008981, #00A79D);
+						background:-o-linear-gradient(#008981, #00A79D);
+						background: -moz-linear-gradient(#008981, #00A79D);
+						background: linear-gradient(#008981, #00A79D);}
+.edit-post-info-row, .edit-post-info-table {margin-bottom: 5px;}
+
+
+
+
+
+
+/* start style for support/inc/common.inc.php */
+#page-title-row1 {padding-left: 0px;}
+.showPageTitle-col {margin-top: 10px; padding: 0px 20px 0px 50px;}
+#page-title-row2 {margin-left: 49px;}
+.heskTitle {border-radius: 5px; background-color: #EC790F; font-size: 12px; color: #fff; padding: 5px;}
+.error img, .success img, .notice img, .info img {vertical-align:text-bottom;}
+		

@@ -1,0 +1,32 @@
+Gentile %%NAME%%,
+
+Il vostro ticket di supporto "%%SUBJECT%%" è stato aggiornato allo stato: Chiuso/Risolto.
+
+Ticket tracking ID: %%TRACK_ID%%
+
+Potete visualizzare lo stato del ticket al seguente URL:
+%%TRACK_URL%%
+
+
+
+Distinti saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+***** ENGLISH *****
+
+Dear %%NAME%%,
+
+Your support ticket "%%SUBJECT%%" has been updated to a Closed/Resolved status.
+
+Ticket tracking ID: %%TRACK_ID%%
+
+You can view the status of your ticket here:
+%%TRACK_URL%%
+
+
+Sincerely,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

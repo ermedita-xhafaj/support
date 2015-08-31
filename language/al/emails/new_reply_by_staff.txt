@@ -1,0 +1,38 @@
+Gentile %%NAME%%,
+E' stato emesso un nuovo messaggio o risposta per il ticket con oggetto "%%SUBJECT%%".
+
+-------------------------------------------------------
+%%MESSAGE%%
+-------------------------------------------------------
+
+Potete gestire il ticket dalla URL sottostante:
+%%TRACK_URL%%
+
+
+
+Distinti Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+
+
+
+**** ENGLISH *****
+
+Dear %%NAME%%,
+
+Our staff has just replied to your ticket "%%SUBJECT%%".
+
+---------------------------------------------------------
+%%MESSAGE%%
+---------------------------------------------------------
+
+You can view the ticket here:
+%%TRACK_URL%%
+
+
+
+Sincerely,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
