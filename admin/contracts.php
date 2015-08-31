@@ -67,20 +67,6 @@ else {
 	$value_company_id = '';
 }
 
-if(isset($_POST['starting_date'])){
-	$value_starting_date = hesk_input( hesk_POST('starting_date') );
-}
-else {
-	$value_starting_date = '';
-}
-
-if(isset($_POST['ending_date'])){
-	$value_ending_date = hesk_input( hesk_POST('ending_date') );
-}
-else {
-	$value_ending_date = '';
-}
-
 if(isset($_POST['client_id'])){
 	$value_client_id = hesk_input( hesk_POST('client_id') );
 }
@@ -100,6 +86,20 @@ if(isset($_POST['staff_id'])){
 }
 else {
 	$value_staff_id = '';
+}
+
+if(isset($_POST['starting_date'])){
+	$value_starting_date = hesk_input( hesk_POST('starting_date') );
+}
+else {
+	$value_starting_date = '';
+}
+
+if(isset($_POST['ending_date'])){
+	$value_ending_date = hesk_input( hesk_POST('ending_date') );
+}
+else {
+	$value_ending_date = '';
 }
 
 if(isset($_POST['created_by'])){
@@ -123,26 +123,26 @@ else {
 	$value_active = '';
 }
 
-if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_starting_date) && !empty($value_ending_date) && !empty($value_client_id) && !empty($value_project_id) && !empty($value_staff_id) && !empty($value_created_by) && !empty($value_ending_date_info))
+if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_staff_id) && !empty($value_starting_date) && !empty($value_ending_date) && !empty($value_created_by) && !empty($value_ending_date_info))
 	{
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` (
 			`contract_name`,
 			`company_id`,
-			`starting_date`,
-			`ending_date`,
 			`client_id`,
 			`project_id`,
 			`staff_id`,
+			`starting_date`,
+			`ending_date`,
 			`created_by`,
-			`ending_date_info`,
+			`ending_date_info`
 			) VALUES (
 			'".hesk_dbEscape($value_contract_name)."',
 			'".hesk_dbEscape($value_company_id)."',
-			'".hesk_dbEscape($value_starting_date)."',
-			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($value_client_id)."',
 			'".hesk_dbEscape($value_project_id)."',
 			'".hesk_dbEscape($value_staff_id)."',
+			'".hesk_dbEscape($value_starting_date)."',
+			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($value_created_by)."',
 			'".hesk_dbEscape($value_ending_date_info)."'
 			)" );
@@ -164,7 +164,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<th style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['contract_name']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['company']; ?></i></b></th>
-			<th style="text-align:left"><b><i><?php echo $hesklang['aclient'] ?></i></b></th>
+			<!--<th style="text-align:left"><b><i><?php //echo $hesklang['aclient'] ?></i></b></th>-->
 			<th style="text-align:left"><b><i><?php echo $hesklang['project'] ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['staffname'] ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['starting_date']; ?></i></b></th>
@@ -182,8 +182,8 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				$result_company_contract = hesk_dbQuery('SELECT company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row['company_id']);
 				$company_result = mysqli_fetch_array($result_company_contract);
 			
-				$result_client_contract = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$row['client_id']);
-				$client_result = mysqli_fetch_array($result_client_contract);
+				/*$result_client_contract = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$row['client_id']);
+				$client_result = mysqli_fetch_array($result_client_contract);*/
 				
 				$result_project_contract = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE id='.$row['project_id']);
 				$project_result = mysqli_fetch_array($result_project_contract);
@@ -193,9 +193,9 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				echo '<tr>
 					<td>' .$row['id'] .'</td>
 					<td>' .$row['contract_name'] .'</td>
-					<td>' .$company_result['company_name'] .'</td>
-					<td>' .$client_result['name'] .'</td>
-					<td>' .$project_result['project_name'] .'</td>
+					<td>' .$company_result['company_name'] .'</td>'
+					/*'<td>' .$client_result['name'] .'</td>'*/
+					.'<td>' .$project_result['project_name'] .'</td>
 					<td>' .$staff_result['name'] .'</td>
 					<td>' .$row['starting_date'] .'</td>
 					<td>' .$row['ending_date'] .'</td>
@@ -219,7 +219,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			</div>
 			
 			<div class="form-inline" id="contract_row">
-				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company']; ?></label>
+				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
 				<select class="form-control" id="" name="company_id" style="width: 336px;">
 					<option></option>
 					<?php
@@ -234,24 +234,24 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				</select>
 			</div>
 
-			<div class="form-inline" id="contract_row">
-				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['aclient']; ?></label>
+			<!--<div class="form-inline" id="contract_row">
+				<label class="col-sm-2 control-label" for=""><?php /*echo $hesklang['aclient'];*/ ?></label>
 				<select class="form-control" id="" name="client_id" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_cl = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`');
+						/*$res_cl = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`');
 						$i=1;
 						while ($row_cl = mysqli_fetch_array($res_cl)) 
 						{
 							echo 
 							'<option value="' .$row_cl['id'] .'">' .$row_cl['name'] .'</option>';
-						}
+						}*/
 					?>		
 				</select>
-			</div>
+			</div>-->
 
 			<div class="form-inline" id="contract_row">
-				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['project']; ?></label>
+				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['project']; ?>:<font class="important">*</font></label>
 				<select class="form-control" id="" name="project_id" style="width: 336px;">
 					<option></option>
 					<?php
@@ -267,7 +267,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			</div>
 			
 			<div class="form-inline" id="contract_row">
-				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?></label>
+				<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
 				<select class="form-control" id="" name="staff_id" style="width: 336px;">
 					<option></option>
 					<?php
