@@ -272,7 +272,12 @@ hesk_handle_messages();
 			<?php
 			$is_table = 0;
 			// Get categories
+<<<<<<< HEAD
 			$res = hesk_dbQuery("SELECT `id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' ORDER BY `cat_order` ASC");
+=======
+			hesk_dbConnect();
+			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' ORDER BY `cat_order` ASC");
+>>>>>>> Ermedita-branch
 
 			/*if (hesk_dbNumRows($res) == 1)
 			{
@@ -303,7 +308,7 @@ hesk_handle_messages();
 						// List categories
 						while ($row = hesk_dbFetchAssoc($res))
 						{
-							echo '<option value="' . $row['id'] . '"' . (($_SESSION['c_category'] == $row['id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
+							echo '<option value="' . $row['categ_impro_id'] . '"' . (($_SESSION['c_category'] == $row['categ_impro_id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
 						}
 						?>
 						</select>
