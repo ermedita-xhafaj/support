@@ -196,6 +196,7 @@ if ($hesk_settings['confirm_email'])
 	}
 }
 
+
 $tmpvar['category'] = intval( hesk_POST('category') ) or $hesk_error_buffer['category']=$hesklang['sel_app_cat'];
 
 // Do we allow customer to select priority?
@@ -419,7 +420,7 @@ $params = array();
 	$params['description'] =  hesk_POST('message');
 	$params['email_from'] =  hesk_POST('email');
 	$params['priority'] =  hesk_POST('priority');
-	$params['categ_id'] =  15;
+	$params['categ_id'] =  hesk_POST('category');
 	$params['cp_issue_type'] =  "Helpdesk";
 	$params['project_id'] =  3;
 	

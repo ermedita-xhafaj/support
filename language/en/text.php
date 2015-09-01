@@ -613,7 +613,8 @@ $hesklang['chpri']='Priority changed';
 $hesklang['chpri2']='Ticket\'s priority has been changed to %s';
 $hesklang['selcan']='Select the canned response you would like to edit';
 $hesklang['q_wrng']='Wrong anti-SPAM answer';
-$hesklang['cndupl']='You already have a category with that name. Choose a unique name for each category.';
+$hesklang['cndupl_name']='You already have a category with that name. Choose a unique name for each category.';
+$hesklang['cndupl_categ']='You already have a category with that ID. Choose a unique ID for each category.';
 $hesklang['wsel']='Select the field you want to search by';
 
 
@@ -1420,6 +1421,7 @@ $hesklang['state']='State';
 $hesklang['city']='City';
 $hesklang['zip_code']='Zip Code';
 $hesklang['telephone']='Telephone';
+$hesklang['categ_impro_id']='Category id';
 
 
 

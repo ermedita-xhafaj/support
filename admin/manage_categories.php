@@ -116,6 +116,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<tr>
 			<th class="admin_white" style="white-space:nowrap;width:1px;"><b><i>&nbsp;<?php echo $hesklang['id']; ?>&nbsp;</i></b></th>
 			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['cat_name']; ?>&nbsp;</i></b></th>
+			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['categ_impro_id']; ?>&nbsp;</i></b></th>    <!-- shtimi dhe linkimi i nje category impro-hesk id-->
 			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['priority']; ?>&nbsp;</i></b></th>
 			<th class="admin_white" style="white-space:nowrap;width:1px;"><b><i>&nbsp;<?php echo $hesklang['not']; ?>&nbsp;</i></b></th>
 			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['graph']; ?>&nbsp;</i></b></th>
@@ -213,6 +214,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				<tr>
 				<td class="'.$color.'">'.$mycat['id'].'</td>
 				<td class="'.$color.'">'.$mycat['name'].'</td>
+				<td class="'.$color.'">'.$mycat['categ_impro_id'].'</td>
 				<td class="'.$color.'" width="1" style="white-space: nowrap;">'.$priorities[$mycat['priority']]['formatted'].'&nbsp;</td>
 				<td class="'.$color.'" style="text-align:center"><a href="show_tickets.php?category='.$mycat['id'].'&amp;s_all=1&amp;s_my=1&amp;s_ot=1&amp;s_un=1" alt="'.$hesklang['list_tickets_cat'].'" title="'.$hesklang['list_tickets_cat'].'">'.$all.'</a></td>
 				<td class="'.$color.'" width="1">
@@ -273,7 +275,28 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 						echo ' value="'.hesk_input($_SESSION['catname']).'" ';
 					}
 				?>	/></div>
-		
+				
+			<?php				
+				/*if(!empty($value_categ_impro_id) )
+			{	
+				
+				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (
+						`categ_impro_id`
+						) VALUES (
+						'".hesk_dbEscape($value_categ_impro_id)."'
+						)" );
+			}*/
+				?>
+				<div class="form-inline">
+					<div class="form-inline category-row" id="categ-impro-id"><div class="col-sm-3"><label for="categ-impro-id"><?php echo $hesklang['categ_impro_id']; ?></label></div> <input class="form-control" type="text" id="categ-impro-id" name="categ-impro-id" size="40" maxlength="40"
+					<?php
+					if(isset($_SESSION['categ_impro_id']))
+					{
+						echo ' value="'.hesk_input($_SESSION['categ_impro_id']).'" ';
+						//$value_categ_impro_id = hesk_input( hesk_POST('categ_impro_id') );
+					}?>	
+				</div>
+				
 				<div class="form-inline category-row"><div class="col-sm-3"><label for="category-priority"><?php echo $hesklang['def_pri']; ?></label>[<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_pri']); ?>')">?</a></b>]</div> 
 				<select class="form-control" id="category-priority" name="priority">
 				<?php
@@ -332,6 +355,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 						<label class="col-sm-3 control-label" for="new-name-category"><?php echo $hesklang['nen']; ?></label>
 						<input class="form-control" type="text" id="new-name-category" name="name" size="40" maxlength="40" <?php if (isset($_SESSION['catname2'])) {echo ' value="'.hesk_input($_SESSION['catname2']).'" ';} ?> />
 					</div>
+					
 				</div><!-- end old-new-name-category -->			
 				
 				<div class="container">
@@ -928,13 +952,24 @@ function new_cat()
 
     /* Category name */
 	$catname = hesk_input( hesk_POST('name') , $hesklang['enter_cat_name'], 'manage_categories.php');
-
+	
+	/* Category impro-hesk id */
+	$cat_impro_id = hesk_input( hesk_POST('categ-impro-id') , $hesklang['enter_categ_impro_id'], 'manage_categories.php');
+	
+	/* Do we already have a categ_impro_id with this id? */
+	$res = hesk_dbQuery("SELECT `categ_impro_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `categ_impro_id` LIKE '".hesk_dbEscape( hesk_dbLike($cat_impro_id) )."' LIMIT 1");
+    if (hesk_dbNumRows($res) != 0)
+    {
+		$_SESSION['categ_impro_id'] = $cat_impro_id;
+		hesk_process_messages($hesklang['cndupl_categ'],'manage_categories.php');
+    }
+	
     /* Do we already have a category with this name? */
 	$res = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `name` LIKE '".hesk_dbEscape( hesk_dbLike($catname) )."' LIMIT 1");
     if (hesk_dbNumRows($res) != 0)
     {
 		$_SESSION['catname'] = $catname;
-		hesk_process_messages($hesklang['cndupl'],'manage_categories.php');
+		hesk_process_messages($hesklang['cndupl_name'],'manage_categories.php');
     }
 
 	/* Get the latest cat_order */
@@ -942,9 +977,10 @@ function new_cat()
 	$row = hesk_dbFetchRow($res);
 	$my_order = $row[0]+10;
 
-	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (`name`,`cat_order`,`autoassign`,`type`, `priority`) VALUES ('".hesk_dbEscape($catname)."','".intval($my_order)."','".intval($_SESSION['cat_autoassign'])."','".intval($_SESSION['cat_type'])."','{$_SESSION['cat_priority']}')");
+	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (`name`,`categ_impro_id`,`cat_order`,`autoassign`,`type`, `priority`) VALUES ('".hesk_dbEscape($catname)."', ".intval($cat_impro_id).", '".intval($my_order)."','".intval($_SESSION['cat_autoassign'])."','".intval($_SESSION['cat_type'])."','{$_SESSION['cat_priority']}')");
 
     hesk_cleanSessionVars('catname');
+    hesk_cleanSessionVars('categ_impro_id');
     hesk_cleanSessionVars('cat_autoassign');
     hesk_cleanSessionVars('cat_type');
     hesk_cleanSessionVars('cat_priority');
