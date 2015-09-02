@@ -284,7 +284,11 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					if(isset($_SESSION['categ_impro_id']))
 					{
 						echo ' value="'.hesk_input($_SESSION['categ_impro_id']).'" ';
+<<<<<<< HEAD
 					}?>	/>
+=======
+					}?>	
+>>>>>>> Ermedita-branch
 				</div>
 				
 				<div class="form-inline category-row"><div class="col-sm-3"><label for="category-priority"><?php echo $hesklang['def_pri']; ?></label>[<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_pri']); ?>')">?</a></b>]</div> 

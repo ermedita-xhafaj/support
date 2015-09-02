@@ -60,7 +60,11 @@ $hesk_settings['select_pri']=0;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=0;
+<<<<<<< HEAD
 $hesk_settings['secimg_sum']='HHTJ858M92';
+=======
+$hesk_settings['secimg_sum']='Y18D4XHH5A';
+>>>>>>> Ermedita-branch
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
 $hesk_settings['recaptcha_private_key']='';
@@ -154,7 +158,11 @@ $hesk_settings['open_only']=1;
 
 // ==> TICKET LIST
 
+<<<<<<< HEAD
 $hesk_settings['ticket_list']=array('id','lastchange','category','name','subject','status','owner','lastreplier');
+=======
+$hesk_settings['ticket_list']=array('id','trackid','lastchange','category','name','subject','status','owner','lastreplier');
+>>>>>>> Ermedita-branch
 
 // --> Other
 $hesk_settings['submittedformat']='2';
