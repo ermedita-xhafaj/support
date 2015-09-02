@@ -1402,6 +1402,7 @@ $hesklang['active']='Active';
 $hesklang['state']='State';
 $hesklang['company']='Company';
 $hesklang['project']='Project';
+$hesklang['contract']='Contract';
 $hesklang['project_name']='Project Name';
 $hesklang['manage_project']='Manage Projects';
 $hesklang['manage_company']='Manage Companies';
@@ -1411,6 +1412,7 @@ $hesklang['dep_name']='Department Name';
 $hesklang['dep_manager']='Department Manager';
 $hesklang['project_manager']='Project Manager';
 $hesklang['create_contract']='Create Contracts';
+$hesklang['edit_contract']='Edit Contracts';
 $hesklang['create_project']='Create Projects';
 $hesklang['create_company']='Create Companies';
 $hesklang['create_department']='Create Departments';
@@ -1421,6 +1423,8 @@ $hesklang['state']='State';
 $hesklang['city']='City';
 $hesklang['zip_code']='Zip Code';
 $hesklang['telephone']='Telephone';
+$hesklang['project_code']='Project Code';
+$hesklang['err_project_code']='Error Project Code';
 $hesklang['categ_impro_id']='Category id';
 
 

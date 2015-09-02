@@ -381,6 +381,8 @@ if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_to
 
 <hr />
 
+
+<!-- TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES -->
 <div class="row ticket-info-name-dt-email-message">
 	<div>
 		&nbsp;
@@ -507,7 +509,7 @@ if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_to
 	</div>
 </div><!-- end ticket-info-name-dt-email-message -->
 <hr/> 
-
+<!-- TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES -->
 <?php
 /* Print "Submit a reply" form? */
 if ($ticket['locked'] != 1 && $ticket['status'] != 3 && ! $hesk_settings['reply_top'])
@@ -697,7 +699,9 @@ function hesk_printCustomerReplyForm($reopen=0)
 <br/><br/>
 				<?php
 				}
+				if (isset($_SESSION['ticket_message'])) {echo stripslashes(hesk_input($_SESSION['ticket_message']));}
 				?>
+
 
 				<p align="center">
 				<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />

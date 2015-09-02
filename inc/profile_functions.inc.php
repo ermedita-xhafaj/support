@@ -85,12 +85,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<div class="profile-information">
 			<div class="form-inline" id="profile-information-row">
 			<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php echo $_SESSION[$session_array]['name']; ?>" />
+			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" />
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php echo $_SESSION[$session_array]['email']; ?>" />
+				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" />
 			</div>
 			
 			<?php
@@ -99,7 +99,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php echo $_SESSION[$session_array]['user']; ?>" />
+				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" />
 			</div>
 			<?php
 			}
@@ -107,12 +107,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-newpass"><?php echo $is_profile_page ? $hesklang['new_pass'] : $hesklang['pass']; ?>:</label>
-				<input class="form-control" type="password" id="profile-information-newpass" name="newpass" autocomplete="off" size="40" value="<?php echo isset($_SESSION[$session_array]['cleanpass']) ? $_SESSION[$session_array]['cleanpass'] : ''; ?>" onkeyup="javascript:hesk_checkPassword(this.value)" />
+				<input class="form-control" type="password" id="profile-information-newpass" name="newpass" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" />
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-confirmpass"><?php echo $hesklang['confirm_pass']; ?>:</label>
-				<input class="form-control" type="password" id="profile-information-confirmpass" name="newpass2" autocomplete="off" size="40" value="<?php echo isset($_SESSION[$session_array]['cleanpass']) ? $_SESSION[$session_array]['cleanpass'] : ''; ?>" />
+				<input class="form-control" type="password" id="profile-information-confirmpass" name="newpass2" autocomplete="off" size="40" />
 			</div>
 			
 			<div class="form-inline" id="profile-information-pwdst-row">

@@ -226,6 +226,7 @@ td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: 
 #view-submitTicket{padding-left: 50px;}
 .form-submit-support-request form {margin-left: -10px;}
 .contact-support-request{margin-left: -50px;}
+#name-contact-info-support-request, #email-contact-info-support-request { width: 336px; background-color: white;}
 .submit-view-existing-ticket {margin-bottom: 50px;}
 .submit-ticket-btn {margin-bottom: 50px; width: 178px; margin-left: -24px;}
 .submit-ticket-btn {color: white; 
@@ -238,7 +239,7 @@ td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: 
 						background:-o-linear-gradient(#008981, #00A79D);
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);}
-						
+#select-cont {margin-left: -50px;}						
 						
 						
 
@@ -526,15 +527,15 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 .old-new-name-category, .manage-category-priority {margin: 10px 0px 5px;}
 #hr_for_category {margin: 0px 5px;}
 
-.manage-config-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
-.manage-config {border-bottom: 1px solid #37B992;}
-.manage-config li a { margin:0px; color:#fff; }
-.manage-config  li.active {background-color:#fff!important; bottom:-1px;}
-.manage-config li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
-.manage-config li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
-.manage-config li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
-#configuration-info, #department-info, #company-info, #project-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
-#config-info, #dep-info, #comp-info, #proj-info {border: 1px solid #37B992; border-top:0px; background-color: white; margin-bottom: 20px;}
+.manage-config-tab, .manage-contract-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
+.manage-config, .manage-contract {border-bottom: 1px solid #37B992;}
+.manage-config li a, .manage-contract li a { margin:0px; color:#fff; }
+.manage-config  li.active, .manage-contract  li.active {background-color:#fff!important; bottom:-1px;}
+.manage-config li.active a, .manage-contract li.active a  { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.manage-config li.active a:hover, .manage-contract li.active a:hover{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+.manage-config li.active a:focus, .manage-contract li.active a:focus{ border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
+#configuration-info, #department-info, #company-info, #project-info, #create-contract-info, #edit-contract-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#config-info, #dep-info, #comp-info, #proj-info, #create-cont, #edit-cont {border: 1px solid #37B992; border-top:0px; background-color: white; margin-bottom: 20px;}
 
 .manage-projects-table {background: white; width: 95.5%; margin-top: 5px; margin-bottom: 15px;}
 .create-projects {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 97.2%; margin-left: 15px; margin-bottom: 20px;}
@@ -846,7 +847,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 
 /* start style for support/admin/contracts.php */
 .manage-contracts-table {background: white; width: 98.6%; margin-top: 5px;}
-.create-contract {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 68.8%; margin-left: 15.1%; margin-bottom: 20px;}
+.create-contract, .edit-contract {margin-bottom: 20px; padding-top: 10px;}
 #contract_row {margin-bottom: 5px;}
 .contract-submit-btn {width: 128px; margin-bottom: 10px;}
 .contract-submit-btn {color: white;
