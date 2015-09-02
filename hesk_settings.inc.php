@@ -62,7 +62,6 @@ $hesk_settings['select_pri']=0;
 $hesk_settings['secimg_use']=0;
 
 //$hesk_settings['secimg_sum']='HHTJ858M92';
-
 $hesk_settings['secimg_sum']='Y18D4XHH5A';
 
 $hesk_settings['recaptcha_use']=0;
@@ -160,7 +159,6 @@ $hesk_settings['open_only']=1;
 
 
 //$hesk_settings['ticket_list']=array('id','lastchange','category','name','subject','status','owner','lastreplier');
-
 $hesk_settings['ticket_list']=array('id','trackid','lastchange','category','name','subject','status','owner','lastreplier');
 
 

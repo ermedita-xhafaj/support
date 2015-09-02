@@ -422,6 +422,7 @@ $params = array();
 	$params['priority'] =  hesk_POST('priority');
 	$params['categ_id'] =  hesk_POST('category');
 	$params['cp_issue_type'] =  "helpdesk";
+	$params['helpdesk_id'] =  hesk_dbEscape($tmpvar['trackid']);
 	$params['project_id'] =  3;
 	
 	$oeapi = new OpenerpApi();  //create object
