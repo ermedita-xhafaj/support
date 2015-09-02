@@ -293,7 +293,6 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					if(isset($_SESSION['categ_impro_id']))
 					{
 						echo ' value="'.hesk_input($_SESSION['categ_impro_id']).'" ';
-						//$value_categ_impro_id = hesk_input( hesk_POST('categ_impro_id') );
 					}?>	
 				</div>
 				

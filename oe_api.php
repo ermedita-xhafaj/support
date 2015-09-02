@@ -50,65 +50,6 @@ private $host = 'improdemo.commprog.com';
 		$this->uid = $id;
 	}
 
-
-	/* Funksioni i lexhimit te nje sherbimi
-	* @args: $service => servisi i deshiruar
-	* @args: $objectid => kodi i kerkimit
-	* @args: $uid => Numri Personal i Kerkuesit
-	* @return: $status => statusi i porosise
-	*/
-	
-	
-	public function search_employee($service = "hr.employee", $uid = ''){
-		$this->client = new xmlrpc_client($this->server_url.'object');
-		$keys = array(new xmlrpcval(array(new xmlrpcval("id" , "string"),
-										new xmlrpcval("=","string"),
-										new xmlrpcval($uid,"string")),"array"));
-		$msg = new xmlrpcmsg('execute');
-		$msg->addParam(new xmlrpcval($this->db, "string"));
-		$msg->addParam(new xmlrpcval($this->uid, "int"));
-		$msg->addParam(new xmlrpcval($this->pass, "string"));
-		$msg->addParam(new xmlrpcval($service, "string"));
-		$msg->addParam(new xmlrpcval("search", "string"));
-		$msg->addParam(new xmlrpcval($keys, "array"));	
-
-		$resp = $this->client->send($msg);
-		
-		//return $resp;
-		$ids = $resp->value();		
-		
-		if(empty($ids)){
-				return array(array("state" => "search_error"));
-		} else {
-			$this->zhvish_rpc($ids);
-		}
-
-		$ids_rpc = array();
-		$ids_rpc[0] = new xmlrpcval($uid, "string");
-		foreach($ids as $id) {
-			$ids_rpc[] = new xmlrpcval($uid, "int");
-		}	
-		$fields = array();
-		$fields[0] = new xmlrpcval("name", "string");
-		$fields[1] = new xmlrpcval("gender", "string");
-
-		$msg = new xmlrpcmsg('execute');
-		$msg->addParam(new xmlrpcval($this->db, "string"));
-		$msg->addParam(new xmlrpcval($this->uid, "int"));
-		$msg->addParam(new xmlrpcval($this->pass, "string"));
-		$msg->addParam(new xmlrpcval($service, "string"));
-		$msg->addParam(new xmlrpcval("read", "string"));
-		$msg->addParam(new xmlrpcval($ids_rpc, "array"));
-		$msg->addParam(new xmlrpcval($fields, "array"));
-
-		$resp = $this->client->send($msg);
-		$val = $resp->value();
-		$this->zhvish_rpc($val);
-		return $val;	
-	}
-	
-	
-	
 	public function create_record($values, $model_name) {
         $this->client = new xmlrpc_client($this->server_url.'object');
         //$this->$client->return_type = 'phpvals';

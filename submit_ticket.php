@@ -57,11 +57,11 @@ require(HESK_PATH . 'inc/email_functions.inc.php');
 require(HESK_PATH . 'inc/posting_functions.inc.php');
 
 // We only allow POST requests to this file
-if ( $_SERVER['REQUEST_METHOD'] != 'POST' )
+/*if ( $_SERVER['REQUEST_METHOD'] != 'POST' )
 {
 	header('Location: index.php?a=add');
 	exit();
-}
+}*/
 
 // Check for POST requests larger than what the server can handle
 if ( empty($_POST) && ! empty($_SERVER['CONTENT_LENGTH']) )
@@ -421,12 +421,13 @@ $params = array();
 	$params['email_from'] =  hesk_POST('email');
 	$params['priority'] =  hesk_POST('priority');
 	$params['categ_id'] =  hesk_POST('category');
-	$params['cp_issue_type'] =  "Helpdesk";
+	$params['cp_issue_type'] =  "helpdesk";
 	$params['project_id'] =  3;
 	
 	$oeapi = new OpenerpApi();  //create object
 	$data = $oeapi->create_record($params ,$valid_services["SCA"]);
-	//var_dump($data);
+	
+	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Notify the customer
 if ($hesk_settings['notify_new'])

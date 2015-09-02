@@ -412,7 +412,28 @@ if (isset($_POST['notemsg']) && hesk_token_check('POST'))
 				'attachments'	=> $myattachments,
 				'id'			=> $ticket['id'],
 				);
+	
+	//insert to ERP
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+include('oe_api.php');
+$valid_services = array("SCA" => "mail.message"); //klasat e ERP  me te cilat do te punojme
+$params = array();
 
+	$params['subject'] =   $ticket['subject'];
+	//$params['user_id'] =   $ticket['name'];
+	$params['user_id'] =   11;
+	$params['body_text'] =   stripslashes($message);
+	$params['date'] =  hesk_date($ticket['dt'], true);
+	$params['res_id'] =  141;
+	//$params['res_id'] =  $ticket['id'];
+	$params['model'] =  "project.issue";
+	
+	
+	$oeapi = new OpenerpApi();  //create object
+	$data = $oeapi->create_record($params ,$valid_services["SCA"]);
+	var_dump($data);
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				// 2. Add custom fields to the array
 				foreach ($hesk_settings['custom_fields'] as $k => $v)
 				{
