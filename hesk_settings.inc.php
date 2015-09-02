@@ -158,11 +158,11 @@ $hesk_settings['open_only']=1;
 
 // ==> TICKET LIST
 
-<<<<<<< HEAD
-$hesk_settings['ticket_list']=array('id','lastchange','category','name','subject','status','owner','lastreplier');
-=======
+
+//$hesk_settings['ticket_list']=array('id','lastchange','category','name','subject','status','owner','lastreplier');
+
 $hesk_settings['ticket_list']=array('id','trackid','lastchange','category','name','subject','status','owner','lastreplier');
->>>>>>> Ermedita-branch
+
 
 // --> Other
 $hesk_settings['submittedformat']='2';
