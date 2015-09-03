@@ -226,23 +226,26 @@ $info = array(
 
 //insert to ERP
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 include('oe_api.php');
-$valid_services = array("SCA" => "mail.message"); //klasat e ERP  me te cilat do te punojme
-$params = array();
+$valid_services = array("SCA" => "mail.message", "PIS"=>"project.issue"); //klasat e ERP  me te cilat do te punojme
+$oeapi = new OpenerpApi();
+
+$params1 = array();   // array me vlerat e ticket_id
+$params = array();   // array me vlerat e reply_message
+
+	$params1[0] = $ticket['id'];
+	$data = $oeapi->search_helpdeskID($valid_services["PIS"], $ticket['id']);     // gjejme ceshtjen ky helpdesk_id = ticket_id
+
 
 	$params['subject'] =   $ticket['subject'];
-	//$params['user_id'] =   $ticket['name'];
-	$params['user_id'] =   11;
+	$params['user_id'] =   11;    // Do krijohet nga ERP nje user default dhe do vendosim ID e tij
 	$params['body_text'] =   stripslashes($message);
 	$params['date'] =  hesk_date($ticket['dt'], true);
-	$params['res_id'] =  141;
-	//$params['res_id'] =  $ticket['id'];
+	$params['res_id'] =  $data[0];
 	$params['model'] =  "project.issue";
-	
-	
-	$oeapi = new OpenerpApi();  //create object
-	$data = $oeapi->create_record($params ,$valid_services["SCA"]);
-	var_dump($data);
+	$params['email_from'] =  $ticket['email'];
+	$data = $oeapi->create_record($params ,$valid_services["SCA"]);   // dergojme te dhenat e reply_message tek ceshtje e duhur
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

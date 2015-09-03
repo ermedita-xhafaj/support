@@ -84,8 +84,8 @@ private $host = 'improdemo.commprog.com';
 		$ids_rpc[0] = new xmlrpcval($uid, "string");
 		$fields = array();
 		$fields[0] = new xmlrpcval("name", "string");
-		$fields[1] = new xmlrpcval("descritpion", "string");
-		$fields[2] = new xmlrpcval("project_id", "string");
+		$fields[1] = new xmlrpcval("", "string");
+		$fields[2] = new xmlrpcval("projdescritpionect_id", "string");
 		$fields[3] = new xmlrpcval("categ_id", "string");
 		$fields[4] = new xmlrpcval("user_id", "string"); ///id e issue
 		
@@ -103,6 +103,40 @@ private $host = 'improdemo.commprog.com';
 		$val = $resp->value();
 		$this->zhvish_rpc($val);
 		return $val;	
+	}
+	
+	
+	/* Funksioni i lexhimit te nje sherbimi
+	* @args: $service => servisi i deshiruar
+	* @args: $objectid => kodi i kerkimit
+	* @args: $uid => Numri Personal i Kerkuesit
+	* @return: $status => statusi i porosise
+	*/
+	public function search_helpdeskID($service = "project.issue", $objectid = 0, $uid = '') {
+		$this->client = new xmlrpc_client($this->server_url.'object');
+		$keys = array(new xmlrpcval(array(new xmlrpcval("helpdesk_id" , "string"),
+						new xmlrpcval("=","string"),
+						new xmlrpcval($objectid,"string")),"array")
+						
+			);
+
+		$msg = new xmlrpcmsg('execute');
+		$msg->addParam(new xmlrpcval($this->db, "string"));
+		$msg->addParam(new xmlrpcval($this->uid, "int"));
+		$msg->addParam(new xmlrpcval($this->pass, "string"));
+		$msg->addParam(new xmlrpcval($service, "string"));
+		$msg->addParam(new xmlrpcval("search", "string"));
+		$msg->addParam(new xmlrpcval($keys, "array"));
+		$resp = $this->client->send($msg);
+		$ids = $resp->value();
+		if(empty($ids)){
+				return array(array("state" => "ja ke fut kot"));
+		} else {
+			$this->zhvish_rpc($ids);
+			
+		}
+		
+		return $ids;
 	}
 
 }
