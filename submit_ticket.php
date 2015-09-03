@@ -408,7 +408,7 @@ if ($hesk_settings['attachments']['use'] && ! empty($attachments) )
 
 // Insert ticket to database
 $ticket = hesk_newTicket($tmpvar);
-
+//var_dump($ticket);
 
 //insert to ERP
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,12 +422,11 @@ $params = array();
 	$params['priority'] =  hesk_POST('priority');
 	$params['categ_id'] =  hesk_POST('category');
 	$params['cp_issue_type'] =  "helpdesk";
-	$params['helpdesk_id'] =  hesk_dbEscape($tmpvar['trackid']);
+	$params['helpdesk_id'] = $ticket['id'];
 	$params['project_id'] =  3;
 	
 	$oeapi = new OpenerpApi();  //create object
 	$data = $oeapi->create_record($params ,$valid_services["SCA"]);
-	
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Notify the customer
