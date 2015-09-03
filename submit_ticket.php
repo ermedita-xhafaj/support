@@ -502,7 +502,6 @@ hesk_show_success(
 
 	$hesklang['ticket_submitted'] . '<br /><br />' .
 	$hesklang['ticket_submitted_success'] . ': <b>' . $ticket['trackid'] . '</b><br /><br /> ' .
-	($hesk_settings['notify_new'] && $hesk_settings['spam_notice'] ? $hesklang['spam_inbox'] . '<br /><br />' : '') .
 	'<a href="' . $hesk_settings['hesk_url'] . '/ticket.php?track=' . $ticket['trackid'] . '">' . $hesklang['view_your_ticket'] . '</a>'
 
 );

@@ -274,26 +274,19 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					{
 						echo ' value="'.hesk_input($_SESSION['catname']).'" ';
 					}
-				?>	/></div>
-				
-			<?php				
-				/*if(!empty($value_categ_impro_id) )
-			{	
-				
-				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (
-						`categ_impro_id`
-						) VALUES (
-						'".hesk_dbEscape($value_categ_impro_id)."'
-						)" );
-			}*/
-				?>
+				?>	
+				/>
+				</div>
+
 				<div class="form-inline">
 					<div class="form-inline category-row" id="categ-impro-id"><div class="col-sm-3"><label for="categ-impro-id"><?php echo $hesklang['categ_impro_id']; ?></label></div> <input class="form-control" type="text" id="categ-impro-id" name="categ-impro-id" size="40" maxlength="40"
 					<?php
 					if(isset($_SESSION['categ_impro_id']))
 					{
 						echo ' value="'.hesk_input($_SESSION['categ_impro_id']).'" ';
-					}?>	
+
+					}?>	/>
+
 				</div>
 				
 				<div class="form-inline category-row"><div class="col-sm-3"><label for="category-priority"><?php echo $hesklang['def_pri']; ?></label>[<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_pri']); ?>')">?</a></b>]</div> 
@@ -366,7 +359,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 		<!-- END CONTENT -->
 	</div> <!-- end manage-categories-rename-category -->
 	</div>
-
+	</div>
 	<div class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
 	<div class="manage-categories-set-category-priority">
 		
@@ -444,7 +437,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				$valuedep_active = '' ;
 			}
 
-			var_dump($_POST);
+			//var_dump($_POST);
 			if(!empty($valuedep_department_code) && !empty($valuedep_department_name) && !empty($valuedep_department_manager))
 			{	
 				
@@ -491,17 +484,17 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="department_code" size="40" maxlength="50" value=" <?php echo $valuedep_department_code; ?>" />
+						<input class="form-control" required="required" title="Required field" type="number" id="" name="department_code" size="40" maxlength="50" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_name'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="department_name" size="40" maxlength="50" value=" <?php echo $valuedep_department_name; ?>" />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_name" size="40" maxlength="50"  />
 					</div>
 				
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="department_manager" size="40" maxlength="50" value=" <?php echo $valuedep_department_manager; ?>" />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_manager" size="40" maxlength="50" />
 					</div>	
 				</div>
 				
@@ -580,8 +573,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				$valuecomp_telephone = '' ;
 			}
 
-			var_dump($_POST);
-			if(!empty($valuecomp_company_name) && !empty($valuecomp_email) && !empty($valuecomp_web_page) && !empty($valuecomp_address) && !empty($valuecomp_state) && !empty($valuecomp_city) &&  !empty($valuecomp_zip_code) && !empty($valuecomp_telephone))
+			if(!empty($valuecomp_company_name) && !empty($valuecomp_email) && !empty($valuecomp_telephone))
 			{	
 				
 				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` (
@@ -647,42 +639,42 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['company_name'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="company_name" size="40" maxlength="50" value=" <?php echo $valuecomp_company_name; ?>" />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="company_name" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['email'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="email" id="" name="email" size="40" maxlength="50" value=" <?php echo $valuecomp_email; ?>" />
+						<input class="form-control" required="required" title="Required field" type="email" id="" name="email" size="40" maxlength="50" value="" />
 					</div>
 				
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['web_page'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="web_page" size="40" maxlength="50" value=" <?php echo $valuecomp_web_page; ?>" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['web_page'] ?>:</label>
+						<input class="form-control" type="text" id="" name="web_page" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['address'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="address" size="40" maxlength="50" value=" <?php echo $valuecomp_address; ?>" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['address'] ?>:</label>
+						<input class="form-control" type="text" id="" name="address" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['state'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="state" size="40" maxlength="50" value=" <?php echo $valuecomp_state; ?>" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['state'] ?>:</label>
+						<input class="form-control" type="text" id="" name="state" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['city'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="city" size="40" maxlength="50" value=" <?php echo $valuecomp_city; ?>" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['city'] ?>:</label>
+						<input class="form-control" type="text" id="" name="city" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['zip_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="zip_code" size="40" maxlength="50" value=" <?php echo $valuecomp_zip_code; ?>" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['zip_code'] ?>:</label>
+						<input class="form-control" type="number" id="" name="zip_code" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['telephone'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required type="text" id="" name="telephone" size="40" maxlength="50" value=" <?php echo $valuecomp_telephone; ?>" />
+						<input class="form-control" required="required" title="Required field" type="number" id="" name="telephone" size="40" maxlength="50" value="" />
 					</div>
 					
 				</div>
@@ -706,6 +698,13 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			}
 			else {
 				$valueproj_id = '';
+			}
+			
+			if(isset($_POST['project_code'])){
+				$valueproj_project_code = hesk_input( hesk_POST('project_code') );
+			}
+			else {
+				$valueproj_project_code = '';
 			}
 			
 			if(isset($_POST['project_name'])){
@@ -736,13 +735,15 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				$valueproj_active = '';
 			}
 
-			if(!empty($valueproj_project_name) && !empty($valueproj_project_manager) && !empty($valueproj_company_id))
+			if(!empty($valueproj_project_code) && !empty($valueproj_project_name) && !empty($valueproj_project_manager) && !empty($valueproj_company_id))
 			{
 				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` (
+						`project_code`,
 						`project_name`,
 						`project_manager`,
 						`company_id`
 						) VALUES (
+						'".hesk_dbEscape($valueproj_project_code)."',
 						'".hesk_dbEscape($valueproj_project_name)."',
 						'".hesk_dbEscape($valueproj_project_manager)."',
 						'".hesk_dbEscape($valueproj_company_id)."'
@@ -753,7 +754,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-projects-table">
 				<tr>
-					<th style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['project_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['project_name']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['project_manager']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['company_name'] ?></i></b></th>
@@ -769,7 +770,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 						$company_resultproj = mysqli_fetch_array($result_company_proj);
 
 						echo '<tr>
-							<td>' .$row_proj['id'] .'</td>
+							<td>' .$row_proj['project_code'] .'</td>
 							<td>' .$row_proj['project_name'] .'</td>
 							<td>' .$row_proj['project_manager'] .'</td>
 							<td>' .$company_resultproj['company_name'] .'</td>
@@ -785,18 +786,23 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<form method="post" action="manage_categories.php#tab_proj-info" name="form1">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['project_code'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="number" id="" name="project_code" size="40" maxlength="50" value="" />
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_name'] ?>: <font class="important">*</font></label>
-						<input class="form-control" type="text" id="" name="project_name" size="40" maxlength="50" value=" <?php echo $valueproj_project_name; ?>" />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_name" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>: <font class="important">*</font></label>
-						<input class="form-control" type="text" id="" name="project_manager" size="40" maxlength="50" value=" <?php echo $valueproj_project_manager; ?>" />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_manager" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?></label>
-						<select class="form-control" id="" name="company_id" style="width: 336px;">
+						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
 								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
