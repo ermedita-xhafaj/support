@@ -310,7 +310,8 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				</div>
 
 				<div class="form-inline">
-					<div class="form-inline category-row" id="categ-impro-id"><div class="col-sm-3"><label for="categ-impro-id"><?php echo $hesklang['categ_impro_id']; ?></label></div> <input class="form-control" type="text" id="categ-impro-id" name="categ-impro-id" size="40" maxlength="40"
+					<div class="form-inline category-row" id="categ-impro-id"><div class="col-sm-3"><label for="categ-impro-id"><?php echo $hesklang['categ_impro_id']; ?></label></div> 
+					<input class="form-control" type="text" id="categ-impro-id" name="categ-impro-id" size="40" maxlength="40" style="width: 368px;"
 					<?php
 					if(isset($_SESSION['categ_impro_id']))
 					{
@@ -385,17 +386,9 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 		<!-- END CONTENT -->
 	</div> <!-- end manage-categories-rename-category -->
 	</div>
-<!-- HEAD
-	</div>
-	<div style="display:none" class="container set-cat-pri-title"><?php //echo $hesklang['ch_cat_pri']; ?></div>
+
+	<div  style="display:none" class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
 	<div style="display:none" class="manage-categories-set-category-priority">
-======= -->
-	
-	
-	<div id="hr_for_category"><hr/></div>
-	
-	<div class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
-	<div class="">
 		
 		<!-- CONTENT -->
 			<form action="manage_categories.php" method="post">

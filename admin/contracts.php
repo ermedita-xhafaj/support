@@ -248,6 +248,7 @@ else {return false;}
 		C.id, 
 		C.contract_name,
 		CO.company_name,
+		C.active,
 		P.project_name,
 		S.name as staff_name,
 		C.starting_date,
@@ -297,8 +298,8 @@ else {return false;}
 					echo '<tr>
 						<td>' .$row['id'] .'</td>
 						<td>' .$row['contract_name'] .'</td>
-						<td>' .$company_result['company_name'] .'</td>
-						<td>' .$project_result['project_name'] .'</td>
+						<td>' .$row['company_name'] .'</td>
+						<td>' .$row['project_name'] .'</td>
 						<td>' .$staff_string .'</td>
 						<td>' .$row['starting_date'] .'</td>
 						<td>' .$row['ending_date'] .'</td>
@@ -312,8 +313,8 @@ else {return false;}
 						echo '<tr>
 						<td>' .$row['id'] .'</td>
 						<td>' .$row['contract_name'] .'</td>
-						<td>' .$company_result['company_name'] .'</td>
-						<td>' .$project_result['project_name'] .'</td>
+						<td>' .$row['company_name'] .'</td>
+						<td>' .$row['project_name'] .'</td>
 						<td>' .$staff_string .'</td>
 						<td>' .$row['starting_date'] .'</td>
 						<td>' .$row['ending_date'] .'</td>

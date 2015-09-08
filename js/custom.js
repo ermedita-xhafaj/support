@@ -111,7 +111,6 @@ $(document).ready(function(){
 });
 
 
-});
 
 //Initialize the plugin:	
 $(document).ready(function() {
