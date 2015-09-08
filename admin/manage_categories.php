@@ -109,6 +109,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	hesk_handle_messages();
 	?>
 
+
 	<div class="container manage-categories-title"><?php echo $hesklang['categ_pri']; ?></div>
 
 	<?php $sql = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
@@ -130,7 +131,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<input name="submitbutton" type="submit" class="btn btn-default execute-btn" value="Search"/>
 		</form>
 	</div> <!--end div i filtrave -->
-	
+
 	<div class="table-responsive container">
 		<table class="table table-bordered manage-categories-table">
 			<tr>
@@ -384,9 +385,17 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 		<!-- END CONTENT -->
 	</div> <!-- end manage-categories-rename-category -->
 	</div>
+<!-- HEAD
 	</div>
-	<div style="display:none" class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
+	<div style="display:none" class="container set-cat-pri-title"><?php //echo $hesklang['ch_cat_pri']; ?></div>
 	<div style="display:none" class="manage-categories-set-category-priority">
+======= -->
+	
+	
+	<div id="hr_for_category"><hr/></div>
+	
+	<div class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
+	<div class="">
 		
 		<!-- CONTENT -->
 			<form action="manage_categories.php" method="post">
@@ -423,8 +432,11 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			</form>
 		<!-- END CONTENT -->
 	</div><!-- end manage-categories-set-category-priority -->
+	</div>
 	</div> <!-- config-info -->
-		
+
+
+<!--manage departments-->	
 	<div role="tabpanel" class="tab-pane" id="dep-info">
 				<?php
 			if(isset($_POST['id'])){
@@ -477,6 +489,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 						)" );
 			}
 		?>
+		
 		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-projects-table">
@@ -484,42 +497,68 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_name']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_manager']; ?></i></b></th>
-					<th style="text-align:left"><b><i><?php echo $hesklang['active'] ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 				</tr>
 
 				<?php
+				if(isset($_POST['action']) && $_POST['action'] == 'update')
+					{
+					$valuedep_department_name = hesk_input( hesk_POST('department_name') );
+					$valuedep_department_manager = hesk_input( hesk_POST('department_manager') );
+
+					$query = hesk_dbQuery(
+						"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."departments` SET
+						`department_name`='".hesk_dbEscape($valuedep_department_name)."',
+						`department_manager`='".hesk_dbEscape($valuedep_department_manager)."'
+						WHERE `id`='".intval($_GET['id'])."' LIMIT 1"
+						);	
+					}
+					
 				$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`');
 					$i=1;
 					while ($row_dep = mysqli_fetch_array($res_dep)) 
 					{
+						$edit_code = '<span class="new_class"><a href="http://localhost/support/admin/manage_categories.php?a=edit&amp;id='.$row_dep['id'] .'#tab_dep-info"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" /></a></span>';
+						
+						if ($valuedep_id == 1)
+						{
+							$remove_code = '<img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
+						}
+						else
+						{
+							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove&amp;id='.$valuedep_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
+						}
+						
 						echo '<tr>
 							<td>' .$row_dep['department_code'] .'</td>
 							<td>' .$row_dep['department_name'] .'</td>
 							<td>' .$row_dep['department_manager'] .'</td>
-							<td>' .$row_dep['active'] .'</td>
+							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
 						}
 				?>		
 			</table>
 		</div>
 
-		<div class="container create-project-title"><?php echo $hesklang['create_department']; ?></div>
-		<div class="create-projects">
+		<div class="container create-project-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-create-department" ><?php echo $hesklang['create_department']; ?></a>
+		</div>
+		<div class="create-projects collapse" id="div-id-create-department">
 			<form method="POST" action="manage_categories.php#tab_dep-info" name="form2">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="" name="department_code" size="40" maxlength="50" />
+						<input class="form-control" required="required" title="Required field" type="number" id="" name="department_code" size="40" maxlength="50" value=""/>
 					</div>
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_name'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_name" size="40" maxlength="50"  />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_name" size="40" maxlength="50" value=""/>
 					</div>
 				
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_manager" size="40" maxlength="50" />
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_manager" size="40" maxlength="50" value=""/>
 					</div>	
 				</div>
 				
@@ -531,8 +570,57 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				</div>
 			</form>
 		</div>
-	</div>
 		
+		<!-- update departments-->
+	<?php
+		$valuedep_id = '';
+		$valuedep_department_code = '';
+		$valuedep_department_name = '';
+		$valuedep_department_manager = '';
+
+		if(isset($_GET['id'])) {
+		$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."departments` WHERE `id` = '".$_GET['id']."' LIMIT 1");
+		if(mysqli_num_rows($res_dep)==1){	
+			$row_dep = mysqli_fetch_array($res_dep);
+			$valuedep_id = $row_dep['id'];
+			$valuedep_department_code = $row_dep['department_code'];
+			$valuedep_department_name = $row_dep['department_name'];
+			$valuedep_department_manager = $row_dep['department_manager'];	
+		}
+		
+	}
+ 
+	?>
+		
+		<div class="container create-project-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-department" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?> ><?php echo $hesklang['edit_department']; ?></a>
+		</div>
+		<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?>" id="div-id-edit-department" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
+			<form method="POST" action="manage_categories.php?a=edit&id=<?php echo$_GET['id'];?>#tab_dep-info" name="form_edit_dep">
+				<div class="">
+					<div class="form-inline" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_name'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_name" size="40" maxlength="50" value="<?php echo $valuedep_department_name ?>" />
+					</div>
+				
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_manager" size="40" maxlength="50" value="<?php echo $valuedep_department_manager ?>" />
+					</div>	
+				</div>
+				
+				<!-- Submit -->
+				<div class="container">
+					<input type="hidden" name="action" value="update" />
+					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
+					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" class="btn btn-default contract-submit-btn"/>
+				</div>
+			</form>
+		</div>	
+	</div>
+
+	
+<!--manage companies-->	
 	<div role="tabpanel" class="tab-pane" id="comp-info">
 		<?php
 			if(isset($_POST['id'])){
@@ -598,6 +686,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				$valuecomp_telephone = '' ;
 			}
 
+			if(isset($_POST['action']) && $_POST['action'] == 'save') {
 			if(!empty($valuecomp_company_name) && !empty($valuecomp_email) && !empty($valuecomp_telephone))
 			{	
 				
@@ -621,10 +710,12 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 						'".hesk_dbEscape($valuecomp_telephone)."'
 						)" );
 			}
+		}
 		?>
-		<div class="container manage-project-title"><?php echo $hesklang['manage_company']; ?></div>
+		
+		<div class="container manage-compnay-title"><?php echo $hesklang['manage_company']; ?></div>
 		<div class="table-responsive container">
-			<table class="table table-bordered manage-projects-table">
+			<table class="table table-bordered manage-company-table">
 				<tr>
 					<th style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['company_name']; ?></i></b></th>
@@ -635,13 +726,50 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					<th style="text-align:left"><b><i><?php echo $hesklang['city']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['zip_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['telephone']; ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 				</tr>
 
 				<?php
+				if(isset($_POST['action']) && $_POST['action'] == 'update')
+					{
+					$valuecomp_company_name = hesk_input( hesk_POST('company_name') );
+					$valuecomp_email = hesk_input( hesk_POST('email') );
+					$valuecomp_web_page = hesk_input( hesk_POST('web_page') );
+					$valuecomp_address = hesk_input( hesk_POST('address') );
+					$valuecomp_state = hesk_input( hesk_POST('state') );
+					$valuecomp_city = hesk_input( hesk_POST('city') );
+					$valuecomp_zip_code = hesk_input( hesk_POST('zip_code') );
+					$valuecomp_telephone = hesk_input( hesk_POST('telephone') );
+
+					$query = hesk_dbQuery(
+						"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` SET
+						`company_name`='".hesk_dbEscape($valuecomp_company_name)."',
+						`email`='".hesk_dbEscape($valuecomp_email)."',
+						`web_page`='".hesk_dbEscape($valuecomp_web_page)."',
+						`address`='".hesk_dbEscape($valuecomp_address)."',
+						`state`='".hesk_dbEscape($valuecomp_state)."',
+						`city`='".hesk_dbEscape($valuecomp_city)."',
+						`zip_code`='".hesk_dbEscape($valuecomp_zip_code)."',
+						`telephone`='".hesk_dbEscape($valuecomp_telephone)."'
+						WHERE `id`='".intval($_GET['id'])."' LIMIT 1"
+						);		
+					}
+					
 				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
 					$i=1;
 					while ($row_comp = mysqli_fetch_array($res_comp)) 
 					{
+						$edit_code = '<span class="new_class"><a href="http://localhost/support/admin/manage_categories.php?a=edit&amp;id='.$row_comp['id'] .'#tab_comp-info"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" /></a></span>';
+						
+						if ($valuecomp_id == 1)
+						{
+							$remove_code = '<img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
+						}
+						else
+						{
+							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove&amp;id='.$valuecomp_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
+						}
+						
 						echo '<tr>
 							<td>' .$row_comp['id'] .'</td>
 							<td>' .$row_comp['company_name'] .'</td>
@@ -652,14 +780,17 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 							<td>' .$row_comp['city'] .'</td>
 							<td>' .$row_comp['zip_code'] .'</td>
 							<td>' .$row_comp['telephone'] .'</td>
+							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
 						}
 				?>		
 			</table>
 		</div>
 
-		<div class="container create-project-title"><?php echo $hesklang['create_company']; ?></div>
-		<div class="create-projects">
+		<div class="container create-company-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-create-company" ><?php echo $hesklang['create_company']; ?></a>
+		</div>
+		<div class="create-projects collapse" id="div-id-create-company">
 			<form method="POST" action="manage_categories.php#tab_comp-info" name="form">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
@@ -712,10 +843,96 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				</div>
 			</form>
 		</div>
+		
+		<!-- update companies -->
+	<?php
+		$valuecomp_id = '';
+		$valuecomp_company_name = '';
+		$valuecomp_email = '';
+		$valuecomp_web_page = '';
+		$valuecomp_address = '' ;
+		$valuecomp_state = '' ;
+		$valuecomp_city = '' ;
+		$valuecomp_zip_code = '' ;
+		$valuecomp_telephone = '' ;
+
+		if(isset($_GET['id'])) {
+		$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."companies` WHERE `id` = '".$_GET['id']."' LIMIT 1");
+		if(mysqli_num_rows($res_comp)==1){	
+			$row_comp = mysqli_fetch_array($res_comp);
+			$valuecomp_id = $row_comp['id'];
+			$valuecomp_company_name = $row_comp['company_name'];
+			$valuecomp_email = $row_comp['email'];
+			$valuecomp_web_page = $row_comp['web_page'];
+			$valuecomp_address = $row_comp['address'];
+			$valuecomp_state = $row_comp['state'];
+			$valuecomp_city = $row_comp['city'];
+			$valuecomp_zip_code = $row_comp['zip_code'];
+			$valuecomp_telephone = $row_comp['telephone'];			
+		}		
+	}
+	?>
+	
+	<div class="container update-company-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-company" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?> ><?php echo $hesklang['edit_company']; ?></a>
+	</div>
+	<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?>" id="div-id-edit-company" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
+			<form method="POST" action="manage_categories.php?a=edit&id=<?php echo$_GET['id'];?>#tab_comp-info" name="form_edit_comp">
+				<div class="">
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['company_name'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="company_name" size="40" maxlength="50" value="<?php echo $valuecomp_company_name ?>" />
+					</div>
+					
+					<div class="form-inline" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['email'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="email" id="" name="email" size="40" maxlength="50" value="<?php echo $valuecomp_email ?>" />
+					</div>
+				
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['web_page'] ?>:</label>
+						<input class="form-control" type="text" id="" name="web_page" size="40" maxlength="50" value="<?php echo $valuecomp_web_page ?>" />
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['address'] ?>:</label>
+						<input class="form-control" type="text" id="" name="address" size="40" maxlength="50" value="<?php echo $valuecomp_address ?>" />
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['state'] ?>:</label>
+						<input class="form-control" type="text" id="" name="state" size="40" maxlength="50" value="<?php echo $valuecomp_state ?>" />
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['city'] ?>:</label>
+						<input class="form-control" type="text" id="" name="city" size="40" maxlength="50" value="<?php echo $valuecomp_city ?>" />
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['zip_code'] ?>:</label>
+						<input class="form-control" type="number" id="" name="zip_code" size="40" maxlength="50" value="<?php echo $valuecomp_zip_code ?>" />
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['telephone'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="number" id="" name="telephone" size="40" maxlength="50" value="<?php echo $valuecomp_telephone ?>"/>
+					</div>
+					
+				</div>
+				
+				<!-- Submit -->
+				<div class="container">
+					<input type="hidden" name="action" value="update" />
+					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
+					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" class="btn btn-default contract-submit-btn"/>
+				</div>
+			</form>
+		</div>
 	</div>
 	
 	
-	
+<!--manage projects-->
 	<div role="tabpanel" class="tab-pane" id="proj-info">
 		<?php
 			if(isset($_POST['id'])){
@@ -783,36 +1000,63 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					<th style="text-align:left"><b><i><?php echo $hesklang['project_name']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['project_manager']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['company_name'] ?></i></b></th>
-					<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 				</tr>
 
 				<?php
+				if(isset($_POST['action']) && $_POST['action'] == 'update')
+					{
+					$valueproj_project_name = hesk_input( hesk_POST('project_name') );
+					$valueproj_project_manager = hesk_input( hesk_POST('project_manager') );
+					$valueproj_company_id = hesk_input( hesk_POST('company_id') );
+					
+					$query = hesk_dbQuery(
+						"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` SET
+						`project_name`='".hesk_dbEscape($valueproj_project_name)."',
+						`project_manager`='".hesk_dbEscape($valueproj_project_manager)."',
+						`company_id`='".hesk_dbEscape($valueproj_company_id)."'
+						WHERE `id`='".intval($_GET['id'])."' LIMIT 1"
+						);	
+					}
 				$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`');
 					$i=1;
 					while ($row_proj = mysqli_fetch_array($res_proj)) 
 					{
 						$result_company_proj = hesk_dbQuery('SELECT company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row_proj['company_id']);
 						$company_resultproj = mysqli_fetch_array($result_company_proj);
-
-						echo '<tr>
-							<td>' .$row_proj['project_code'] .'</td>
+						
+						$edit_code = '<span class="new_class"><a href="http://localhost/support/admin/manage_categories.php?a=edit&amp;id='.$row_proj['id'] .'#tab_proj-info"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" /></a></span>';
+						
+						if ($valueproj_id == 1)
+						{
+							$remove_code = '<img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
+						}
+						else
+						{
+							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove&amp;id='.$valueproj_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
+						}
+						
+						echo '<tr class="project-row-identification">
+							<td class="project-code-identification">' .$row_proj['project_code'] .'</td>
 							<td>' .$row_proj['project_name'] .'</td>
 							<td>' .$row_proj['project_manager'] .'</td>
 							<td>' .$company_resultproj['company_name'] .'</td>
-							<td>' .$row_proj['active'] .'</td>
+							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
 						}
 				?>		
 			</table>
 		</div>
 
-		<div class="container create-project-title"><?php echo $hesklang['create_project']; ?></div>
-		<div class="create-projects">
+		<div class="container create-project-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-create-project" ><?php echo $hesklang['create_project']; ?></a>
+		</div>
+		<div class="create-projects collapse" id="div-id-create-project">
 			<form method="post" action="manage_categories.php#tab_proj-info" name="form1">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="" name="project_code" size="40" maxlength="50" value="" />
+						<input class="form-control" required="required" title="Required field" type="number" id="form-project-code" name="project_code" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
@@ -840,24 +1084,79 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 							?>		
 						</select>
 					</div>
-
-					<!--<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label"><?php /*echo $hesklang['active'];*/ ?>: <font class="important">*</font></label>
-						<div class="radio">
-							<label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">Yes</label>
-							<label><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">No</label>
-						</div>
-					</div>-->
 				</div>
 				
 				<!-- Submit -->
 				<div class="container">
 					<input type="hidden" name="action" value="save" />
 					<input type="hidden" name="token" value="" />
-					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" id="project-button" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
+		
+	<!-- update projects -->
+	<?php
+		$valueproj_id = '';
+		$valueproj_project_code = '';
+		$valueproj_project_name = '';
+		$valueproj_project_manager = '';
+		$valueproj_company_id = '' ;
+
+		if(isset($_GET['id'])) {
+		$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."projects` WHERE `id` = '".$_GET['id']."' LIMIT 1");
+		if(mysqli_num_rows($res_proj)==1){	
+			$row_proj = mysqli_fetch_array($res_proj);
+			$valueproj_id = $row_proj['id'];
+			$valueproj_project_code = $row_proj['project_code'];
+			$valueproj_project_name = $row_proj['project_name'];
+			$valueproj_project_manager = $row_proj['project_manager'];
+			$valueproj_company_id = $row_comp['company_id'];		
+		}		
+	}
+	?>		
+	
+		<div class="container create-project-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-project" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>><?php echo $hesklang['edit_project']; ?></a>
+		</div>
+		<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?>" id="div-id-edit-project" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
+			<form method="post" action="manage_categories.php?a=edit&id=<?php echo $_GET['id'];?>#tab_proj-info" name="form_edit_project">
+				<div class="">
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['project_name'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_name" size="40" maxlength="50" value="<?php echo $valueproj_project_name ?>" />
+					</div>
+					
+					<div class="form-inline" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>: <font class="important">*</font></label>
+						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_manager" size="40" maxlength="50" value="<?php echo $valueproj_project_manager ?>" />
+					</div>
+					
+					<div class="form-inline" id="project_row">
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?></label>
+						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
+							<option></option>
+							<?php
+								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
+								$i=1;
+								while ($row_comp = mysqli_fetch_array($res_comp)) 
+								{
+									echo 
+									'<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+								}
+							?>		
+						</select>
+					</div>
+				</div>
+				
+				<!-- Submit -->
+				<div class="container">
+					<input type="hidden" name="action" value="update" />
+					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
+					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" class="btn btn-default contract-submit-btn"/>
+				</div>
+			</form>
+		</div>		
 	</div>
 
 </div> <!-- manage-config-tab -->

@@ -1002,9 +1002,77 @@ function print_start()
 				</div><!-- end submit-ticket -->
 				<!-- END SUBMIT -->
 		</div>
+		
+			<!--<div><img src="img/blank.gif" width="5" height="1" alt="" /></div>-->
+			
+		<div class="col-sm-4 view-ticket-col">
+				<!-- START VIEW -->
+				<div class="view-ticket">
+				<a style="text-decoration: none" href="ticket.php">
+					<div class="form-inline">
+						&nbsp;
+						<img src="img/existingticket.jpg" alt="existingticket"/></td>
+						<div class="form-group">
+							<span><b><?php echo $hesklang['view_existing']; ?></b></span><br />
+							<span id="vw-ticket"><?php echo $hesklang['vet']; ?></span>
+						</div>
+						&nbsp;
+					</div>
+				</a>
+				</div><!-- end view-ticket -->
+				<!-- END VIEW -->
+		</div>
 	</div><!-- end submit-view-existing-ticket -->
+
+<br/><br/>
+
+ <div class="container knowledgebase-text">
+	<div class="form-inline"><img src="img/knowledgebase.png" alt="knowledgebase"/><span><?php echo $hesklang['kb_text']; ?></span></div>
+	<?php
+	if ($hesk_settings['kb_enable'])
+	{
+		?>
+		<br />
+
+		<div class="row kb-top-latest-view-art">
+			<div>
+
+				<div style="margin-top: 15px;">
+
+					<?php
+
+					/* Get list of top articles */
+					hesk_kbTopArticles($hesk_settings['kb_index_popart']);
+
+					/* Get list of latest articles */
+					hesk_kbLatestArticles($hesk_settings['kb_index_latest']);
+					
+					?>
+
+				</div>
+
+			</div>
+		</div><!-- end knowledgebase-text -->
+
+</div>
+
+	<?php
+}
+// Knowledgebase disabled, let's just print some blank lines so page looks better
+else
+{
+	?>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<?php
+}
+?>
 <!-- start form login-->	
-<?php require(HESK_PATH . 'inc/print_tickets_client.inc.php'); ?>
+
 <?php else: ?>
 	<div class="container">
 		<div class="container col-sm-5 user-login-help-staf">
@@ -1051,6 +1119,15 @@ EOD;
 <?php endif; ?>	
 
 <?php
+
+/*	// Show a link to admin panel?
+	if ($hesk_settings['alink'])
+	{
+		?>
+		<p style="text-align:center"><a href="<?php echo $hesk_settings['admin_dir']; ?>/" class="smaller"><?php echo $hesklang['ap']; ?></a></p>
+		<?php
+	}
+*/						/*comment 5/6/2015*/
 
 } // End print_start()
 

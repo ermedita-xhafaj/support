@@ -71,6 +71,18 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+	if(!$("#edit-contract-info").hasClass('active')){
+		$(".endingdate_head").addClass("hidden");
+		$(".createdby_head").addClass("hidden");
+		$(".endingdate_info").addClass("hidden");
+		$(".createdby_info").addClass("hidden");
+		}
+	else {
+		$(".endingdate_head").removeClass("hidden");
+		$(".createdby_head").removeClass("hidden");
+		$(".endingdate_info").removeClass("hidden");
+		$(".createdby_info").removeClass("hidden");
+	}
 	$(".new_class").click(function(){
 	if( $(this).attr('id') == "create-contract-info") {
 		$(".endingdate_head").addClass("hidden");
@@ -99,4 +111,28 @@ $(document).ready(function(){
 });
 
 
+});
+
+//Initialize the plugin:	
+$(document).ready(function() {
+	$('.multiple').multiselect({
+	enableCaseInsensitiveFiltering: true,
+});
+});
+
+$(document).ready(function() {
+	$("#project-button").click(function(){
+		var exist = false;
+		$(".manage-projects-table tr.project-row-identification td.project-code-identification").each(function(){
+			if($("#form-project-code").val()==$(this).html()){
+				alert("Vendosni nje kod te ndryshem per projektin");
+				exist = true;
+			}
+		});
+		if(exist){
+			return false;
+		} else{
+			return true;
+		}
+	});
 });

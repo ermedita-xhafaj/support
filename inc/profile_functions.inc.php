@@ -85,12 +85,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<div class="profile-information">
 			<div class="form-inline" id="profile-information-row">
 			<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" />
+			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php echo $_SESSION['userdata']['name']; ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" />
+				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php echo $_SESSION['userdata']['email']; ?>"/>
 			</div>
 			
 			<?php
@@ -99,7 +99,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" />
+				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php echo $_SESSION['userdata']['user']; ?>"/>
 			</div>
 			<?php
 			}
