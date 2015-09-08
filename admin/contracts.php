@@ -35,6 +35,8 @@
 define('IN_SCRIPT',1);
 define('HESK_PATH','../');
 
+
+
 /* Get all the required files and functions */
 require(HESK_PATH . 'hesk_settings.inc.php');
 require(HESK_PATH . 'inc/common.inc.php');
@@ -74,13 +76,6 @@ else {
 	$value_project_id = '';
 }
 
-if(isset($_POST['staff_id'])){
-	$value_staff_id = hesk_input( hesk_POST('staff_id') );
-}
-else {
-	$value_staff_id = '';
-}
-
 if(isset($_POST['starting_date'])){
 	$value_starting_date = hesk_input( hesk_POST('starting_date') );
 }
@@ -90,23 +85,10 @@ else {
 
 if(isset($_POST['ending_date'])){
 	$value_ending_date = hesk_input( hesk_POST('ending_date') );
-}
+	$value_ending_date_info = $value_ending_date;
+	}
 else {
 	$value_ending_date = '';
-}
-
-if(isset($_POST['created_by'])){
-	$value_created_by = hesk_input( hesk_POST('created_by') );
-}
-else {
-	$value_created_by = '';
-}
-
-if(isset($_POST['ending_date_info'])){
-	$value_ending_date_info = hesk_input( hesk_POST('ending_date_info') );
-}
-else {
-	$value_ending_date_info = '';
 }
 
 if(isset($_POST['active'])){
@@ -116,32 +98,41 @@ else {
 	$value_active = '';
 }
 
-if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_staff_id) && !empty($value_starting_date) && !empty($value_ending_date))
+if(isset($_POST['staff_id'])){
+	$value_staff_id = hesk_input( hesk_POST('staff_id') );
+}
+else {
+	$value_staff_id = '';
+}
+
+if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_starting_date) && !empty($value_ending_date))
 	{
+
 	 if(isset($_POST['action']) && $_POST['action'] == 'save') {
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` (
-			`id`,
 			`contract_name`,
 			`company_id`,
 			`project_id`,
-			`staff_id`,
 			`starting_date`,
 			`ending_date`,
 			`created_by`,
 			`ending_date_info`,
 			`active`
 			) VALUES (
-			'".hesk_dbEscape($value_id)."',
 			'".hesk_dbEscape($value_contract_name)."',
 			'".hesk_dbEscape($value_company_id)."',
 			'".hesk_dbEscape($value_project_id)."',
-			'".hesk_dbEscape($value_staff_id)."',
 			'".hesk_dbEscape($value_starting_date)."',
 			'".hesk_dbEscape($value_ending_date)."',
-			'".hesk_dbEscape($value_created_by)."',
+			'".hesk_dbEscape($_SESSION['id'])."',
 			'".hesk_dbEscape($value_ending_date_info)."',
 			'".hesk_dbEscape($value_active)."'
 			)" );
+			$id = hesk_dbInsertID();
+			foreach($_POST['staff_id'] as $staff){
+				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
+					`userId`, `contractId`) VALUES('".hesk_dbEscape($staff)."', '".$id."')" );
+			}
 		}
 	}
 
@@ -192,50 +183,84 @@ else {return false;}
 		`contract_name`='".hesk_dbEscape($value_contract_name)."',
 		`company_id`='".hesk_dbEscape($value_company_id)."',
 		`project_id`='".hesk_dbEscape($value_project_id)."',
-		`staff_id`='".hesk_dbEscape($value_staff_id)."',
 		`starting_date`='".hesk_dbEscape($value_starting_date)."',
 		`ending_date`='".hesk_dbEscape($value_ending_date)."'
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
-		
+
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."' LIMIT 1");
+	foreach($_POST['staff_id'] as $staff){
+		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
+			`userId`, 
+			`contractId`
+			)
+			VALUES(
+			'".hesk_dbEscape($staff)."', 
+			'".$value_id."'
+			)" );
 	}
-		$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts`');
+
+	}
+		$res = hesk_dbQuery("SELECT 
+		C.id, 
+		C.contract_name,
+		CO.company_name,
+		P.project_name,
+		S.name as staff_name,
+		C.starting_date,
+		C.ending_date,
+		C.ending_date_info,
+		CB.name AS created_by 
+		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS S ON C.staff_id=S.Id
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS CB ON C.created_by=CB.Id
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id");
+
 			$i=1;
 			while ($row = mysqli_fetch_array($res)) 
 			{
-				$result_company_contract = hesk_dbQuery('SELECT company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row['company_id']);
+				/*$result_company_contract = hesk_dbQuery('SELECT company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row['company_id']);
 				$company_result = mysqli_fetch_array($result_company_contract);
-				
-				$result_project_contract = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE id='.$row['project_id']);
+				*/
+				/*$result_project_contract = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE id='.$row['project_id']);
 				$project_result = mysqli_fetch_array($result_project_contract);
-				
-				$result_staff_cont = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id='.$row['staff_id']);
+				*/
+				/*$result_staff_cont = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id='.$row['staff_id']);
 				$staff_result = mysqli_fetch_array($result_staff_cont);
-				
+				*/
 				/* Edit contract*/
-				$edit_code = '<span><a href="http://localhost/support/admin/contracts.php?a=edit&amp;id='.$row['id'] .'#tab_edit-cont"><button class="new_class btn btn-default btn-xs">'.$hesklang['edit'].'</button></a></span>';
+				$edit_code = '<span class="new_class"><a href="http://localhost/support/admin/contracts.php?a=edit&amp;id='.$row['id'] .'#tab_edit-cont"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" /></a></span>';
 				
 				/* Deleting contract with ID */
-				$res_delete = "DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".intval($value_id)."'";
+				/*$res_delete = "DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".intval($value_id)."'";*/
 				if ($value_id == 1)
 				{
-					$remove_code = '';
+					$remove_code = '<img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
 				}
 				else
 				{
-					$remove_code = '<span> <a href="http://localhost/support/admin/contracts.php?a=remove&amp;id='.$value_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><button class="btn btn-default btn-xs">'.$hesklang['remove'].'</button></a></span>';
+					$remove_code = '<span> <a href="http://localhost/support/admin/contracts.php?a=remove&amp;id='.$value_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 				}
 				
+				/* Select multiple users from staff */
+				$staff = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".$row['id']."'");
+				$staff_string= "";
+				while ($row1 = mysqli_fetch_array($staff)){
+					$staff_user = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE `id` ="'.$row1["userId"].'"');
+					$user = mysqli_fetch_array($staff_user);
+					$staff_string .= $user['name']."<br/>";
+				}
 				echo '<tr>
 					<td>' .$row['id'] .'</td>
 					<td>' .$row['contract_name'] .'</td>
-					<td>' .$company_result['company_name'] .'</td>
-					<td>' .$project_result['project_name'] .'</td>
-					<td>' .$staff_result['name'] .'</td>
+					<td>' .$row['company_name'] .'</td>
+					<td>' .$row['project_name'] .'</td>
+					<td>' .$staff_string .'</td>
 					<td>' .$row['starting_date'] .'</td>
 					<td>' .$row['ending_date'] .'</td>
-					<td class="hidden endingdate_info">' .$row['ending_date'] .'</td>
-					<td class="hidden createdby_info">' .$staff_result['name'] .'</td>
+					<td class="hidden endingdate_info">' .$row['ending_date_info'] .'</td>
+					<td class="hidden createdby_info">' .$row['created_by'] .'</td>
 					<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 					</tr>';
 				}
@@ -250,8 +275,6 @@ else {return false;}
 	$is_edit = false;
 }
 
-$value_ending_date = true;
-$hesk_settings['active'] = 1;
 ?>
 <div class="container tab-content manage-contract-tab">
 	<ul id="tabs" class="nav nav-tabs manage-contract" data-tabs="tabs">
@@ -302,7 +325,7 @@ $hesk_settings['active'] = 1;
 					
 					<div class="form-inline" id="contract_row">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
-						<select class="form-control" required="required" title="Required field" id="" name="staff_id" style="width: 336px;">
+						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
 								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users`');
@@ -313,7 +336,7 @@ $hesk_settings['active'] = 1;
 									'<option value="' .$row_staff['id'] .'">' .$row_staff['name'] .'</option>';
 								}
 							?>		
-						</select>
+						</select>      				
 					</div>
 
 					<div class="form-inline" id="contract_row">
@@ -394,8 +417,15 @@ if(isset($_GET['id'])) {
 								$i=1;
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
-									echo 
-									'<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+									if($value_company_id == $row_comp['id']) 
+									{
+										echo 
+										'<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
+									}
+									else 
+									{
+										echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+									}
 								}
 							?>		
 						</select>
@@ -410,8 +440,14 @@ if(isset($_GET['id'])) {
 								$i=1;
 								while ($row_project = mysqli_fetch_array($res_project)) 
 								{
-									echo 
-									'<option value="' .$row_project['id'] .'">' .$row_project['project_name'] .'</option>';
+									if($value_project_id == $row_project['id']) 
+									{
+									echo '<option value="' .$row_project['id'] .'" selected="selected">' .$row_project['project_name'] .'</option>';
+									}
+									else
+									{
+										echo'<option value="' .$row_project['id'] .'">' .$row_project['project_name'] .'</option>';
+									}
 								}
 							?>		
 						</select>
@@ -419,18 +455,29 @@ if(isset($_GET['id'])) {
 					
 					<div class="form-inline" id="contract_row">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
-						<select class="form-control" required="required" title="Required field" id="" name="staff_id" style="width: 336px;">
+						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
 								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users`');
+								if(isset($_GET['id'])){
+								$current_staff = hesk_dbQuery('SELECT userId FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE contractId='.$_GET['id']);
+								$staff1 = array();
+								
+								while ($row_staff = mysqli_fetch_array($current_staff)){
+									$staff1[] = $row_staff['userId'];
+								}
 								$i=1;
 								while ($row_staff = mysqli_fetch_array($res_staff)) 
 								{
-									echo 
-									'<option value="' .$row_staff['id'] .'">' .$row_staff['name'] .'</option>';
+									if(in_array($row_staff['id'], $staff1)){
+										echo '<option value="' .$row_staff['id'] .'" selected="selected">' .$row_staff['name'] .'</option>';
+									} else{
+										echo '<option value="' .$row_staff['id'] .'">' .$row_staff['name'] .'</option>';
+									}
+								}
 								}
 							?>		
-						</select>
+						</select>      				
 					</div>
 
 					<div class="form-inline" id="contract_row">

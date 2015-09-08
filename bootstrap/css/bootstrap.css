@@ -3873,6 +3873,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .input-group-btn:last-child > .btn,
 .input-group-btn:last-child > .btn-group {
   margin-left: -1px;
+  height: 34px;		/*added 07/09/2015*/
 }
 .nav {
   padding-left: 0;
