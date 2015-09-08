@@ -109,17 +109,38 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	hesk_handle_messages();
 	?>
 
-	<div class="container manage-categories-title"><?php echo $hesklang['proj']; ?> [<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_intro']); ?>')">?</a>]</div>
+	<div class="container manage-categories-title"><?php echo $hesklang['categ_pri']; ?></div>
 
+	<?php $sql = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
+	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+		<form method="post">
+			<?php echo "<select class='form-control-1' name='search_by_cat_name' id='cat_name_list'>"; // list box select command
+				echo"<option value=''>Select category name</option>";
+					while ($tmp = hesk_dbFetchAssoc($sql))
+					{
+						echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+					}
+						echo "</select>";
+				?>
+			<select id="cat_status" name="search_by_cat_status" class="form-control-1">
+				<option value="">Select status</option>
+				<option value="1">Active</option>
+				<option value="0">Inactive</option>
+			</select>
+			<input name="submitbutton" type="submit" class="btn btn-default execute-btn" value="Search"/>
+		</form>
+	</div> <!--end div i filtrave -->
+	
 	<div class="table-responsive container">
 		<table class="table table-bordered manage-categories-table">
 			<tr>
-			<th class="admin_white" style="white-space:nowrap;width:1px;"><b><i>&nbsp;<?php echo $hesklang['id']; ?>&nbsp;</i></b></th>
-			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['cat_name']; ?>&nbsp;</i></b></th>
+			<th class="admin_white" style="white-space:nowrap;width:1px; display: none"><b><i>&nbsp;<?php echo $hesklang['id']; ?>&nbsp;</i></b></th>
 			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['categ_impro_id']; ?>&nbsp;</i></b></th>    <!-- shtimi dhe linkimi i nje category impro-hesk id-->
-			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['priority']; ?>&nbsp;</i></b></th>
+			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['cat_name']; ?>&nbsp;</i></b></th>
+			<th class="admin_white" style="text-align:left; display: none"><b><i>&nbsp;<?php echo $hesklang['priority']; ?>&nbsp;</i></b></th>
 			<th class="admin_white" style="white-space:nowrap;width:1px;"><b><i>&nbsp;<?php echo $hesklang['not']; ?>&nbsp;</i></b></th>
-			<th class="admin_white" style="text-align:left"><b><i>&nbsp;<?php echo $hesklang['graph']; ?>&nbsp;</i></b></th>
+			<th class="admin_white" style="text-align:left; display: none"><b><i>&nbsp;<?php echo $hesklang['graph']; ?>&nbsp;</i></b></th>
+			<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 			<th class="admin_white" style="width:100px"><b><i>&nbsp;<?php echo $hesklang['opt']; ?>&nbsp;</i></b></th>
 			</tr>
 
@@ -127,16 +148,24 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			/* Get number of tickets per category */
 			$tickets_all   = array();
 			$tickets_total = 0;
-
+			
 			$res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `category` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` GROUP BY `category`');
 			while ($tmp = hesk_dbFetchAssoc($res))
 			{
 				$tickets_all[$tmp['category']] = $tmp['cnt'];
 				$tickets_total += $tmp['cnt'];
 			}
-
-			/* Get list of categories */
-			$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
+			
+			//ermedita search by filters
+			$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC"); /* Get list of categories */
+			if (isset($_POST['submitbutton'])){
+			if (!empty($_POST['search_by_cat_name'])) {
+				$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories`WHERE id='.$_POST['search_by_cat_name']);
+			}
+			elseif($_POST['search_by_cat_status'] === '0' || $_POST['search_by_cat_status'] === '1'){
+				$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories`WHERE active='.$_POST['search_by_cat_status']);
+			}
+			}
 			$options='';
 
 			$i=1;
@@ -209,16 +238,17 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				$options .= '<option value="'.$mycat['id'].'" ';
 				$options .= (isset($_SESSION['selcat']) && $mycat['id'] == $_SESSION['selcat']) ? ' selected="selected" ' : '';
 				$options .= '>'.$mycat['name'].'</option>';
-
+				if($mycat['active']==1) $active="checked"; else $active="";
 				echo '
-				<tr>
-				<td class="'.$color.'">'.$mycat['id'].'</td>
-				<td class="'.$color.'">'.$mycat['name'].'</td>
+				<tr class="'.$mycat['id'].'" >
+				<td style="display: none" class="'.$color.'">'.$mycat['id'].'</td>
 				<td class="'.$color.'">'.$mycat['categ_impro_id'].'</td>
-				<td class="'.$color.'" width="1" style="white-space: nowrap;">'.$priorities[$mycat['priority']]['formatted'].'&nbsp;</td>
+				<td class="'.$color.'">'.$mycat['name'].'</td>
+				<td style="display: none" class="'.$color.'" width="1" style="white-space: nowrap;">'.$priorities[$mycat['priority']]['formatted'].'&nbsp;</td>
 				<td class="'.$color.'" style="text-align:center"><a href="show_tickets.php?category='.$mycat['id'].'&amp;s_all=1&amp;s_my=1&amp;s_ot=1&amp;s_un=1" alt="'.$hesklang['list_tickets_cat'].'" title="'.$hesklang['list_tickets_cat'].'">'.$all.'</a></td>
-				<td class="'.$color.'" width="1">
-				<div class="progress-container" style="width: 160px" title="'.sprintf($hesklang['perat'],$width_all.'%').'">
+				<td class="cat-status-identifier" > <input type="checkbox" name="expiry_date" onclick="return false" value="' .$mycat['active'] .'" '.$active.' ></td>
+				<td style="display: none" class="'.$color.'" width="1">
+				<div style="display: none" class="progress-container" style="width: 160px" title="'.sprintf($hesklang['perat'],$width_all.'%').'">
 				<div style="width: '.$width_all.'%;float:left;"></div>
 				</div>
 				</td>
@@ -266,7 +296,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	<div class="container add-cat-title"><?php echo $hesklang['add_cat']; ?></div>
 	<div class="manage-categories-add-new-category">
 		<div>	
-		<!-- CONTENT -->
+		<!-- Add NEW Category -->
 			<form action="manage_categories.php" method="post">
 				<div class="form-inline category-row" id="name-category-row"><div class="col-sm-3"><label for="category-name"><?php echo $hesklang['cat_name']; ?></label>(<?php echo $hesklang['max_chars']; ?>)<b>:</b></div> <input class="form-control" type="text" id="category-name" name="name" size="40" maxlength="40"
 				<?php
@@ -288,37 +318,26 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 					}?>	/>
 
 				</div>
-				
-				<div class="form-inline category-row"><div class="col-sm-3"><label for="category-priority"><?php echo $hesklang['def_pri']; ?></label>[<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_pri']); ?>')">?</a></b>]</div> 
+			<!--fshehim "Priority" kur celim nje category -->
+				<div  style="display:none" class="form-inline category-row"><div class="col-sm-3"><label for="category-priority"><?php echo $hesklang['def_pri']; ?></label>[<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_pri']); ?>')">?</a></b>]</div> 
 				<select class="form-control" id="category-priority" name="priority">
-				<?php
-				// Default priority: low
-				if ( ! isset($_SESSION['cat_priority']) )
-				{
-					$_SESSION['cat_priority'] = 3;
-				}
-
+				<?php// Default priority: low
+				if ( ! isset($_SESSION['cat_priority']) ){$_SESSION['cat_priority'] = 3;}
 				// List possible priorities
-				foreach ($priorities as $value => $info)
-				{
-					echo '<option value="'.$value.'"'.($_SESSION['cat_priority'] == $value ? ' selected="selected"' : '').'>'.$info['text'].'</option>';
-				}
-				?>
-				</select></div>
-
-				<div class="form-inline category-row"><b><label class="col-sm-3"><?php echo $hesklang['opt']; ?>:</b></label>
+				foreach ($priorities as $value => $info){echo '<option value="'.$value.'"'.($_SESSION['cat_priority'] == $value ? ' selected="selected"' : '').'>'.$info['text'].'</option>';}
+				?></select></div>
+			<!--fshehim "Options" kur celim nje category -->
+				<div style="display:none" class="form-inline category-row"><b><label class="col-sm-3"><?php echo $hesklang['opt']; ?>:</b></label>
+					<?php if ($hesk_settings['autoassign'])	{?>
+						<div class="form-group options-category-row"><label><input type="checkbox" name="autoassign" value="Y" <?php if ( ! isset($_SESSION['cat_autoassign']) || $_SESSION['cat_autoassign'] == 1 ) {echo 'checked="checked"';} ?>  /> <?php echo $hesklang['cat_aa']; ?></label><br/> <?php } ?>
+						<label><input type="checkbox" name="type" value="Y" <?php if ( isset($_SESSION['cat_type']) && $_SESSION['cat_type'] == 1 ) {echo 'checked="checked"';} ?> /> <?php echo $hesklang['cat_type']; ?></label></div>	
+				</div>
 				
-					<?php
-					if ($hesk_settings['autoassign'])
-					{
-						?>
-						<div class="form-group options-category-row">
-							<label><input type="checkbox" name="autoassign" value="Y" <?php if ( ! isset($_SESSION['cat_autoassign']) || $_SESSION['cat_autoassign'] == 1 ) {echo 'checked="checked"';} ?>  /> <?php echo $hesklang['cat_aa']; ?></label><br/>
-						<?php
-					}
-					?>
-							<label><input type="checkbox" name="type" value="Y" <?php if ( isset($_SESSION['cat_type']) && $_SESSION['cat_type'] == 1 ) {echo 'checked="checked"';} ?> /> <?php echo $hesklang['cat_type']; ?></label>
-						</div>	
+			<!--shtohim fushen "Active" kur celim nje category -->
+				<div class="form-inline category-row"><b><label class="col-sm-3"><?php echo $hesklang['def_act']; ?>:</label></b>
+					<div class="form-group options-category-row">
+						<input type="checkbox" name="cat_active" value="1" checked />
+					</div>	
 				</div>
 			
 				<div class="container">
@@ -335,7 +354,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	<div class="container ren-cat-title"><?php echo $hesklang['ren_cat']; ?></div>
 	<div>
 		
-		<!-- CONTENT -->
+		<!-- Rename Category -->
 			<form action="manage_categories.php" method="post">
 				<div class="form-group old-new-name-category">
 					<div class="form-inline new-name-category-row">
@@ -348,6 +367,12 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 						<input class="form-control" type="text" id="new-name-category" name="name" size="40" maxlength="40" <?php if (isset($_SESSION['catname2'])) {echo ' value="'.hesk_input($_SESSION['catname2']).'" ';} ?> />
 					</div>
 					
+					<!--shtohim fushen "Active" kur celim nje category -->
+				<div class="form-inline category-row"><b><label class="col-sm-3"><?php echo $hesklang['def_act']; ?>:</label></b>
+					<div class="form-group options-category-row">
+						<input type="checkbox" name="cat_active" id="new-category-status" value="1"  />
+					</div>	
+				</div>
 				</div><!-- end old-new-name-category -->			
 				
 				<div class="container">
@@ -360,8 +385,8 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	</div> <!-- end manage-categories-rename-category -->
 	</div>
 	</div>
-	<div class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
-	<div class="manage-categories-set-category-priority">
+	<div style="display:none" class="container set-cat-pri-title"><?php echo $hesklang['ch_cat_pri']; ?></div>
+	<div style="display:none" class="manage-categories-set-category-priority">
 		
 		<!-- CONTENT -->
 			<form action="manage_categories.php" method="post">
@@ -936,7 +961,6 @@ else
     exit();
 }
 
-
 function new_cat()
 {
 	global $hesk_settings, $hesklang;
@@ -957,6 +981,12 @@ function new_cat()
 
     /* Category name */
 	$catname = hesk_input( hesk_POST('name') , $hesklang['enter_cat_name'], 'manage_categories.php');
+	
+	/* category active */
+	$category_active = hesk_input( hesk_POST('cat_active'));
+	if(empty($category_active)) { $category_active = "0"; }
+	//var_dump($category_active);
+	//exit();
 	
 	/* Category impro-hesk id */
 	$cat_impro_id = hesk_input( hesk_POST('categ-impro-id') , $hesklang['enter_categ_impro_id'], 'manage_categories.php');
@@ -982,13 +1012,14 @@ function new_cat()
 	$row = hesk_dbFetchRow($res);
 	$my_order = $row[0]+10;
 
-	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (`name`,`categ_impro_id`,`cat_order`,`autoassign`,`type`, `priority`) VALUES ('".hesk_dbEscape($catname)."', ".intval($cat_impro_id).", '".intval($my_order)."','".intval($_SESSION['cat_autoassign'])."','".intval($_SESSION['cat_type'])."','{$_SESSION['cat_priority']}')");
+	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (`name`,`categ_impro_id`,`cat_order`,`autoassign`,`type`, `priority`, `active`) VALUES ('".hesk_dbEscape($catname)."', ".intval($cat_impro_id).", '".intval($my_order)."','".intval($_SESSION['cat_autoassign'])."','".intval($_SESSION['cat_type'])."','".$_SESSION['cat_priority']."', '".intval($category_active)."')");
 
     hesk_cleanSessionVars('catname');
     hesk_cleanSessionVars('categ_impro_id');
     hesk_cleanSessionVars('cat_autoassign');
     hesk_cleanSessionVars('cat_type');
     hesk_cleanSessionVars('cat_priority');
+    hesk_cleanSessionVars('cat_active');
 
     $_SESSION['selcat2'] = hesk_dbInsertID();
 
@@ -1004,6 +1035,7 @@ function rename_cat()
 	hesk_token_check('POST');
 
     $_SERVER['PHP_SELF'] = 'manage_categories.php?catid='.intval( hesk_POST('catid') );
+    //$active =hesk_POST('cat_active');
 
 	$catid = hesk_isNumber( hesk_POST('catid'), $hesklang['choose_cat_ren'], $_SERVER['PHP_SELF']);
 	$_SESSION['selcat'] = $catid;
@@ -1011,6 +1043,9 @@ function rename_cat()
 
 	$catname = hesk_input( hesk_POST('name'), $hesklang['cat_ren_name'], $_SERVER['PHP_SELF']);
     $_SESSION['catname2'] = $catname;
+	
+	$catactive = hesk_input( hesk_POST('cat_active'));
+	if(empty($catactive)) { $catactive = "0"; }
 
 	$res = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `name` LIKE '".hesk_dbEscape( hesk_dbLike($catname) )."' LIMIT 1");
     if (hesk_dbNumRows($res) != 0)
@@ -1026,7 +1061,7 @@ function rename_cat()
         }
     }
 
-	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` SET `name`='".hesk_dbEscape($catname)."' WHERE `id`='".intval($catid)."' LIMIT 1");
+	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` SET `name`='".hesk_dbEscape($catname)."', `active`='".intval($catactive)."' WHERE `id`='".intval($catid)."' LIMIT 1");
 
     unset($_SESSION['selcat']);
     unset($_SESSION['catname2']);
@@ -1049,11 +1084,13 @@ function remove()
     {
     	hesk_process_messages($hesklang['cant_del_default_cat'],$_SERVER['PHP_SELF']);
     }
-
-	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `id`='".intval($mycat)."' LIMIT 1");
+	
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE NOT EXISTS 
+	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` as `t` WHERE `t`.`category`='".intval($mycat)."') LIMIT 1");
+	
 	if (hesk_dbAffectedRows() != 1)
     {
-    	hesk_error("$hesklang[int_error]: $hesklang[cat_not_found].");
+    	hesk_error("$hesklang[cat_req].");
     }
 
 	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `category`=1 WHERE `category`='".intval($mycat)."'");

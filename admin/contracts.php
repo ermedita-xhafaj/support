@@ -116,14 +116,16 @@ else {
 	$value_ending_date_info = '';
 }
 
-if(isset($_POST['active'])){
+/* if(isset($_POST['active'])){
 	$value_active = hesk_input( hesk_POST('active') );
 }
 else {
 	$value_active = '';
-}
+} */
 
 if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_staff_id) && !empty($value_starting_date) && !empty($value_ending_date))
+
+	if((date("Y-m-d") >= hesk_dbEscape($value_starting_date)) && (date("Y-m-d") <= hesk_dbEscape($value_ending_date)) )
 	{
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` (
 			`id`,
@@ -134,7 +136,8 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			`starting_date`,
 			`ending_date`,
 			`created_by`,
-			`ending_date_info`
+			`ending_date_info`,
+			`active`
 			) VALUES (
 			'".hesk_dbEscape($value_id)."',
 			'".hesk_dbEscape($value_contract_name)."',
@@ -144,8 +147,36 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			'".hesk_dbEscape($value_starting_date)."',
 			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($value_created_by)."',
-			'".hesk_dbEscape($value_ending_date_info)."'
+			'".hesk_dbEscape($value_ending_date_info)."',
+			'".hesk_dbEscape(1)."'
 			)" );
+	}
+	else{
+		
+		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` (
+			`id`,
+			`contract_name`,
+			`company_id`,
+			`project_id`,
+			`staff_id`,
+			`starting_date`,
+			`ending_date`,
+			`created_by`,
+			`ending_date_info`,
+			`active`
+			) VALUES (
+			'".hesk_dbEscape($value_id)."',
+			'".hesk_dbEscape($value_contract_name)."',
+			'".hesk_dbEscape($value_company_id)."',
+			'".hesk_dbEscape($value_project_id)."',
+			'".hesk_dbEscape($value_staff_id)."',
+			'".hesk_dbEscape($value_starting_date)."',
+			'".hesk_dbEscape($value_ending_date)."',
+			'".hesk_dbEscape($value_created_by)."',
+			'".hesk_dbEscape($value_ending_date_info)."',
+			'".hesk_dbEscape(0)."'
+			)" );
+		
 	}
 
 
@@ -168,6 +199,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<th style="text-align:left"><b><i><?php echo $hesklang['staffname'] ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['starting_date']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['ending_date']; ?></i></b></th>
+			<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 			<?php /*if(isset($_POST['update'])){
 			echo '<th style="text-align:left"><b><i>' .$hesklang['ending_date_info'] .'</i></b></th>';
 			}*/
@@ -196,6 +228,8 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			}
 		
 		$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts`');
+		//$flag = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` where active = 1');
+		
 			$i=1;
 			while ($row = mysqli_fetch_array($res)) 
 			{
@@ -207,20 +241,40 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				
 				$result_staff_cont = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id='.$row['staff_id']);
 				$staff_result = mysqli_fetch_array($result_staff_cont);
-				echo '<tr>
-					<td>' .$row['id'] .'</td>
-					<td>' .$row['contract_name'] .'</td>
-					<td>' .$company_result['company_name'] .'</td>
-					<td>' .$project_result['project_name'] .'</td>
-					<td>' .$staff_result['name'] .'</td>
-					<td>' .$row['starting_date'] .'</td>
-					<td>' .$row['ending_date'] .'</td>';
-					/*if(isset($_POST['update'])){
-					echo
-					'<td>' .$row['ending_date'] .'</td>';}*/
-					echo 
-					'<td>' .$edit_code .$remove_code .'</td>
-					</tr>';
+				if($row['active']){
+					echo '<tr>
+						<td>' .$row['id'] .'</td>
+						<td>' .$row['contract_name'] .'</td>
+						<td>' .$company_result['company_name'] .'</td>
+						<td>' .$project_result['project_name'] .'</td>
+						<td>' .$staff_result['name'] .'</td>
+						<td>' .$row['starting_date'] .'</td>
+						<td>' .$row['ending_date'] .'</td>
+						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false" checked="checked" ></td>';
+						/*if(isset($_POST['update'])){
+						echo
+						'<td>' .$row['ending_date'] .'</td>';}*/
+						echo 
+						'<td>' .$edit_code .$remove_code .'</td>
+						</tr>';
+					}
+					else{
+						echo '<tr>
+						<td>' .$row['id'] .'</td>
+						<td>' .$row['contract_name'] .'</td>
+						<td>' .$company_result['company_name'] .'</td>
+						<td>' .$project_result['project_name'] .'</td>
+						<td>' .$staff_result['name'] .'</td>
+						<td>' .$row['starting_date'] .'</td>
+						<td>' .$row['ending_date'] .'</td>
+						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false"></td>';
+						/*if(isset($_POST['update'])){
+						echo
+						'<td>' .$row['ending_date'] .'</td>';}*/
+						echo 
+						'<td>' .$edit_code .$remove_code .'</td>
+						</tr>';
+					}
 				}
 			
 		?>		

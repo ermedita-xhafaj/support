@@ -70,4 +70,15 @@ $(document).ready(function(){
 
 });
 
+$(document).ready(function(){
+	$("#old-name-category").change(function(){
+		if($(".manage-categories-table tr."+$(this).val()+" td.cat-status-identifier input").attr("checked")){
+			$("#new-category-status").prop("checked",true);
+		}
+		else{
+			$("#new-category-status").prop("checked", false);
+		}
+	});
+});
+
 
