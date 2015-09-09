@@ -47,6 +47,11 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>hesk_javascript.js"></script>
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>/js/custom.js"></script>
 	
+	<!-- Bootstrap multi select
+	<script type="text/javascript" src= "<?php echo HESK_PATH; ?>/bootstrap-multiselect/js/jquery-2.1.0.min.js"></script> -->
+	<script type="text/javascript" src= "<?php echo HESK_PATH; ?>/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+	<link rel="stylesheet" href="<?php echo HESK_PATH; ?>/bootstrap-multiselect/css/bootstrap-multiselect.css" type="text/css"/>
+	
     <?php
 	/* Prepare Javascript that browser should load on page load */
     $onload = "javascript:var i=new Image();i.src='" . HESK_PATH . "img/orangebtnover.gif';var i2=new Image();i2.src='" . HESK_PATH . "img/greenbtnover.gif';";

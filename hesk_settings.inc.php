@@ -53,17 +53,14 @@ $hesk_settings['sequential']=1;
 $hesk_settings['time_worked']=1;
 $hesk_settings['spam_notice']=1;
 $hesk_settings['list_users']=0;
-$hesk_settings['debug_mode']=0; //ermedita Debugg ON/OFF
+$hesk_settings['debug_mode']=1; //ermedita Debugg ON/OFF
 $hesk_settings['short_link']=0;
 $hesk_settings['select_cat']=0;
 $hesk_settings['select_pri']=0;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=0;
-
-//$hesk_settings['secimg_sum']='HHTJ858M92';
-$hesk_settings['secimg_sum']='Y18D4XHH5A';
-
+$hesk_settings['secimg_sum']='VZWAXLUWTP';
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
 $hesk_settings['recaptcha_private_key']='';
@@ -157,10 +154,7 @@ $hesk_settings['open_only']=1;
 
 // ==> TICKET LIST
 
-
-//$hesk_settings['ticket_list']=array('id','lastchange','category','name','subject','status','owner','lastreplier');
-$hesk_settings['ticket_list']=array('id','trackid','lastchange','category','name','subject','status','owner','lastreplier');
-
+$hesk_settings['ticket_list']=array('id','lastchange','name','subject','status');
 
 // --> Other
 $hesk_settings['submittedformat']='2';
