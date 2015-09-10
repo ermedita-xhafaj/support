@@ -536,7 +536,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 #configuration-info, #department-info, #company-info, #project-info, #create-contract-info, #edit-contract-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
 #config-info, #dep-info, #comp-info, #proj-info, #create-cont, #edit-cont {border: 1px solid #37B992; border-top:0px; background-color: white; margin-bottom: 20px;}
 
-.manage-projects-table, .manage-company-table, .manage-department-table {background: white; width: 95.5%; margin-top: 5px; margin-bottom: 15px;}
+.manage-projects-table, .manage-company-table {background: white; width: 95.5%; margin-top: 5px; margin-bottom: 15px;}
 .create-projects {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 97.2%; margin-left: 15px; margin-bottom: 20px;}
 #project_row {margin-bottom: 5px;}
 .project-submit-btn {width: 128px; margin-bottom: 10px;}
@@ -797,8 +797,8 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 /* start style for support/inc/profile_functions.inc.php */						
 .profile-functions-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
 .profile-functions {border-bottom: 1px solid #37B992;}
-#p-info, #permissions, #signature, #preferences, #notifications, #project_users{border: 1px solid #37B992; border-top:0px; background-color: white;}
-#profile-info, #permissions-info, #signature-info, #preferences-info, #notifications-info, #project_users-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#p-info, #permissions, #signature, #preferences, #notifications{border: 1px solid #37B992; border-top:0px; background-color: white;}
+#profile-info, #permissions-info, #signature-info, #preferences-info, #notifications-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
 .profile-functions li a { margin:0px; color:#fff; }
 .profile-functions li.active {background-color:#fff!important; bottom:-1px;}
 .profile-functions li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
@@ -816,10 +816,6 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 .signature-profile-func, .preferences-profile-func {padding-top: 15px; margin-bottom: 15px;}
 .preferences-profile-defaults {margin-top: 5px;}
 .notif-mw {padding: 15px 0 5px 15px;}
-.project_contract_table {padding-top: 20px; margin: 0 20px;}
-
-
-
 
 /*start style for support/index.php */
 .user-login-help-staf {margin-left: -15px;}

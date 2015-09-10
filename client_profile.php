@@ -1,23 +1,19 @@
 <?php 
 define('IN_SCRIPT',1);
 define('HESK_PATH','./');
+include("inc/database.inc.php");
 
 /* Get all the required files and functions */
 require(HESK_PATH . 'hesk_settings.inc.php');
 require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/profile_functions.inc.php');
-hesk_load_database_functions();
 
 session_start();
 hesk_dbConnect();
 
-
-$_SESSION['new']['token']="";
-$_SESSION['token']="";
-
 /* Update profile? */
-if ( isset($_POST['action']) && $_POST['action']=="update")
+if ( ! empty($_POST['action']))
 {
 	// Demo mode
 	if ( defined('HESK_DEMO') )
@@ -88,6 +84,7 @@ if (defined('WARN_PASSWORD'))
 ?>
 
 <div class="container"><?php echo $hesklang['req_marked_with']; ?> <font class="important">*</font></div>
+
 <div class="container tab-content profile-functions-tab">
 	<ul id="tabs" class="nav nav-tabs profile-functions" data-tabs="tabs">
 		<li class="active" id="profile-info"><a href="#p-info" aria-controls="p-info" role="tab" data-toggle="tab"><?php echo $hesklang['pinfo']; ?></a></li>
@@ -102,6 +99,7 @@ if (defined('WARN_PASSWORD'))
 		<div class="profile-information">
 			<div class="form-inline" style="margin-bottom: 5px;">
 				<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
+				<?php /*var_dump($_SESSION['id']['name']);*/ ?>
 				<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if (isset($_SESSION['id']['name'])){echo $_SESSION['id']['name']; }?>" />
 			
 			</div>
@@ -114,21 +112,6 @@ if (defined('WARN_PASSWORD'))
 			<div class="form-inline" style="margin-bottom: 5px;">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
 				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?>" />
-			</div>
-			
-			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo 'Address'; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['address'])) {echo $_SESSION['id']['address']; } ?>"/>
-			</div>
-			
-			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo 'Phone Number'; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="number" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['phonenumber'])) {echo $_SESSION['id']['phonenumber']; } ?>"/>
-			</div>
-			
-			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo 'Pozicioni Detyres'; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['poz_detyres'])) {echo $_SESSION['id']['poz_detyres']; } ?>"/>
 			</div>
 
 			<input type="hidden" name="userid" value="<?php echo $_SESSION['id']['id']; ?>" />
@@ -202,22 +185,19 @@ function update_profile() {
     $sql_username = '';
     $hesk_error_buffer = '';
 
-	$newvar['new']['name']  = hesk_input( hesk_POST('name') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_your_name'] . '</li>';
-	$newvar['new']['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer = '<li>' . $hesklang['enter_valid_email'] . '</li>';
-	$newvar['new']['signature'] = hesk_input( hesk_POST('signature') );
-	$newvar['new']['user'] = hesk_input( hesk_POST('user') );
-	$newvar['new']['address'] = hesk_input( hesk_POST('address') );
-	$newvar['new']['phonenumber'] = hesk_input( hesk_POST('phonenumber') );
-	$newvar['new']['poz_detyres'] = hesk_input( hesk_POST('poz_detyres') );
+	$_SESSION['new']['name']  = hesk_input( hesk_POST('name') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_your_name'] . '</li>';
+	$_SESSION['new']['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer = '<li>' . $hesklang['enter_valid_email'] . '</li>';
+	$_SESSION['new']['signature'] = hesk_input( hesk_POST('signature') );
+	$_SESSION['new']['user'] = hesk_input( hesk_POST('user') );
 
 	/* Signature */
-	if (strlen($newvar['new']['signature'])>1000)
+	if (strlen($_SESSION['new']['signature'])>1000)
     {
 		$hesk_error_buffer .= '<li>' . $hesklang['signature_long'] . '</li>';
     }
 
 	
-	$sql_username =  ",user='" . hesk_dbEscape($newvar['new']['user']) . "'";
+	$sql_username =  ",user='" . hesk_dbEscape($_SESSION['new']['user']) . "'";
 	
 	
 	/* Change password? */
@@ -256,21 +236,18 @@ function update_profile() {
     if (strlen($hesk_error_buffer))
     {
 		/* Process the session variables */
-		$newvar['new'] = hesk_stripArray($newvar['new']);
+		$_SESSION['new'] = hesk_stripArray($_SESSION['new']);
 
 		$hesk_error_buffer = $hesklang['rfm'].'<br /><br /><ul>'.$hesk_error_buffer.'</ul>';
-		//hesk_process_messages($hesk_error_buffer,'NOREDIRECT');
+		hesk_process_messages($hesk_error_buffer,'NOREDIRECT');
     }
-    //else
-    //{			
+    else
+    {			
 			$query = "UPDATE ".hesk_dbEscape($hesk_settings['db_pfix'])."clients SET 
-			name='".hesk_dbEscape($newvar['new']['name'])."', 
-			email='".hesk_dbEscape($newvar['new']['email'])."', 
-			user='".hesk_dbEscape($newvar['new']['user'])."',
-			address='".hesk_dbEscape($newvar['new']['address'])."',
-			phonenumber='".hesk_dbEscape($newvar['new']['phonenumber'])."',
-			poz_detyres='".hesk_dbEscape($newvar['new']['poz_detyres'])."',
-			signature='".hesk_dbEscape($newvar['new']['signature'])."'
+			name='".hesk_dbEscape($_SESSION['new']['name'])."', 
+			email='".hesk_dbEscape($_SESSION['new']['email'])."', 
+			user='".hesk_dbEscape($_SESSION['new']['user'])."',
+			signature='".hesk_dbEscape($_SESSION['new']['signature'])."'
 			$sql_pass
 			WHERE id=".$id." LIMIT 1";
 			
@@ -278,22 +255,19 @@ function update_profile() {
 		$result = hesk_dbQuery($query);
 
 		/* Process the session variables */
-		$newvar['new'] = hesk_stripArray($newvar['new']);
-		$tmp = $_SESSION['id']['id'];
-		$_SESSION['id'] = $newvar['new'];
-		$_SESSION['id']['id'] = $tmp;
+		$_SESSION['new'] = hesk_stripArray($_SESSION['new']);
 
         /* Update session variables */
-        /*foreach ($newvar['new'] as $k => $v)
+        foreach ($_SESSION['new'] as $k => $v)
         {
         	$_SESSION[$k] = $v;
-        }*/
-        unset($newvar['new']);
+        }
+        unset($_SESSION['new']);
 		
 		hesk_cleanSessionVars('as_notify');
 
 	    hesk_process_messages($hesklang['profile_updated_success'],'client_profile.php','SUCCESS');
-   // }
+    }
 } // End update_profile()
 
 ?>

@@ -1004,10 +1004,7 @@ function print_start()
 		</div>
 	</div><!-- end submit-view-existing-ticket -->
 <!-- start form login-->	
-<div class="print_ticket_for_client">
 <?php require(HESK_PATH . 'inc/print_tickets_client.inc.php'); ?>
-</div>
-
 <?php else: ?>
 	<div class="container">
 		<div class="container col-sm-5 user-login-help-staf">

@@ -77,12 +77,6 @@ hesk_handle_messages();
 
 
 <?php
-/* Print forms for listing and searching tickets */
-require_once(HESK_PATH . 'inc/show_search_form.inc.php');
-?>
-	
-	
-<?php
 /* Print the list of tickets */
 $is_search = 1;
 require_once(HESK_PATH . 'inc/print_tickets.inc.php');
@@ -96,6 +90,10 @@ if ( ! empty($_GET['def']))
 
 &nbsp;<br />
 
+<?php
+/* Print forms for listing and searching tickets */
+require_once(HESK_PATH . 'inc/show_search_form.inc.php');
+?>
 
 <p>&nbsp;</p>
 <?php

@@ -84,6 +84,7 @@ $s_my = array(1=>1,2=>1);
 $s_ot = array(1=>1,2=>1);
 $s_un = array(1=>1,2=>1);
 
+
 // --> TICKET STATUS
 $possible_status = array(
 0 => 'NEW',
@@ -155,7 +156,7 @@ if ($tmp == 0 || $tmp == 4)
 else
 {
 	// A custom selection of priorities
-	$sql .= "`priority` IN ('" . implode("','", array_keys($priority) ) . "') ";
+	$sql .= " AND `priority` IN ('" . implode("','", array_keys($priority) ) . "') ";
 }
 
 // That's all the SQL we need for count
@@ -163,4 +164,8 @@ $sql_count .= $sql;
 $sql_final .=  $sql;
 
 // List tickets?
+if (!isset($_SESSION['hide']['ticket_list']))
+{
+	$href = 'show_tickets.php';
 	require(HESK_PATH . 'inc/ticket_list_client.inc.php');
+}

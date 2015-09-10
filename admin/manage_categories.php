@@ -75,16 +75,14 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
-
-
-//Hacking i id ne URL per te mos nxjerre errore ne Update
-if(!isset($_GET['id']))
-{ 
-	$_GET['id'] = 0;
-}
-
 ?>
 
+<!--</td>
+</tr>-->
+
+<!-- start in this page end somewhere...
+<tr>
+<td>-->
 
 <div class="container tab-content manage-config-tab">
 	<ul id="tabs" class="nav nav-tabs manage-config" data-tabs="tabs">
@@ -289,13 +287,11 @@ if(!isset($_GET['id']))
 		</table>
 	</div>
 
-	
-	<!-- Hide notice Manage Categories after Manage Categories Table-->
 	<?php
-	/*if ($hesk_settings['cust_urgency'])
+	if ($hesk_settings['cust_urgency'])
 	{
 		hesk_show_notice($hesklang['cat_pri_info'] . ' ' . $hesklang['cpri']);
-	}*/
+	}
 	?>
 
 	<div class="container add-cat-title"><?php echo $hesklang['add_cat']; ?></div>
@@ -489,7 +485,7 @@ if(!isset($_GET['id']))
 		
 		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
 		<div class="table-responsive container">
-			<table class="table table-bordered manage-department-table">
+			<table class="table table-bordered manage-projects-table">
 				<tr>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_name']; ?></i></b></th>
@@ -526,8 +522,8 @@ if(!isset($_GET['id']))
 							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove&amp;id='.$valuedep_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 						}
 						
-						echo '<tr class="department-row-identification">
-							<td class="department-code-identification">' .$row_dep['department_code'] .'</td>
+						echo '<tr>
+							<td>' .$row_dep['department_code'] .'</td>
 							<td>' .$row_dep['department_name'] .'</td>
 							<td>' .$row_dep['department_manager'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
@@ -545,7 +541,7 @@ if(!isset($_GET['id']))
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="form-department-code" name="department_code" size="40" maxlength="50" value=""/>
+						<input class="form-control" required="required" title="Required field" type="number" id="" name="department_code" size="40" maxlength="50" value=""/>
 					</div>
 					
 					<div class="form-inline" id="project_row">
@@ -563,7 +559,7 @@ if(!isset($_GET['id']))
 				<div class="container">
 					<input type="hidden" name="action" value="save" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" id="department-button" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
@@ -1108,7 +1104,7 @@ if(!isset($_GET['id']))
 			$valueproj_project_code = $row_proj['project_code'];
 			$valueproj_project_name = $row_proj['project_name'];
 			$valueproj_project_manager = $row_proj['project_manager'];
-			$valueproj_company_id = $row_proj['company_id'];		
+			$valueproj_company_id = $row_comp['company_id'];		
 		}		
 	}
 	?>		
@@ -1138,14 +1134,8 @@ if(!isset($_GET['id']))
 								$i=1;
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
-									if($valueproj_company_id == $row_comp['id']) 
-									{
-										echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
-									}
-									else
-									{
-										echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
-									}
+									echo 
+									'<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
 								}
 							?>		
 						</select>
