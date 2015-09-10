@@ -229,7 +229,9 @@ else {return false;}
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
 
-	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."' ");
+
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."'");
+
 	foreach($_POST['staff_id'] as $staff){
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
 			`userId`, 
@@ -409,13 +411,6 @@ else {return false;}
 						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50" value="" />
 					</div>
-					
-					<?php if( !($value_ending_date == $value_active) && $hesk_settings['active']) {?>
-					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['active']; ?></label>
-						<input type="checkbox" name="active" value="Y" checked="checked"/>
-					</div>
-					<?php } ?>
 				</div>
 				
 				<!-- Submit -->
@@ -453,9 +448,9 @@ if(isset($_GET['id'])) {
 		$value_starting_date = $row['starting_date'];
 		$value_ending_date = $row['ending_date'];		
 	}
-	
+
 }
- 
+
 ?>
 
 	<!-- Edit Contract-->

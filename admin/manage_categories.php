@@ -79,18 +79,23 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 
+
 if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Update
 	$_GET['id'] = 0;
 }
 
 ?>
 
-<!--</td>
-</tr>-->
 
-<!-- start in this page end somewhere...
-<tr>
-<td>-->
+
+//Hacking i id ne URL per te mos nxjerre errore ne Update
+if(!isset($_GET['id']))
+{ 
+	$_GET['id'] = 0;
+}
+
+?>
+
 
 <!--MANAGE CATEGORIES-->
 <div class="container tab-content manage-config-tab">
@@ -296,11 +301,13 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		</table>
 	</div>
 
+	
+	<!-- Hide notice Manage Categories after Manage Categories Table-->
 	<?php
-	if ($hesk_settings['cust_urgency'])
+	/*if ($hesk_settings['cust_urgency'])
 	{
 		hesk_show_notice($hesklang['cat_pri_info'] . ' ' . $hesklang['cpri']);
-	}
+	}*/
 	?>
 
 	<div class="container add-cat-title"><?php echo $hesklang['add_cat']; ?></div>
@@ -511,7 +518,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		
 		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
 		<div class="table-responsive container">
-			<table class="table table-bordered manage-projects-table">
+			<table class="table table-bordered manage-department-table">
 				<tr>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_name']; ?></i></b></th>
@@ -560,15 +567,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						{
 							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove_dep&amp;id='.$row_dep['id'] .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 						}
+
 					if($row_dep['active']==1) $active="checked"; else $active="";
-						echo '<tr>
-							<td>' .$row_dep['department_code'] .'</td>
+						echo '<tr class="department-row-identification">
+							<td class="department-code-identification">' .$row_dep['department_code'] .'</td>
 							<td>' .$row_dep['department_name'] .'</td>
 							<td>' .$row_dep['department_manager'] .'</td>
 							<td>' .$row_dep['active'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
-						}
+					}
 				?>		
 			</table>
 		</div>
@@ -582,7 +590,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="" name="department_code" size="40" maxlength="50" value=""/>
+						<input class="form-control" required="required" title="Required field" type="number" id="form-department-code" name="department_code" size="40" maxlength="50" value=""/>
 					</div>
 					
 					<div class="form-inline" id="project_row">
@@ -606,7 +614,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="container">
 					<input type="hidden" name="action" value="save" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" id="department-button" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
@@ -1324,6 +1332,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
+
+									if($valueproj_company_id == $row_comp['id']) 
+									{
+										echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
+									}
+									else
+									{
+										echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+									}
+
 									if($valueproj_company_id==$row_comp['id']) echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
 									else echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
 								}
@@ -1341,6 +1359,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 								{
 									if($valueproj_department_id==$row_dep['id']) echo '<option value="' .$row_dep['id'] .'" selected="selected">' .$row_dep['department_name'] .'</option>';
 									else echo '<option value="' .$row_dep['id'] .'">' .$row_dep['department_name'] .'</option>';
+
 								}
 							?>		
 						</select>
