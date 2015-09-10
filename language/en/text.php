@@ -154,7 +154,7 @@ $hesklang['c2c']='Click to continue';
 $hesklang['tickets_deleted']='Tickets deleted';
 $hesklang['num_tickets_deleted']='<b>%d</b> tickets have been deleted';
 $hesklang['found_num_tickets']='Found <b>%d</b> tickets. Pages:';
-$hesklang['confirm_del_cat']='Are you sure you want to remove this record?';
+$hesklang['confirm_del_cat']='Are you sure you want to remove this category?';
 $hesklang['cat_intro']='Here you are able to manage categories. Categories are useful
 for categorizing tickets by relevance (for example &quot;Sales&quot;,
 &quot;Hardware problems&quot;, &quot;PHP/MySQL problems&quot; etc) and for
@@ -1434,13 +1434,6 @@ $hesklang['categ_impro_id']='Category Code';
 $hesklang['def_act']='Active';
 $hesklang['enter_categ_impro_id']='Please enter category code!';
 $hesklang['cat_req']='Selected category cannot be deleted because it is linked with a ticket!';
-$hesklang['dep_removed_db']='Selected department has been successfully removed from the database';
-$hesklang['dep_req']='Selected department cannot be deleted because it is linked with a project!';
-$hesklang['department_name']='Department Name';
-$hesklang['comp_req']='Selected company cannot be deleted because it is linked with a SLA!';
-$hesklang['company_name']='Company Name';
-$hesklang['proj_req']='Selected project cannot be deleted because it is linked with a SLA!';
-
 
 
 
