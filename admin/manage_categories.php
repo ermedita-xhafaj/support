@@ -88,13 +88,6 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 
 
 
-//Hacking i id ne URL per te mos nxjerre errore ne Update
-if(!isset($_GET['id']))
-{ 
-	$_GET['id'] = 0;
-}
-
-?>
 
 
 <!--MANAGE CATEGORIES-->
