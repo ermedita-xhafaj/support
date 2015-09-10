@@ -21,26 +21,17 @@ $(document).ready(function(){
 	});
 });
 
-
 $(document).ready(function(){
 	$(".te-drejtat").click(function(){
 	if( $(this).attr('id') == "klient") {
 		$("#preferences-info").addClass("hidden");
+		$("#notifications-info").addClass("hidden");
+		$("#project_users-info").addClass("hidden");
 		}
 	else {
 		$("#preferences-info").removeClass("hidden");
-	}
-	});
-
-});
-
-$(document).ready(function(){
-	$(".te-drejtat").click(function(){
-	if( $(this).attr('id') == "klient") {
-		$("#notifications-info").addClass("hidden");
-		}
-	else {
 		$("#notifications-info").removeClass("hidden");
+		$("#project_users-info").removeClass("hidden");
 	}
 	});
 
@@ -119,11 +110,30 @@ $(document).ready(function() {
 });
 });
 
+
+// Check for control project_code, department_code:
 $(document).ready(function() {
 	$("#project-button").click(function(){
 		var exist = false;
 		$(".manage-projects-table tr.project-row-identification td.project-code-identification").each(function(){
 			if($("#form-project-code").val()==$(this).html()){
+				alert("Vendosni nje kod te ndryshem per projektin");
+				exist = true;
+			}
+		});
+		if(exist){
+			return false;
+		} else{
+			return true;
+		}
+	});
+});
+
+$(document).ready(function() {
+	$("#department-button").click(function(){
+		var exist = false;
+		$(".manage-department-table tr.department-row-identification td.department-code-identification").each(function(){
+			if($("#form-department-code").val()==$(this).html()){
 				alert("Vendosni nje kod te ndryshem per projektin");
 				exist = true;
 			}
