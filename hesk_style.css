@@ -506,8 +506,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 .add-cat-title, .ren-cat-title, .set-cat-pri-title {font-size: 15pt; font-weight: bold; margin-top: 10px;}
 .manage-categories-title {font-size: 15pt; font-weight: bold; padding-top: 10px;}
 .manage-categories-table{background: white; width: 95.5%; margin-bottom: 15px;}
-#category-name, #new-name-category {width: 368px;}
-#old-name-category, #set-category {width: 112px;}
+#category-name, #new-name-category , #old-name-category, #set-category{width: 368px;}
 .create-cat-btn, .rename-cat-btn, .set-cat-pri-btn {margin-bottom: 10px;}
 .manage-categories-set-category-priority {margin-bottom: 20px;}
 .create-cat-btn, .rename-cat-btn, .set-cat-pri-btn{color: white; width: 178px;
@@ -537,7 +536,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 #configuration-info, #department-info, #company-info, #project-info, #create-contract-info, #edit-contract-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
 #config-info, #dep-info, #comp-info, #proj-info, #create-cont, #edit-cont {border: 1px solid #37B992; border-top:0px; background-color: white; margin-bottom: 20px;}
 
-.manage-projects-table, .manage-company-table {background: white; width: 95.5%; margin-top: 5px; margin-bottom: 15px;}
+.manage-projects-table, .manage-company-table, .manage-department-table {background: white; width: 95.5%; margin-top: 5px; margin-bottom: 15px;}
 .create-projects {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 97.2%; margin-left: 15px; margin-bottom: 20px;}
 #project_row {margin-bottom: 5px;}
 .project-submit-btn {width: 128px; margin-bottom: 10px;}
@@ -798,8 +797,8 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 /* start style for support/inc/profile_functions.inc.php */						
 .profile-functions-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
 .profile-functions {border-bottom: 1px solid #37B992;}
-#p-info, #permissions, #signature, #preferences, #notifications{border: 1px solid #37B992; border-top:0px; background-color: white;}
-#profile-info, #permissions-info, #signature-info, #preferences-info, #notifications-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
+#p-info, #permissions, #signature, #preferences, #notifications, #project_users{border: 1px solid #37B992; border-top:0px; background-color: white;}
+#profile-info, #permissions-info, #signature-info, #preferences-info, #notifications-info, #project_users-info {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
 .profile-functions li a { margin:0px; color:#fff; }
 .profile-functions li.active {background-color:#fff!important; bottom:-1px;}
 .profile-functions li.active a { border:solid; border-width:1px 1px 0px 1px; border-color:#37B992; color: #37B992;}
@@ -817,6 +816,10 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 .signature-profile-func, .preferences-profile-func {padding-top: 15px; margin-bottom: 15px;}
 .preferences-profile-defaults {margin-top: 5px;}
 .notif-mw {padding: 15px 0 5px 15px;}
+.project_contract_table {padding-top: 20px; margin: 0 20px;}
+
+
+
 
 /*start style for support/index.php */
 .user-login-help-staf {margin-left: -15px;}
@@ -983,4 +986,16 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 #page-title-row2 {margin-left: 49px;}
 .heskTitle {border-radius: 5px; background-color: #EC790F; font-size: 12px; color: #fff; padding: 5px;}
 .error img, .success img, .notice img, .info img {vertical-align:text-bottom;}
+.form-control-1 {     display: inline; height: 34px; padding: 6px 12px; font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
 		

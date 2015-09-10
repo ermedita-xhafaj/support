@@ -38,7 +38,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 function hesk_profile_tab($session_array='new',$is_profile_page=true)
 {
-	global $hesk_settings, $hesklang, $can_reply_tickets, $can_view_tickets, $can_view_unassigned;
+	global $hesk_settings, $hesklang, $can_reply_tickets, $can_view_tickets, $can_view_unassigned, $default_userdata;
 	?>
 	<!-- TABS -->
 <div class="container tab-content profile-functions-tab">
@@ -74,6 +74,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<!--<li id="permissions-info"><a href="#permissions" aria-controls="permissions" role="tab" data-toggle="tab"><?php //echo $hesklang['permissions']; ?></a></li>-->
 			<?php } ?>
 			<li id="signature-info"><a href="#signature" aria-controls="signature" role="tab" data-toggle="tab"><?php echo $hesklang['sig']; ?></a></li>
+			<li class="hidden" id="project_users-info"><a href="#project_users" aria-controls="project_users" role="tab" data-toggle="tab"><?php echo $hesklang['project']; ?></a></li>
 			<li class="hidden" id="preferences-info"><a href="#preferences" aria-controls="preferences" role="tab" data-toggle="tab"><?php echo $hesklang['pref']; ?></a></li>
 			<li class="hidden" id="notifications-info"><a href="#notifications" aria-controls="notifications" role="tab" data-toggle="tab"><?php echo $hesklang['notn']; ?></a></li>
 		</ul>
@@ -85,12 +86,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<div class="profile-information">
 			<div class="form-inline" id="profile-information-row">
 			<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php echo $_SESSION['userdata']['name']; ?>"/>
+			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if(isset($_SESSION['new']['name'])) {echo $_SESSION['new']['name'];} ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php echo $_SESSION['userdata']['email']; ?>"/>
+				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['email'])) {echo $_SESSION['new']['email']; } ?>"/>
 			</div>
 			
 			<?php
@@ -99,11 +100,26 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php echo $_SESSION['userdata']['user']; ?>"/>
+				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION['new']['user'])) {echo $_SESSION['new']['user']; } ?>"/>
 			</div>
 			<?php
 			}
 			?>
+			
+			<div class="form-inline" id="profile-information-row">
+				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo 'Address'; ?>: <font class="important">*</font></label>
+				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['address'])) {echo $_SESSION['new']['address']; } ?>"/>
+			</div>
+			
+			<div class="form-inline" id="profile-information-row">
+				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo 'Phone Number'; ?>: <font class="important">*</font></label>
+				<input class="form-control" type="number" min="0" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['phonenumber'])) {echo $_SESSION['new']['phonenumber']; } ?>"/>
+			</div>
+			
+			<div class="form-inline" id="profile-information-row">
+				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo 'Pozicioni Detyres'; ?>: <font class="important">*</font></label>
+				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['poz_detyres'])) {echo $_SESSION['new']['poz_detyres']; } ?>"/>
+			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-newpass"><?php echo $is_profile_page ? $hesklang['new_pass'] : $hesklang['pass']; ?>:</label>
@@ -125,17 +141,16 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			</div>
 			
 			<div class="form-inline hidden" id="show-hide-kontrata">
-				<label class="col-sm-2 control-label" for="select-kontrata">Kontrata:</label>
-				<select class="form-control" id="select-kontrata" name="contract_id" style="width: 336px;">
+				<label class="col-sm-2 control-label" for="select-kontrata"><?php echo $hesklang['contract']; ?></label>
+				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
 					<option></option>
 					<?php
-						$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts`');
+						$res_contract = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts`');
 						$i=1;
-						while ($row = mysqli_fetch_array($res)) {
-						echo 
-						'<option value="' .$row['id'] .'">' .$row['contract_name'] .'</option>'
-						;}
-				
+						while ($row_contract = mysqli_fetch_array($res_contract)) 
+						{
+							echo '<option value="' .$row_contract['id'] .'">' .$row_contract['contract_name'] .'</option>';
+						}
 					?>		
 				</select>
 			</div>
@@ -244,6 +259,51 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			</div><!-- end signature-profile-func -->
 		</div>
 			<!-- SIGNATURE -->
+			
+			<!-- Projets for Users -->
+	<div role="tabpanel" class="tab-pane" id="project_users">		
+		<div class="project_contract_table">
+			<table class="table table-bordered">
+				<tr>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['contract']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['project']; ?></i></b></th>
+				</tr>
+
+				<?php
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `id` ASC');
+					$i=1;
+					while ($row = mysqli_fetch_array($result)) 
+					{
+						$staff = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `userId`='".$row['id']."'");
+						$staff_string= "";
+						$project_string= "";
+						while ($row1 = mysqli_fetch_array($staff))
+						{
+							$contract_staff = hesk_dbQuery('SELECT contract_name, project_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row1["contractId"].'"');
+							$contract = mysqli_fetch_array($contract_staff);
+							$staff_string .= $contract['contract_name']."<br/>";
+							$project_id = isset($contract['project_id'])?$contract['project_id']:"";
+							if(!empty($project_id)){
+								$project_staff = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE `id` ="'.$project_id.'"');
+								$project = mysqli_fetch_array($project_staff);
+								$project_string .= $project['project_name']."<br/>";
+							}
+						}
+						
+						echo '<tr>
+						<td class="$color">' .$row['id'] .'</td>
+						<td class="$color">' .$row['name'] .'</td>
+						<td class="$color">' .$staff_string .'</td>
+						<td class="$color">' .$project_string .'</td>
+						</tr>';
+						}
+				?>				
+			</table>
+		</div>
+	</div>
+			<!-- End Projets for Users -->
 
 			<?php
 			if ( ! $is_profile_page || $can_reply_tickets )

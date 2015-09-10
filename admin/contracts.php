@@ -98,6 +98,7 @@ else {
 	$value_active = '';
 }
 
+
 if(isset($_POST['staff_id'])){
 	$value_staff_id = hesk_input( hesk_POST('staff_id') );
 }
@@ -105,7 +106,10 @@ else {
 	$value_staff_id = '';
 }
 
-if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_starting_date) && !empty($value_ending_date))
+if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_starting_date) && !empty($value_ending_date)){
+
+
+	if((date("Y-m-d") >= hesk_dbEscape($value_starting_date)) && (date("Y-m-d") <= hesk_dbEscape($value_ending_date)) )
 	{
 
 	 if(isset($_POST['action']) && $_POST['action'] == 'save') {
@@ -126,7 +130,7 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($_SESSION['id'])."',
 			'".hesk_dbEscape($value_ending_date_info)."',
-			'".hesk_dbEscape($value_active)."'
+			'".hesk_dbEscape(1)."'
 			)" );
 			$id = hesk_dbInsertID();
 			foreach($_POST['staff_id'] as $staff){
@@ -135,7 +139,39 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			}
 		}
 	}
-
+	else{
+		
+		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` (
+			`id`,
+			`contract_name`,
+			`company_id`,
+			`project_id`,
+			`staff_id`,
+			`starting_date`,
+			`ending_date`,
+			`created_by`,
+			`ending_date_info`,
+			`active`
+			) VALUES (
+			'".hesk_dbEscape($value_id)."',
+			'".hesk_dbEscape($value_contract_name)."',
+			'".hesk_dbEscape($value_company_id)."',
+			'".hesk_dbEscape($value_project_id)."',
+			'".hesk_dbEscape($value_staff_id)."',
+			'".hesk_dbEscape($value_starting_date)."',
+			'".hesk_dbEscape($value_ending_date)."',
+			'".hesk_dbEscape($value_created_by)."',
+			'".hesk_dbEscape($value_ending_date_info)."',
+			'".hesk_dbEscape(0)."'
+			)" );
+			$id = hesk_dbInsertID();
+			foreach($_POST['staff_id'] as $staff){
+				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
+					`userId`, `contractId`) VALUES('".hesk_dbEscape($staff)."', '".$id."')" );
+			}			
+		
+	}
+}
 
 /* Print header */
 require_once(HESK_PATH . 'inc/header.inc.php');
@@ -158,6 +194,11 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<th style="text-align:left"><b><i><?php echo $hesklang['ending_date']; ?></i></b></th>
 			<th class="hidden endingdate_head" style="text-align:left"><b><i><?php echo $hesklang['ending_date_info']; ?></i></b></th>
 			<th class="hidden createdby_head" style="text-align:left"><b><i><?php echo $hesklang['created_by']; ?></i></b></th>
+			<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
+			<?php /*if(isset($_POST['update'])){
+			echo '<th style="text-align:left"><b><i>' .$hesklang['ending_date_info'] .'</i></b></th>';
+			}*/
+			?>
 			<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 		</tr>
 <script language="Javascript" type="text/javascript"><!--
@@ -188,7 +229,7 @@ else {return false;}
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
 
-	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."' LIMIT 1");
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."'");
 	foreach($_POST['staff_id'] as $staff){
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
 			`userId`, 
@@ -199,12 +240,15 @@ else {return false;}
 			'".$value_id."'
 			)" );
 	}
+		//$flag = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` where active = 1');
+
 
 	}
 		$res = hesk_dbQuery("SELECT 
 		C.id, 
 		C.contract_name,
 		CO.company_name,
+		C.active,
 		P.project_name,
 		S.name as staff_name,
 		C.starting_date,
@@ -216,7 +260,6 @@ else {return false;}
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS CB ON C.created_by=CB.Id
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id");
-
 			$i=1;
 			while ($row = mysqli_fetch_array($res)) 
 			{
@@ -251,18 +294,36 @@ else {return false;}
 					$user = mysqli_fetch_array($staff_user);
 					$staff_string .= $user['name']."<br/>";
 				}
-				echo '<tr>
-					<td>' .$row['id'] .'</td>
-					<td>' .$row['contract_name'] .'</td>
-					<td>' .$row['company_name'] .'</td>
-					<td>' .$row['project_name'] .'</td>
-					<td>' .$staff_string .'</td>
-					<td>' .$row['starting_date'] .'</td>
-					<td>' .$row['ending_date'] .'</td>
-					<td class="hidden endingdate_info">' .$row['ending_date_info'] .'</td>
-					<td class="hidden createdby_info">' .$row['created_by'] .'</td>
-					<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
-					</tr>';
+				if($row['active']){
+					echo '<tr>
+						<td>' .$row['id'] .'</td>
+						<td>' .$row['contract_name'] .'</td>
+						<td>' .$row['company_name'] .'</td>
+						<td>' .$row['project_name'] .'</td>
+						<td>' .$staff_string .'</td>
+						<td>' .$row['starting_date'] .'</td>
+						<td>' .$row['ending_date'] .'</td>
+						<td class="hidden endingdate_info">' .$row['ending_date'] .'</td>
+						<td class="hidden createdby_info">' .$row['created_by'] .'</td>						
+						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false" checked="checked" ></td>
+						<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
+						</tr>';
+					}
+					else{
+						echo '<tr>
+						<td>' .$row['id'] .'</td>
+						<td>' .$row['contract_name'] .'</td>
+						<td>' .$row['company_name'] .'</td>
+						<td>' .$row['project_name'] .'</td>
+						<td>' .$staff_string .'</td>
+						<td>' .$row['starting_date'] .'</td>
+						<td>' .$row['ending_date'] .'</td>
+						<td class="hidden endingdate_info">' .$row['ending_date'] .'</td>
+						<td class="hidden createdby_info">' .$row['created_by'] .'</td>	
+						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false"></td>
+						<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
+						</tr>';
+					}
 				}
 			
 		?>		
@@ -348,13 +409,6 @@ else {return false;}
 						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50" value="" />
 					</div>
-					
-					<?php if( !($value_ending_date == $value_active) && $hesk_settings['active']) {?>
-					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['active']; ?></label>
-						<input type="checkbox" name="active" value="Y" checked="checked"/>
-					</div>
-					<?php } ?>
 				</div>
 				
 				<!-- Submit -->
@@ -392,15 +446,15 @@ if(isset($_GET['id'])) {
 		$value_starting_date = $row['starting_date'];
 		$value_ending_date = $row['ending_date'];		
 	}
-	
+
 }
- 
+
 ?>
 
 	<!-- Edit Contract-->
 	<div role="tabpanel" class="tab-pane <?php if($is_edit){ ?>active<?php } ?>" id="edit-cont">
 		<div class="edit-contract">
-		<form method="post" action="contracts.php?a=edit&id=<?php echo$_GET['id'];?>#tab_edit-cont" name="form2">
+		<form method="post" action="contracts.php?a=edit#tab_edit-cont" name="form2">
 				<div class="">
 					<input type="hidden" name="id" value="<?php echo $value_id; ?>"/>
 					<div class="form-inline contr-row1" id="contract_row">

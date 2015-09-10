@@ -62,7 +62,7 @@ $hesklang['enter_date']='Please enter the date you want to search in';
 $hesklang['date_not_valid']='This is not a valid date. Please enter date in <b>YYYY-MM-DD</b> format.';
 $hesklang['enter_subject']='Please enter ticket subject';
 $hesklang['invalid_search']='Invalid search action';
-$hesklang['choose_cat_ren']='Please choose a category to be renamed';
+$hesklang['choose_cat_ren']='Please choose a category to be editted';
 $hesklang['cat_ren_name']='Please write new category name';
 $hesklang['cat_not_found']='Category not found';
 $hesklang['enter_cat_name']='Please enter category name';
@@ -165,7 +165,7 @@ $hesklang['remove']='Remove';
 $hesklang['add_cat']='Add new category';
 $hesklang['max_chars']='max 40 chars';
 $hesklang['create_cat']='Create category';
-$hesklang['ren_cat']='Rename category';
+$hesklang['ren_cat']='Edit category';
 $hesklang['to']='to';
 $hesklang['cat_added']='Category added';
 $hesklang['cat_name_added']='Category %s has been successfully added';
@@ -580,7 +580,7 @@ $hesklang['autologin']='Log me on automatically each visit';
 $hesklang['just_user']='Remember just my username';
 $hesklang['nothx']='No, thanks';
 $hesklang['pinfo']='Profile information';
-$hesklang['categ_pri']='Manage Categories & Priorities';
+$hesklang['categ_pri']='Manage Categories';
 $hesklang['dep']='Manage Departments';
 $hesklang['comp']='Manage Companies';
 $hesklang['proj']='Manage Projects';
@@ -1429,7 +1429,13 @@ $hesklang['zip_code']='Zip Code';
 $hesklang['telephone']='Telephone';
 $hesklang['project_code']='Project Code';
 $hesklang['err_project_code']='Error Project Code';
-$hesklang['categ_impro_id']='Category id';
+//Ermedita - fusha te reja emrtime
+$hesklang['categ_impro_id']='Category Code';
+$hesklang['def_act']='Active';
+$hesklang['enter_categ_impro_id']='Please enter category code!';
+$hesklang['cat_req']='Selected category cannot be deleted because it is linked with a ticket!';
+
+
 
 
 
