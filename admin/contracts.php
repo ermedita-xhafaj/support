@@ -229,7 +229,13 @@ else {return false;}
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
 
+<<<<<<< HEAD
 	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."'");
+=======
+
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."'");
+
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
 	foreach($_POST['staff_id'] as $staff){
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
 			`userId`, 

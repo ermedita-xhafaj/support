@@ -77,6 +77,22 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 
 
+<<<<<<< HEAD
+//Hacking i id ne URL per te mos nxjerre errore ne Update
+if(!isset($_GET['id']))
+{ 
+=======
+if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Update
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
+	$_GET['id'] = 0;
+}
+
+?>
+
+<<<<<<< HEAD
+=======
+
+
 //Hacking i id ne URL per te mos nxjerre errore ne Update
 if(!isset($_GET['id']))
 { 
@@ -85,6 +101,7 @@ if(!isset($_GET['id']))
 
 ?>
 
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
 
 <div class="container tab-content manage-config-tab">
 	<ul id="tabs" class="nav nav-tabs manage-config" data-tabs="tabs">
@@ -525,14 +542,19 @@ if(!isset($_GET['id']))
 						{
 							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove&amp;id='.$valuedep_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 						}
+<<<<<<< HEAD
 						
+=======
+
+					if($row_dep['active']==1) $active="checked"; else $active="";
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
 						echo '<tr class="department-row-identification">
 							<td class="department-code-identification">' .$row_dep['department_code'] .'</td>
 							<td>' .$row_dep['department_name'] .'</td>
 							<td>' .$row_dep['department_manager'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
-						}
+					}
 				?>		
 			</table>
 		</div>
@@ -1138,6 +1160,10 @@ if(!isset($_GET['id']))
 								$i=1;
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
+<<<<<<< HEAD
+=======
+
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
 									if($valueproj_company_id == $row_comp['id']) 
 									{
 										echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
@@ -1146,10 +1172,42 @@ if(!isset($_GET['id']))
 									{
 										echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
 									}
+<<<<<<< HEAD
+=======
+
+									if($valueproj_company_id==$row_comp['id']) echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
+									else echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
 								}
 							?>		
 						</select>
 					</div>
+<<<<<<< HEAD
+=======
+					
+					<div class="form-inline" id="project_row">
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['department_name']; ?></label>
+						<select class="form-control" required="required" title="Required field" id="" name="department_id" style="width: 336px;">
+							<option></option>
+							<?php
+								$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`');
+								while ($row_dep = mysqli_fetch_array($res_dep)) 
+								{
+									if($valueproj_department_id==$row_dep['id']) echo '<option value="' .$row_dep['id'] .'" selected="selected">' .$row_dep['department_name'] .'</option>';
+									else echo '<option value="' .$row_dep['id'] .'">' .$row_dep['department_name'] .'</option>';
+
+								}
+							?>		
+						</select>
+					</div>
+				<!--shtojme fushen "Active" kur editojm nje projekt -->
+					<div class="clearfix"></div>
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<input class="form-control" type="checkbox" name="project_active" value="1" <?php if($valueproj_active=='1') echo "checked"; ?>/>
+					</div>
+				</div>
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
 				</div>
 				
 				<!-- Submit -->

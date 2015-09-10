@@ -998,4 +998,9 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
+<<<<<<< HEAD
 		
+=======
+
+#div-id-edit-department { padding-top:20px; }	
+>>>>>>> 050eedb2e2e5641d81b2acaf8010a3fb6e984ffb
