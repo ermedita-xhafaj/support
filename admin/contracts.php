@@ -229,7 +229,7 @@ else {return false;}
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
 
-	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."' LIMIT 1");
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".intval($value_id)."' ");
 	foreach($_POST['staff_id'] as $staff){
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` (
 			`userId`, 
@@ -461,7 +461,7 @@ if(isset($_GET['id'])) {
 	<!-- Edit Contract-->
 	<div role="tabpanel" class="tab-pane <?php if($is_edit){ ?>active<?php } ?>" id="edit-cont">
 		<div class="edit-contract">
-		<form method="post" action="contracts.php?a=edit&id=<?php echo$_GET['id'];?>#tab_edit-cont" name="form2">
+		<form method="post" action="contracts.php?a=edit#tab_edit-cont" name="form2">
 				<div class="">
 					<input type="hidden" name="id" value="<?php echo $value_id; ?>"/>
 					<div class="form-inline contr-row1" id="contract_row">
