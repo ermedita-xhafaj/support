@@ -182,14 +182,17 @@ if (defined('WARN_PASSWORD'))
 				</tr>
 
 				<?php
-				$result_cl = hesk_dbQuery('SELECT id, name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE `contract_id` ="'.intval($_SESSION['id']['user']).'" ');
+				$result_cl = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE `client_Id` ="'.intval($_SESSION['id']['id']).'" ');
 					$i=1;
 					while ($row_cl = mysqli_fetch_array($result_cl)) 
 					{
-						$res_contract = hesk_dbQuery("SELECT contract_Id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$row_cl['id']."'");
+						$res_contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row_cl['contract_Id']."'");
 						$contract_string= "";
 						$project_cl_string= "";
-						while ($row_cont = mysqli_fetch_array($res_contract))
+						$res_cl = mysqli_fetch_array($res_contract);
+						$query2 = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`  WHERE `id` ="'.$res_cl['project_id'].'"');
+						$res_proj = mysqli_fetch_array($query2);
+						/*while ($row_cont = mysqli_fetch_array($res_contract))
 						{
 							$contract_client = hesk_dbQuery('SELECT contract_name, project_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row_cont["contract_Id"].'"');
 							$contract = mysqli_fetch_array($contract_client);
@@ -200,12 +203,12 @@ if (defined('WARN_PASSWORD'))
 								$project = mysqli_fetch_array($project_staff);
 								$project_cl_string .= $project['project_name']."<br/>";
 							}
-						}
+						}*/
 						echo '<tr>
-						<td class="$color">' .$row_cl['id'] .'</td>
-						<td class="$color">' .$row_cl['name'] .'</td>
-						<td class="$color">' .$contract_string .'</td>
-						<td class="$color">' .$project_cl_string .'</td>
+						<td class="$color">' .$_SESSION['id']['id'] .'</td>
+						<td class="$color">' .$_SESSION['id']['name'] .'</td>
+						<td class="$color">' .$res_cl['contract_name'] .'</td>
+						<td class="$color">' .$res_proj['project_name'] .'</td>
 						</tr>';
 						}
 						

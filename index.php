@@ -245,11 +245,11 @@ hesk_handle_messages();
 				<select class="form-control" required="required" title="Required field" id="select-cont" name="contract_name" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_client = hesk_dbQuery('SELECT contract_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$_SESSION["id"]["id"]);
+						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.$_SESSION["id"]["id"]);
 						$i=1;
 						while ($row_client = mysqli_fetch_array($res_client)) 
 						{
-						$result_contract = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row_client['contract_id']);
+						$result_contract = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row_client['contract_Id']);
 						$cont_result = mysqli_fetch_array($result_contract);
 							echo 
 								'<option value="' .$cont_result['id'] .'">' .$cont_result['contract_name'] .'</option>';
