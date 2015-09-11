@@ -263,28 +263,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				</div>
 				</td>
 				<td class="'.$color.'" style="text-align:center; white-space:nowrap;">
-				<a href="Javascript:void(0)" onclick="Javascript:hesk_window(\'manage_categories.php?a=linkcode&amp;catid='.$mycat['id'].'&amp;p='.$mycat['type'].'\',\'200\',\'500\')"><img src="../img/code' . ($mycat['type'] ? '_off' : '') . '.png" width="16" height="16" alt="'.$hesklang['geco'].'" title="'.$hesklang['geco'].'" '.$style.' /></a>
-				' . $autoassign_code . '
 				' . $type_code . ' ';
-
-				if ($num > 1)
-				{
-					if ($j == 1)
-					{
-						echo'<img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" /> <a href="manage_categories.php?a=order&amp;catid='.$mycat['id'].'&amp;move=15&amp;token='.hesk_token_echo(0).'"><img src="../img/move_down.png" width="16" height="16" alt="'.$hesklang['move_dn'].'" title="'.$hesklang['move_dn'].'" '.$style.' /></a>';
-					}
-					elseif ($j == $num)
-					{
-						echo'<a href="manage_categories.php?a=order&amp;catid='.$mycat['id'].'&amp;move=-15&amp;token='.hesk_token_echo(0).'"><img src="../img/move_up.png" width="16" height="16" alt="'.$hesklang['move_up'].'" title="'.$hesklang['move_up'].'" '.$style.' /></a> <img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
-					}
-					else
-					{
-						echo'
-						<a href="manage_categories.php?a=order&amp;catid='.$mycat['id'].'&amp;move=-15&amp;token='.hesk_token_echo(0).'"><img src="../img/move_up.png" width="16" height="16" alt="'.$hesklang['move_up'].'" title="'.$hesklang['move_up'].'" '.$style.' /></a>
-						<a href="manage_categories.php?a=order&amp;catid='.$mycat['id'].'&amp;move=15&amp;token='.hesk_token_echo(0).'"><img src="../img/move_down.png" width="16" height="16" alt="'.$hesklang['move_dn'].'" title="'.$hesklang['move_dn'].'" '.$style.' /></a>
-						';
-					}
-				}
 
 				echo $remove_code.'</td>
 				</tr>
@@ -297,10 +276,6 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 	</div>
 
 	<?php
-	if ($hesk_settings['cust_urgency'])
-	{
-		hesk_show_notice($hesklang['cat_pri_info'] . ' ' . $hesklang['cpri']);
-	}
 	?>
 
 	<div class="container add-cat-title"><?php echo $hesklang['add_cat']; ?></div>
@@ -346,7 +321,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				</div>
 				
 			<!--shtohim fushen "Active" kur celim nje category -->
-				<div class="form-inline category-row"><b><label class="col-sm-3"><?php echo $hesklang['def_act']; ?>:</label></b>
+				<div class="form-inline category-row hidden"><b><label class="col-sm-3"><?php echo $hesklang['def_act']; ?>:</label></b>
 					<div class="form-group options-category-row">
 						<input type="checkbox" name="cat_active" value="1" checked />
 					</div>	
