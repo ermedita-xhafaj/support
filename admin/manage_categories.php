@@ -544,7 +544,7 @@ if(!isset($_GET['id']))
 						);	
 					}
 				
-					$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`');
+					$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments` ORDER BY `department_code` ASC');
 					if (isset($_POST['submitbutton1'])){
 						if (!empty($_POST['search_by_dep_name'])) {
 							$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`WHERE id='.$_POST['search_by_dep_name']);
@@ -553,7 +553,7 @@ if(!isset($_GET['id']))
 							$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`WHERE active='.$_POST['search_by_dep_status']);
 						}
 					}
-				
+
 					$i=1;
 					while ($row_dep = mysqli_fetch_array($res_dep)) 
 					{
@@ -840,7 +840,7 @@ if(!isset($_GET['id']))
 						);		
 					}
 					
-				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
+				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` ORDER BY `id` ASC');
 				if (isset($_POST['submitbutton2'])){
 						if (!empty($_POST['search_by_comp_name'])) {
 							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE id='.$_POST['search_by_comp_name']);
@@ -849,6 +849,7 @@ if(!isset($_GET['id']))
 							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE active='.$_POST['search_by_comp_status']);
 						}
 				}
+
 					$i=1;
 					while ($row_comp = mysqli_fetch_array($res_comp)) 
 					{
@@ -1166,7 +1167,7 @@ if(!isset($_GET['id']))
 						);	
 					}
 				//FILTRAT
-				$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`');
+				$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` ORDER BY `project_code` ASC');
 				if (isset($_POST['submitbutton3'])){
 						if (!empty($_POST['search_by_compproj_name'])) {
 							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE company_id='.$_POST['search_by_compproj_name']);
@@ -1178,6 +1179,7 @@ if(!isset($_GET['id']))
 							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE id='.$_POST['search_by_proj_name']);
 						}
 				}
+
 					$i=1;
 					while ($row_proj = mysqli_fetch_array($res_proj)) 
 					{

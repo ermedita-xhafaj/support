@@ -16,7 +16,7 @@ $(document).ready(function(){
 	$('#stafi').click(function(){
 		$("#klient").prop('checked', false);
 	});
-	$('#administraori').click(function(){
+	$('#administratori').click(function(){
 		$("#klient").prop('checked', false);
 	});
 });
@@ -65,26 +65,26 @@ $(document).ready(function(){
 	if(!$("#edit-contract-info").hasClass('active')){
 		$(".endingdate_head").addClass("hidden");
 		$(".createdby_head").addClass("hidden");
-		$(".endingdate_info").addClass("hidden");
+		$(".last_modified").addClass("hidden");
 		$(".createdby_info").addClass("hidden");
 		}
 	else {
 		$(".endingdate_head").removeClass("hidden");
 		$(".createdby_head").removeClass("hidden");
-		$(".endingdate_info").removeClass("hidden");
+		$(".last_modified").removeClass("hidden");
 		$(".createdby_info").removeClass("hidden");
 	}
 	$(".new_class").click(function(){
 	if( $(this).attr('id') == "create-contract-info") {
 		$(".endingdate_head").addClass("hidden");
 		$(".createdby_head").addClass("hidden");
-		$(".endingdate_info").addClass("hidden");
+		$(".last_modified").addClass("hidden");
 		$(".createdby_info").addClass("hidden");
 		}
 	else {
 		$(".endingdate_head").removeClass("hidden");
 		$(".createdby_head").removeClass("hidden");
-		$(".endingdate_info").removeClass("hidden");
+		$(".last_modified").removeClass("hidden");
 		$(".createdby_info").removeClass("hidden");
 	}
 	});
