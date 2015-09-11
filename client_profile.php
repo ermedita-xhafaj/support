@@ -92,6 +92,7 @@ if (defined('WARN_PASSWORD'))
 	<ul id="tabs" class="nav nav-tabs profile-functions" data-tabs="tabs">
 		<li class="active" id="profile-info"><a href="#p-info" aria-controls="p-info" role="tab" data-toggle="tab"><?php echo $hesklang['pinfo']; ?></a></li>
 		<li id="signature-info"><a href="#signature" aria-controls="signature" role="tab" data-toggle="tab"><?php echo $hesklang['sig']; ?></a></li>
+		<li id="contract-client"><a href="#cont_client" aria-controls="cont_client" role="tab" data-toggle="tab"><?php echo $hesklang['contract'] .' & ' .$hesklang['project']; ?></a></li>
 	</ul>
 			<!-- PROFILE INFO -->
 	<div role="tabpanel" class="tab-pane active" id="p-info">
@@ -155,11 +156,9 @@ if (defined('WARN_PASSWORD'))
 		</div><!-- end profile-information -->
 	</div>
 		
-				<!-- SIGNATURE -->
+	<!-- SIGNATURE -->
 	<div role="tabpanel" class="tab-pane" id="signature">
-		
-		&nbsp;<br/><br/>
-
+		<br/>
 		<div class="form-inline signature-profile-func">
 			<label class="control-label col-sm-3"><?php echo $hesklang['signature_max']; ?>:</label>
 			<div class="form-group">
@@ -167,11 +166,54 @@ if (defined('WARN_PASSWORD'))
 				<?php echo $hesklang['sign_extra']; ?>
 			</div>
 		</div><!-- end signature-profile-func -->
-
-		&nbsp;<br />&nbsp;
-
+		<br />	
 	</div>
-			<!-- SIGNATURE -->	
+	<!-- SIGNATURE -->	
+			
+	<!-- contract & project -->
+	<div role="tabpanel" class="tab-pane" id="cont_client">
+		<div class="project_contract_table">
+			<table class="table table-bordered">
+				<tr>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['contract']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['project']; ?></i></b></th>
+				</tr>
+
+				<?php
+				$result_cl = hesk_dbQuery('SELECT id, name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE `contract_id` ="'.intval($_SESSION['id']['user']).'" ');
+					$i=1;
+					while ($row_cl = mysqli_fetch_array($result_cl)) 
+					{
+						$res_contract = hesk_dbQuery("SELECT contract_Id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$row_cl['id']."'");
+						$contract_string= "";
+						$project_cl_string= "";
+						while ($row_cont = mysqli_fetch_array($res_contract))
+						{
+							$contract_client = hesk_dbQuery('SELECT contract_name, project_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row_cont["contract_Id"].'"');
+							$contract = mysqli_fetch_array($contract_client);
+							$contract_string .= $contract['contract_name']."<br/>";
+							$project_id = isset($contract['project_id'])?$contract['project_id']:"";
+							if(!empty($project_id)){
+								$project_staff = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE `id` ="'.$project_id.'"');
+								$project = mysqli_fetch_array($project_staff);
+								$project_cl_string .= $project['project_name']."<br/>";
+							}
+						}
+						echo '<tr>
+						<td class="$color">' .$row_cl['id'] .'</td>
+						<td class="$color">' .$row_cl['name'] .'</td>
+						<td class="$color">' .$contract_string .'</td>
+						<td class="$color">' .$project_cl_string .'</td>
+						</tr>';
+						}
+						
+				?>				
+			</table>
+		</div>
+	</div>
+	<!-- contract & project -->	
 </div>
 		<br/>
 		<!-- Submit -->

@@ -86,12 +86,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<div class="profile-information">
 			<div class="form-inline" id="profile-information-row">
 			<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if(isset($_SESSION['new']['name'])) {echo $_SESSION['new']['name'];} ?>"/>
+			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if(isset($_SESSION['new']['name'])) {echo $_SESSION['new']['name'];} unset($_SESSION['new']['name']); ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['email'])) {echo $_SESSION['new']['email']; } ?>"/>
+				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['email'])) {echo $_SESSION['new']['email']; } unset($_SESSION['new']['email']); ?>"/>
 			</div>
 			
 			<?php
@@ -100,7 +100,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION['new']['user'])) {echo $_SESSION['new']['user']; } ?>"/>
+				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION['new']['user'])) {echo $_SESSION['new']['user']; } unset($_SESSION['new']['user']);?>"/>
 			</div>
 			<?php
 			}
@@ -108,17 +108,17 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo 'Address'; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['address'])) {echo $_SESSION['new']['address']; } ?>"/>
+				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['address'])) {echo $_SESSION['new']['address']; } unset($_SESSION['new']['address']);?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo 'Phone Number'; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="number" min="0" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['phonenumber'])) {echo $_SESSION['new']['phonenumber']; } ?>"/>
+				<input class="form-control" type="number" min="0" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['phonenumber'])) {echo $_SESSION['new']['phonenumber']; } unset($_SESSION['new']['phonenumber']);?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo 'Pozicioni Detyres'; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['poz_detyres'])) {echo $_SESSION['new']['poz_detyres']; } ?>"/>
+				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['poz_detyres'])) {echo $_SESSION['new']['poz_detyres']; } unset($_SESSION['new']['poz_detyres']);?>"/>
 			</div>
 			
 			<!--shtohim fushen "Active" kur celim nje departament -->

@@ -167,7 +167,6 @@ require_once(HESK_PATH . 'inc/header.inc.php');
           <ul class="nav navbar-nav">
 			<li id="userMenu-home"><a href="index.php">Home</a></li>
 			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="userMenu-viewTicket"><a href="ticket.php">View Ticket</a></li>
 			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
 			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
           </ul>
@@ -243,7 +242,7 @@ hesk_handle_messages();
 			
 			<div class="form-inline" style="margin-bottom: 5px;">
 				<label class="col-sm-2 control-label" for="select-cont"><?php echo $hesklang['contract'] ?>: <font class="important">*</font></label>
-				<select class="form-control" id="select-cont" name="contract_name" style="width: 336px;">
+				<select class="form-control" required="required" title="Required field" id="select-cont" name="contract_name" style="width: 336px;">
 					<option></option>
 					<?php
 						$res_client = hesk_dbQuery('SELECT contract_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$_SESSION["id"]["id"]);
@@ -259,7 +258,7 @@ hesk_handle_messages();
 					?>		
 				</select>
 				<?php  
-						/*var_dump($res_cont);*/
+						/*var_dump($row_client);*/
 				?>
 			</div>
 			
@@ -1019,7 +1018,7 @@ function print_start()
 					<div class="form-group">
 						<div class="form-inline signin-username">
 							<label for="inputUser">User:</label><br/>
-							<input name="user" type="text" id="inputUser" class="form-control" required autofocus style="width: 301px;">
+							<input name="user" required="required" title="Required field" type="text" id="inputUser" class="form-control" required autofocus style="width: 301px;">
 						</div>
 						<div class="form-inline signin-password">
 							<label for="inputPassword">Password:</label><br/>
