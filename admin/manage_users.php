@@ -237,7 +237,7 @@ else {return false;}
 hesk_handle_messages();
 ?>
 
-
+<!--MANAGE COMMPROG STAFF -->
 <div class="container manage-user-title">
 	<a data-toggle="collapse" data-parent="#accordion" href="#div-id-1" ><?php echo $hesklang['manage_users']; ?></a>
 	<!--[<a href="javascript:void(0)" onclick="javascript:alert('<?php /*echo hesk_makeJsString($hesklang['users_intro']);*/ ?>')">?</a>]-->
@@ -252,6 +252,7 @@ hesk_handle_messages();
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Address'; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Phone Number'; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Pozicioni Detyres'; ?></i></b></th>
+		<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 		<th class="admin_white" style="text-align:center;white-space:nowrap;width:1px;"><b><i><?php echo $hesklang['administrator']; ?></i></b></th>
 		<?php
 		/* Is user rating enabled? */
@@ -352,7 +353,7 @@ hesk_handle_messages();
 			{
 				$autoassign_code = '';
 			}
-
+		if($myuser['active']=='1') $a="Yes"; else $a="No";
 		echo <<<EOC
 		<tr>
 		<td class="$color">$myuser[name]</td>
@@ -361,6 +362,7 @@ hesk_handle_messages();
 		<td class="$color">$myuser[address]</td>
 		<td class="$color">$myuser[phonenumber]</td>
 		<td class="$color">$myuser[poz_detyres]</td>
+		<td class="$color">$a</td>
 		<td class="$color">$myuser[isadmin]</td>
 
 EOC;
@@ -372,7 +374,7 @@ EOC;
 		}
 		*/
 		echo <<<EOC
-		<td class="$color" style="text-align:center">$autoassign_code $edit_code $remove_code</td>
+		<td class="$color" style="text-align:center">$autoassign_code $edit_code</td>
 		</tr>
 
 EOC;
@@ -398,6 +400,7 @@ EOC;
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Phone Number'; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Pozicioni Detyres'; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Kontrata'; ?></i></b></th>
+		<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 		<th class="admin_white" style="width:100px"><b><i>&nbsp;<?php echo $hesklang['opt']; ?>&nbsp;</i></b></th>
 		</tr>
 
@@ -446,7 +449,8 @@ EOC;
 				<td class="$color">' .$row['phonenumber'] .'</td>
 				<td class="$color">' .$row['poz_detyres'] .'</td>
 				<td class="$color">' .$contract_string .'</td>
-				<td class="$color">' .$edit_code .$remove_code .'</td>';
+				<td class="$color">'.$row['active'].'</td>
+				<td class="$color">' .$edit_code.'</td>';
 				}
 		?>
 			
@@ -697,6 +701,7 @@ function edit_clients(){
 	$_SESSION['new']['address'] = $row['address'];
 	$_SESSION['new']['phonenumber'] = $row['phonenumber'];
 	$_SESSION['new']['poz_detyres'] = $row['poz_detyres'];
+	$_SESSION['new']['active'] = $row['active'];
 	
 
     /* Print header */
@@ -784,11 +789,14 @@ function new_user()
 	hesk_token_check('POST');
 
 	$myuser = hesk_validateUserInfo();
-
+	var_dump($myuser);
+	exit();
     /* Categories and Features will be stored as a string */
     $myuser['categories'] = implode(',',$myuser['categories']);
     $myuser['features'] = implode(',',$myuser['features']);
-	
+	/* user active */
+	$user_active = hesk_input( hesk_POST('prof_active'));
+	if(empty($user_active)) { $user_active = "0"; }
 
     /* Check for duplicate usernames */
 	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
@@ -803,6 +811,8 @@ function new_user()
 		$myuser['categories'] = '';
 		$myuser['features'] = '';
     }
+	
+
 
 	// Check if user is client
 	if(hesk_dbEscape($myuser['isclient'])=="1"){
@@ -815,6 +825,7 @@ function new_user()
 		`address`,
 		`phonenumber`,
 		`poz_detyres`,
+		`active`,
 		`signature`
 		) VALUES (
 		'".hesk_dbEscape($myuser['user'])."',
@@ -825,6 +836,7 @@ function new_user()
 		'".hesk_dbEscape($myuser['address'])."',
 		'".hesk_dbEscape($myuser['phonenumber'])."',
 		'".hesk_dbEscape($myuser['poz_detyres'])."',
+		'".hesk_dbEscape($user_active)."',
 		'".hesk_dbEscape($myuser['signature'])."'
 		)" );
 		$id = hesk_dbInsertID();
@@ -843,6 +855,7 @@ function new_user()
 		`address`,
 		`phonenumber`,
 		`poz_detyres`,
+		`active`,
 		`signature`,
 		`categories`,
 		`autoassign`,
@@ -868,6 +881,7 @@ function new_user()
 		'".hesk_dbEscape($myuser['address'])."',
 		'".hesk_dbEscape($myuser['phonenumber'])."',
 		'".hesk_dbEscape($myuser['poz_detyres'])."',
+		'".hesk_dbEscape($user_active)."',
 		'".hesk_dbEscape($myuser['signature'])."',
 		'".hesk_dbEscape($myuser['categories'])."',
 		'".intval($myuser['autoassign'])."',
@@ -914,7 +928,10 @@ function update_user()
 
     $_SERVER['PHP_SELF'] = './manage_users.php?a=edit&id='.$tmp;
 	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
+	
+	
     $myuser['id'] = $tmp;
+	$active = (isset($_POST['prof_active'])) ? $_POST['prof_active'] : "0";
 
     /* Check for duplicate usernames */
 	$res = hesk_dbQuery("SELECT `id`,`isadmin`,`categories`,`heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
@@ -947,6 +964,7 @@ function update_user()
 		/* Categories and Features will be stored as a string */
 	    $myuser['categories'] = implode(',',$myuser['categories']);
 	    $myuser['features'] = implode(',',$myuser['features']);
+		$active = (isset($myuser['prof_active'])) ? $myuser['prof_active'] : "0";
 
     	/* Unassign tickets from categories that the user had access before but doesn't anymore */
         hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
@@ -960,6 +978,7 @@ function update_user()
     `address`='".hesk_dbEscape($myuser['address'])."',
     `phonenumber`='".hesk_dbEscape($myuser['phonenumber'])."',
     `poz_detyres`='".hesk_dbEscape($myuser['poz_detyres'])."',
+    `active`='".hesk_dbEscape($active)."',
     `signature`='".hesk_dbEscape($myuser['signature'])."'," . ( isset($myuser['pass']) ? "`pass`='".hesk_dbEscape($myuser['pass'])."'," : '' ) . "
     `categories`='".hesk_dbEscape($myuser['categories'])."',
     `isadmin`='".intval($myuser['isadmin'])."',
@@ -1004,6 +1023,7 @@ function update_client(){
     $_SERVER['PHP_SELF'] = './manage_users.php?a=editc&id='.$tmp;
 	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
     $myuser['id'] = $tmp;
+	$active = (isset($_POST['prof_active'])) ? $_POST['prof_active'] : "0";
 	/*var_dump($myuser);
 	exit();*/
 	$query = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` SET
@@ -1012,7 +1032,8 @@ function update_client(){
     `email`='".hesk_dbEscape($myuser['email'])."',
     `address`='".hesk_dbEscape($myuser['address'])."',
     `phonenumber`='".hesk_dbEscape($myuser['phonenumber'])."',
-    `poz_detyres`='".hesk_dbEscape($myuser['poz_detyres'])."'
+    `poz_detyres`='".hesk_dbEscape($myuser['poz_detyres'])."',
+    `active`='".hesk_dbEscape($active)."'
 	" . ( isset($myuser['pass']) ? ", `pass`='".hesk_dbEscape($myuser['pass'])."'" : '' ) . "
 	 WHERE `id`=".intval($myuser['id'])." LIMIT 1");
 	 

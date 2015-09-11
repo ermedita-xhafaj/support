@@ -121,6 +121,13 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['poz_detyres'])) {echo $_SESSION['new']['poz_detyres']; } ?>"/>
 			</div>
 			
+			<!--shtohim fushen "Active" kur celim nje departament -->
+			<div class="clearfix"></div>
+			<div class="form-inline project-row1" id="profile-information-row">
+				<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+				<input class="form-control" type="checkbox" name="prof_active" value="1" <?php if(isset($_SESSION['new']['active']) && $_SESSION['new']['active']=="1") {echo "checked"; } ?> />
+			</div>
+			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-newpass"><?php echo $is_profile_page ? $hesklang['new_pass'] : $hesklang['pass']; ?>:</label>
 				<input class="form-control" type="password" id="profile-information-newpass" name="newpass" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" />

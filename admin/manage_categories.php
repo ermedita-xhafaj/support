@@ -308,6 +308,17 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		<div>	
 		<!-- Add NEW Category -->
 			<form action="manage_categories.php" method="post">
+			<div class="form-inline category-row" id="categ-impro-id"><div class="col-sm-3"><label for="categ-impro-id"><?php echo $hesklang['categ_impro_id']; ?></label></div> 
+					<input class="form-control" type="text" id="categ-impro-id" name="categ-impro-id" size="40" maxlength="40" style="width: 368px;"
+					<?php
+					if(isset($_SESSION['categ_impro_id']))
+					{
+						echo ' value="'.hesk_input($_SESSION['categ_impro_id']).'" ';
+
+					}?>	/>
+
+					</div>
+					
 				<div class="form-inline category-row" id="name-category-row"><div class="col-sm-3"><label for="category-name"><?php echo $hesklang['cat_name']; ?></label>(<?php echo $hesklang['max_chars']; ?>)<b>:</b></div> <input class="form-control" type="text" id="category-name" name="name" size="40" maxlength="40"
 				<?php
 					if (isset($_SESSION['catname']))
@@ -318,17 +329,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				/>
 				</div>
 
-				<div class="form-inline">
-					<div class="form-inline category-row" id="categ-impro-id"><div class="col-sm-3"><label for="categ-impro-id"><?php echo $hesklang['categ_impro_id']; ?></label></div> 
-					<input class="form-control" type="text" id="categ-impro-id" name="categ-impro-id" size="40" maxlength="40" style="width: 368px;"
-					<?php
-					if(isset($_SESSION['categ_impro_id']))
-					{
-						echo ' value="'.hesk_input($_SESSION['categ_impro_id']).'" ';
-
-					}?>	/>
-
-				</div>
+			<div class="form-inline">
 			<!--fshehim "Priority" kur celim nje category -->
 				<div  style="display:none" class="form-inline category-row"><div class="col-sm-3"><label for="category-priority"><?php echo $hesklang['def_pri']; ?></label>[<a href="javascript:void(0)" onclick="javascript:alert('<?php echo hesk_makeJsString($hesklang['cat_pri']); ?>')">?</a></b>]</div> 
 				<select class="form-control" id="category-priority" name="priority">

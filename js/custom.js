@@ -16,7 +16,7 @@ $(document).ready(function(){
 	$('#stafi').click(function(){
 		$("#klient").prop('checked', false);
 	});
-	$('#administraori').click(function(){
+	$('#administratori').click(function(){
 		$("#klient").prop('checked', false);
 	});
 });
