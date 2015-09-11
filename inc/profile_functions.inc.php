@@ -147,7 +147,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				</label>
 			</div>
 			
-			<div class="form-inline <?php if($_GET['a']!="editc") echo "hidden"; ?>" id="show-hide-kontrata"  >
+			<div class="form-inline <?php if(isset($_GET['a']) && $_GET['a']!="editc") echo "hidden"; ?>" id="show-hide-kontrata"  >
 				<label class="col-sm-2 control-label" for="select-kontrata"><?php echo $hesklang['contract']; ?></label>
 				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
 					<option></option>
