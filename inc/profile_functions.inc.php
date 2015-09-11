@@ -152,7 +152,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_contract = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts`');
+						$res_contract = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE active=1');
 						$i=1;
 						while ($row_contract = mysqli_fetch_array($res_contract)) 
 						{

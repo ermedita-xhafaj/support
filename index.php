@@ -245,7 +245,7 @@ hesk_handle_messages();
 				<select class="form-control" required="required" title="Required field" id="select-cont" name="contract_name" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.$_SESSION["id"]["id"]);
+						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.$_SESSION["id"]["id"] );
 						$i=1;
 						while ($row_client = mysqli_fetch_array($res_client)) 
 						{

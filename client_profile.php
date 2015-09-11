@@ -176,7 +176,6 @@ if (defined('WARN_PASSWORD'))
 			<table class="table table-bordered">
 				<tr>
 				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
-				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
 				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['contract']; ?></i></b></th>
 				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['project']; ?></i></b></th>
 				</tr>
@@ -192,21 +191,8 @@ if (defined('WARN_PASSWORD'))
 						$res_cl = mysqli_fetch_array($res_contract);
 						$query2 = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`  WHERE `id` ="'.$res_cl['project_id'].'"');
 						$res_proj = mysqli_fetch_array($query2);
-						/*while ($row_cont = mysqli_fetch_array($res_contract))
-						{
-							$contract_client = hesk_dbQuery('SELECT contract_name, project_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row_cont["contract_Id"].'"');
-							$contract = mysqli_fetch_array($contract_client);
-							$contract_string .= $contract['contract_name']."<br/>";
-							$project_id = isset($contract['project_id'])?$contract['project_id']:"";
-							if(!empty($project_id)){
-								$project_staff = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE `id` ="'.$project_id.'"');
-								$project = mysqli_fetch_array($project_staff);
-								$project_cl_string .= $project['project_name']."<br/>";
-							}
-						}*/
 						echo '<tr>
-						<td class="$color">' .$_SESSION['id']['id'] .'</td>
-						<td class="$color">' .$_SESSION['id']['name'] .'</td>
+						<td class="$color">' .$res_cl['id'] .'</td>
 						<td class="$color">' .$res_cl['contract_name'] .'</td>
 						<td class="$color">' .$res_proj['project_name'] .'</td>
 						</tr>';

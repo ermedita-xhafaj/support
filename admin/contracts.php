@@ -362,7 +362,7 @@ else {return false;}
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
+								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1 ');
 								$i=1;
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
@@ -378,7 +378,7 @@ else {return false;}
 						<select class="form-control" required="required" title="Required field" id="" name="project_id" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_project = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`');
+								$res_project = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE active=1');
 								$i=1;
 								while ($row_project = mysqli_fetch_array($res_project)) 
 								{
@@ -394,7 +394,7 @@ else {return false;}
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users`');
+								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE active=1');
 								$i=1;
 								while ($row_staff = mysqli_fetch_array($res_staff)) 
 								{
@@ -473,7 +473,7 @@ if(isset($_GET['id'])) {
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
+								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1');
 								$i=1;
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
@@ -496,7 +496,7 @@ if(isset($_GET['id'])) {
 						<select class="form-control" required="required" title="Required field" id="" name="project_id" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_project = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`');
+								$res_project = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE active=1');
 								$i=1;
 								while ($row_project = mysqli_fetch_array($res_project)) 
 								{
@@ -518,7 +518,7 @@ if(isset($_GET['id'])) {
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users`');
+								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE active=1');
 								if(isset($_GET['id'])){
 								$current_staff = hesk_dbQuery('SELECT userId FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE contractId='.$_GET['id']);
 								$staff1 = array();
