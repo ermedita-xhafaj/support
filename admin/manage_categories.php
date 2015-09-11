@@ -925,7 +925,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
-						<input class="form-control" type="checkbox" name="comp_active" value="1"  />
+						<input class="form-control" type="checkbox" name="comp_active" value="1" checked />
 					</div>
 					
 				</div>
@@ -1268,7 +1268,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
-						<input class="form-control" type="checkbox" name="project_active" value="1" />
+						<input class="form-control" type="checkbox" name="project_active" value="1" checked />
 					</div>
 				</div>
 				
