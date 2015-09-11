@@ -85,7 +85,6 @@ else {
 
 if(isset($_POST['ending_date'])){
 	$value_ending_date = hesk_input( hesk_POST('ending_date') );
-	$value_ending_date_info = $value_ending_date;
 	}
 else {
 	$value_ending_date = '';
@@ -98,6 +97,12 @@ else {
 	$value_active = '';
 }
 
+if(isset($_POST['lastchange'])){
+	$value['lastchange'] = hesk_date($value['lastchange'], true);
+}
+else {
+	$value['lastchange'] = '';
+}
 
 if(isset($_POST['staff_id'])){
 	$value_staff_id = hesk_input( hesk_POST('staff_id') );
@@ -120,7 +125,6 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			`starting_date`,
 			`ending_date`,
 			`created_by`,
-			`ending_date_info`,
 			`active`
 			) VALUES (
 			'".hesk_dbEscape($value_contract_name)."',
@@ -129,7 +133,6 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			'".hesk_dbEscape($value_starting_date)."',
 			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($_SESSION['id'])."',
-			'".hesk_dbEscape($value_ending_date_info)."',
 			'".hesk_dbEscape(1)."'
 			)" );
 			$id = hesk_dbInsertID();
@@ -150,7 +153,6 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			`starting_date`,
 			`ending_date`,
 			`created_by`,
-			`ending_date_info`,
 			`active`
 			) VALUES (
 			'".hesk_dbEscape($value_id)."',
@@ -161,7 +163,6 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			'".hesk_dbEscape($value_starting_date)."',
 			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($value_created_by)."',
-			'".hesk_dbEscape($value_ending_date_info)."',
 			'".hesk_dbEscape(0)."'
 			)" );
 			$id = hesk_dbInsertID();
@@ -192,7 +193,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<th style="text-align:left"><b><i><?php echo $hesklang['staffname'] ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['starting_date']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['ending_date']; ?></i></b></th>
-			<th class="hidden endingdate_head" style="text-align:left"><b><i><?php echo $hesklang['ending_date_info']; ?></i></b></th>
+			<th class="hidden endingdate_head" style="text-align:left"><b><i><?php echo $hesklang['last_modified']; ?></i></b></th>
 			<th class="hidden createdby_head" style="text-align:left"><b><i><?php echo $hesklang['created_by']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 			<?php /*if(isset($_POST['update'])){
@@ -218,14 +219,15 @@ else {return false;}
 	$value_staff_id = hesk_input( hesk_POST('staff_id') );
 	$value_starting_date = hesk_input( hesk_POST('starting_date') );
 	$value_ending_date = hesk_input( hesk_POST('ending_date') );
-
+	$value['lastchange'] = hesk_date($value['lastchange'], true);
 	$query = hesk_dbQuery(
 		"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET
 		`contract_name`='".hesk_dbEscape($value_contract_name)."',
 		`company_id`='".hesk_dbEscape($value_company_id)."',
 		`project_id`='".hesk_dbEscape($value_project_id)."',
 		`starting_date`='".hesk_dbEscape($value_starting_date)."',
-		`ending_date`='".hesk_dbEscape($value_ending_date)."'
+		`ending_date`='".hesk_dbEscape($value_ending_date)."',
+		`lastchange`=NOW()
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
 
@@ -253,13 +255,14 @@ else {return false;}
 		S.name as staff_name,
 		C.starting_date,
 		C.ending_date,
-		C.ending_date_info,
+		C.lastchange,
 		CB.name AS created_by 
 		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS S ON C.staff_id=S.Id
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS CB ON C.created_by=CB.Id
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id");
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id
+		ORDER BY `id`");
 			$i=1;
 			while ($row = mysqli_fetch_array($res)) 
 			{
@@ -303,7 +306,7 @@ else {return false;}
 						<td>' .$staff_string .'</td>
 						<td>' .$row['starting_date'] .'</td>
 						<td>' .$row['ending_date'] .'</td>
-						<td class="hidden endingdate_info">' .$row['ending_date'] .'</td>
+						<td class="hidden last_modified">' .$row['lastchange'] .'</td>
 						<td class="hidden createdby_info">' .$row['created_by'] .'</td>						
 						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false" checked="checked" ></td>
 						<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
@@ -318,7 +321,7 @@ else {return false;}
 						<td>' .$staff_string .'</td>
 						<td>' .$row['starting_date'] .'</td>
 						<td>' .$row['ending_date'] .'</td>
-						<td class="hidden endingdate_info">' .$row['ending_date'] .'</td>
+						<td class="hidden last_modified">' .$row['ending_date'] .'</td>
 						<td class="hidden createdby_info">' .$row['created_by'] .'</td>	
 						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false"></td>
 						<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
@@ -397,7 +400,7 @@ else {return false;}
 									'<option value="' .$row_staff['id'] .'">' .$row_staff['name'] .'</option>';
 								}
 							?>		
-						</select>      				
+						</select> 
 					</div>
 
 					<div class="form-inline" id="contract_row">
@@ -430,7 +433,7 @@ else {return false;}
 	$value_starting_date = '';
 	$value_ending_date = '';
 	$value_created_by = '';
-	$value_ending_date_info = '';
+	$value['lastchange'] = '';
 	$value_active = '';
 	
 	
@@ -444,7 +447,8 @@ if(isset($_GET['id'])) {
 		$value_project_id = $row['project_id'];
 		$value_staff_id = $row['staff_id'];
 		$value_starting_date = $row['starting_date'];
-		$value_ending_date = $row['ending_date'];		
+		$value_ending_date = $row['ending_date'];
+		$value['lastchange'] = hesk_date($value['lastchange'], true);		
 	}
 
 }

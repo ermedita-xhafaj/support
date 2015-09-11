@@ -511,7 +511,7 @@ if(!isset($_GET['id']))
 						);	
 					}
 					
-				$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`');
+				$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments` ORDER BY `department_code` ASC');
 					$i=1;
 					while ($row_dep = mysqli_fetch_array($res_dep)) 
 					{
@@ -752,7 +752,7 @@ if(!isset($_GET['id']))
 						);		
 					}
 					
-				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
+				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` ORDER BY `id` ASC');
 					$i=1;
 					while ($row_comp = mysqli_fetch_array($res_comp)) 
 					{
@@ -1015,7 +1015,7 @@ if(!isset($_GET['id']))
 						WHERE `id`='".intval($_GET['id'])."' LIMIT 1"
 						);	
 					}
-				$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`');
+				$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` ORDER BY `project_code` ASC');
 					$i=1;
 					while ($row_proj = mysqli_fetch_array($res_proj)) 
 					{

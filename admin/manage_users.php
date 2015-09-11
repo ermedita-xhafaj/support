@@ -181,15 +181,16 @@ if ( $action = hesk_REQUEST('a') )
 		$_SESSION['edit_userdata'] = TRUE;
 		header('Location: ./manage_users.php');
 	}
-	elseif ($action == 'edit')       {edit_user();}
-	elseif ($action == 'editc')       {edit_clients();}
-	elseif ( defined('HESK_DEMO') )  {hesk_process_messages($hesklang['ddemo'], 'manage_users.php', 'NOTICE');}
-	elseif ($action == 'new')        {new_user();}
-	elseif ($action == 'save')       {update_user();}
-	elseif ($action == 'update_client')       {update_client();}
-	elseif ($action == 'remove')     {remove();}
-	elseif ($action == 'autoassign') {toggle_autoassign();}
-    else 							 {hesk_error($hesklang['invalid_action']);}
+	elseif ($action == 'edit')       		{edit_user();}
+	elseif ($action == 'editc')       		{edit_clients();}
+	elseif ( defined('HESK_DEMO') )  		{hesk_process_messages($hesklang['ddemo'], 'manage_users.php', 'NOTICE');}
+	elseif ($action == 'new')        		{new_user();}
+	elseif ($action == 'save')       		{update_user();}
+	elseif ($action == 'update_client')     {update_client();}
+	elseif ($action == 'remove')     		{remove();}
+	elseif ($action == 'removec')     		{remove_clients();}
+	elseif ($action == 'autoassign') 		{toggle_autoassign();}
+    else 							 		{hesk_error($hesklang['invalid_action']);}
 }
 
 else
@@ -426,14 +427,14 @@ EOC;
 				$edit_code = '<a href="manage_users.php?a=editc&amp;id='.$row['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
 			}
 			
-			/* Deleting user with ID 1 (default administrator) is not allowed */
+			/* Deleting client */
 			if ($row['id'] == 1)
 			{
 				$remove_code = ' <img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
 			}
 			else
 			{
-				$remove_code = ' <a href="manage_users.php?a=remove&amp;id='.$row['id'].'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" '.$style.' /></a>';
+				$remove_code = ' <a href="manage_users.php?a=removec&amp;id='.$row['id'].'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" '.$style.' /></a>';
 			}
 			
 				$result1 = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row['contract_id']);
@@ -670,11 +671,9 @@ function edit_user()
 	exit();
 } // End edit_user()
 
+
 function edit_clients(){
 	global $hesk_settings, $hesklang, $default_userdata;
-	
-	//var_dump($_SESSION);
-	//exit();
 
 	$id = intval( hesk_GET('id') ) or hesk_error("$hesklang[int_error]: $hesklang[no_valid_id]");
 
@@ -686,18 +685,22 @@ function edit_clients(){
 
     $_SESSION['edit_userdata'] = TRUE;
 
+	if ( ! isset($_SESSION['save_userdata']))
+    {			
+		$result = hesk_dbQuery('SELECT * from `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE `id`='.$id);
 
-	$result = hesk_dbQuery('SELECT * from `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE `id`='.$id);
+		$row = mysqli_fetch_array($result);
 
-	$row = mysqli_fetch_array($result);
+		$_SESSION['new']['name'] = $row['name'];
+		$_SESSION['new']['email'] = $row['email'];
+		$_SESSION['new']['user'] = $row['user'];
+		$_SESSION['new']['address'] = $row['address'];
+		$_SESSION['new']['phonenumber'] = $row['phonenumber'];
+		$_SESSION['new']['poz_detyres'] = $row['poz_detyres'];
 
-	$_SESSION['new']['name'] = $row['name'];
-	$_SESSION['new']['email'] = $row['email'];
-	$_SESSION['new']['user'] = $row['user'];
-	$_SESSION['new']['address'] = $row['address'];
-	$_SESSION['new']['phonenumber'] = $row['phonenumber'];
-	$_SESSION['new']['poz_detyres'] = $row['poz_detyres'];
-	
+        /* Store original username for display until changes are saved successfully */
+        $_SESSION['original_user'] = $_SESSION['new']['user'];
+    }
 
     /* Print header */
 	require_once(HESK_PATH . 'inc/header.inc.php');
@@ -1004,8 +1007,7 @@ function update_client(){
     $_SERVER['PHP_SELF'] = './manage_users.php?a=editc&id='.$tmp;
 	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
     $myuser['id'] = $tmp;
-	/*var_dump($myuser);
-	exit();*/
+
 	$query = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` SET
 	`user`='".hesk_dbEscape($myuser['user'])."',
     `name`='".hesk_dbEscape($myuser['name'])."',
@@ -1016,11 +1018,22 @@ function update_client(){
 	" . ( isset($myuser['pass']) ? ", `pass`='".hesk_dbEscape($myuser['pass'])."'" : '' ) . "
 	 WHERE `id`=".intval($myuser['id'])." LIMIT 1");
 	 
-	     unset($_SESSION['save_userdata']);
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".intval($myuser['id'])."'");
+	foreach($_POST['contract_id'] as $contract){
+		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` (
+			`contract_Id`, 
+			`client_Id`
+			)
+			VALUES(
+			'".hesk_dbEscape($contract)."', 
+			'".$myuser['id']."'
+			)" );
+	}
+	unset($_SESSION['save_userdata']);
     unset($_SESSION['userdata']);
 
     hesk_process_messages( $hesklang['user_profile_updated_success'],$_SERVER['PHP_SELF'],'SUCCESS');
-}
+} // End update_client()
 
 
 function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_users.php')
@@ -1205,6 +1218,38 @@ function remove()
 
     hesk_process_messages($hesklang['sel_user_removed'],'./manage_users.php','SUCCESS');
 } // End remove()
+
+
+function remove_clients()
+{
+	global $hesk_settings, $hesklang;
+
+	/* A security check */
+	hesk_token_check();
+
+	$myuser = intval( hesk_GET('id' ) ) or hesk_error($hesklang['no_valid_id']);
+
+    /* You can't delete the default client */
+	if ($myuser == 1)
+    {
+        hesk_process_messages($hesklang['cant_del_admin'],'./manage_users.php');
+    }
+
+    /* You can't delete your own account (the one you are logged in) */
+	if ($myuser == $_SESSION['id'])
+    {
+        hesk_process_messages($hesklang['cant_del_own'],'./manage_users.php');
+    }
+
+    /* Delete client info */
+	$res = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` WHERE `id`='".intval($myuser)."'");
+	if (hesk_dbAffectedRows() != 1)
+    {
+        hesk_process_messages($hesklang['int_error'].': '.$hesklang['user_not_found'],'./manage_users.php');
+    }
+
+    hesk_process_messages($hesklang['sel_user_removed'],'./manage_users.php','SUCCESS');
+} // End remove_clients()
 
 
 function toggle_autoassign()
