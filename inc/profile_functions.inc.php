@@ -55,7 +55,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 						?>
 						<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" <?php if ($_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
 						<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0"  <?php if (!$_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
-						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" /> <?php echo $hesklang['aclient'] ?></label>
+						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" <?php if(isset($_GET['a']) && $_GET['a']=="editc") echo "checked"; ?> /> <?php echo $hesklang['aclient'] ?></label>
 						<?php
 					}
 					else
@@ -147,7 +147,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				</label>
 			</div>
 			
-			<div class="form-inline hidden" id="show-hide-kontrata">
+			<div class="form-inline <?php if($_GET['a']!="editc") echo "hidden"; ?>" id="show-hide-kontrata"  >
 				<label class="col-sm-2 control-label" for="select-kontrata"><?php echo $hesklang['contract']; ?></label>
 				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
 					<option></option>

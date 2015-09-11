@@ -792,8 +792,7 @@ function new_user()
 	hesk_token_check('POST');
 
 	$myuser = hesk_validateUserInfo();
-	var_dump($myuser);
-	exit();
+
     /* Categories and Features will be stored as a string */
     $myuser['categories'] = implode(',',$myuser['categories']);
     $myuser['features'] = implode(',',$myuser['features']);
@@ -929,7 +928,7 @@ function update_user()
     	hesk_process_messages($hesklang['eyou'],'profile.php','NOTICE');
     }
 
-    $_SERVER['PHP_SELF'] = './manage_users.php?a=edit&id='.$tmp;
+    $_SERVER['PHP_SELF'] = './manage_users.php';
 	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
 	
 	
@@ -1023,7 +1022,7 @@ function update_client(){
     	hesk_process_messages($hesklang['eyou'],'profile.php','NOTICE');
     }
 
-    $_SERVER['PHP_SELF'] = './manage_users.php?a=editc&id='.$tmp;
+    $_SERVER['PHP_SELF'] = './manage_users.php';
 	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
     $myuser['id'] = $tmp;
 
