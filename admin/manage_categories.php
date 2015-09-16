@@ -1611,7 +1611,7 @@ function remove_comp(){
 	$mycomp = intval( hesk_GET('id'));
 	
 	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` WHERE NOT EXISTS
-	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` as `c` WHERE `c`.`company_id`='".intval($mycomp)."') && `id`='".intval($mycomp)."' LIMIT 1");
+	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."projects` as `p` WHERE `p`.`company_id`='".intval($mycomp)."') && `id`='".intval($mycomp)."' LIMIT 1");
 	if (hesk_dbAffectedRows() != 1)
     {
     	hesk_error("$hesklang[comp_req].");

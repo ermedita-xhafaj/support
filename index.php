@@ -1022,7 +1022,60 @@ function print_start()
 				<!-- END SUBMIT -->
 		</div>
 	</div><!-- end submit-view-existing-ticket -->
-<!-- start form login-->	
+<!-- start form login-->
+
+<?php $sql = hesk_dbQuery("SELECT  id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`"); ?>
+<?php $sql_description = hesk_dbQuery("SELECT subject, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`"); ?>
+<?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
+<?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
+
+	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+		<form method="post" action="">
+			<?php echo "<select class='form-control-1' name='search_by_ID' id='ID_list'>"; // list box select command
+				echo"<option style='color:#ccc' value=''>Select by ID</option>";
+					while ($tmp = hesk_dbFetchAssoc($sql))
+					{
+						echo "<option value=$tmp[id]> $tmp[id] </option>"; 
+					}
+						echo "</select>";
+				?>
+				<datalist id="ticket_desc_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_description)){
+					echo '<option value='.$tmp["subject"].'>';
+				}
+					?>
+				</datalist>
+				<input placeholder="Select by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" class="form-control-1" />
+				
+				<datalist id="ticket_klient_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_client)){
+					echo '<option value='.$tmp["user"].'>';
+				}
+					?>
+				</datalist>
+				<input placeholder="Select by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" class="form-control-1" />
+
+			<?php echo "<select class='form-control-1' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
+				echo"<option value=''>Select category</option>";
+					while ($tmp = hesk_dbFetchAssoc($sql_category))
+					{
+						echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+					}
+						echo "</select>";
+				?>
+			<?php echo "<select class='form-control-1' name='search_by_ticket_status' id='ticket_status_list'>"; // list box select command
+				echo"<option value=''>Select status</option>";
+						echo "<option value='0'> NEW </option>"; 
+						echo "<option value='1'> WAITING REPLY </option>"; 
+						echo "<option value='2'> REPLIED </option>"; 
+						echo "<option value='3'> RESOLVED </option>"; 
+						echo "<option value='4'> IN PROGRESS </option>"; 
+						echo "<option value='5'> ON HOLD </option>"; 
+				echo "</select>";
+				?>
+			<input name="submitbutton_tickets" type="submit" class="btn btn-default execute-btn" value="Search"/>
+		</form>
+	</div> <!--end div i filtrave -->		
 <div class="print_ticket_for_client">
 <?php require(HESK_PATH . 'inc/print_tickets_client.inc.php'); ?>
 </div>
