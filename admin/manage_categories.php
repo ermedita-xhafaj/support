@@ -1124,6 +1124,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					$valueproj_project_manager = hesk_input( hesk_POST('project_manager') );
 					$valueproj_company_id = hesk_input( hesk_POST('company_id') );
 					$valueproj_active = hesk_input( hesk_POST('project_active') );
+					if(empty($valueproj_active)) { $valueproj_active = '0'; }
 					$valueproj_department_id = hesk_input( hesk_POST('department_id') );
 					$valueproj_id = hesk_input( hesk_POST('proj_id') );
 					
