@@ -244,7 +244,32 @@ hesk_handle_messages();
 	<!--[<a href="javascript:void(0)" onclick="javascript:alert('<?php /*echo hesk_makeJsString($hesklang['users_intro']);*/ ?>')">?</a>]-->
 </div>
 
-<div class="table-responsive container collapse" id="div-id-1"  >
+<div class="table-responsive container collapse <?php if(isset($_GET['f']) && ($_GET['f']=="filter_users")) echo "in"; ?> " <?php if(isset($_GET['f']) && ($_GET['f']=="filter_users")) echo 'aria-expanded="true"'; ?>id="div-id-1"  >
+
+<?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users`"); ?>
+<?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
+		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+			<form method="post" action="manage_users.php?f=filter_users">
+				<?php echo "<select class='form-control-1' name='search_by_user_name' id='dep_user_list'>"; // list box select command
+					echo"<option value=''>Select staff</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_name))
+						{
+							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				
+				<?php echo "<select class='form-control-1' name='search_by_project' id='project_list'>"; // list box select command
+					echo"<option value=''>Select project</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_project))
+						{
+							echo "<option value=$tmp[id]> $tmp[project_name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				<input name="submitbutton_user" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			</form>
+		</div> <!--end div i filtrave -->
 	<table class="table table-bordered manage-users-table">
 		<tr>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
@@ -269,7 +294,25 @@ hesk_handle_messages();
 
 		<?php
 		$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `name` ASC');
-
+		if (isset($_POST['submitbutton_user'])){
+				if (!empty($_POST['search_by_user_name'])) {
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id='.$_POST['search_by_user_name']);
+				}
+				if (!empty($_POST['search_by_project'])) {
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE project_id='.$_POST['search_by_project']);
+					$users = array();
+					while($con = hesk_dbFetchAssoc($res)){
+						$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE contractId='.$con['id']);
+						while($query1 = hesk_dbFetchAssoc($query)){
+							$users[] = $query1['userId'];
+						};
+					}
+					//var_dump($users);
+					//exit();
+					$usersStr = implode(',', $users);
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id in ('.$usersStr.')');
+				}
+			}
 		$i=1;
 		$cannot_manage = array();
 
@@ -391,7 +434,46 @@ EOC;
 <div class="container manage-client-title">
 	<a data-toggle="collapse" data-parent="#accordion" href="#div-id-2" ><?php echo $hesklang['manage_clients']; ?></a>
 </div>
-<div class="table-responsive container collapse" id="div-id-2">
+<div class="table-responsive container collapse <?php if(isset($_GET['f']) && ($_GET['f']=="filter_clients")) echo "in"; ?> " <?php if(isset($_GET['f']) && ($_GET['f']=="filter_clients")) echo 'aria-expanded="true"'; ?>id="div-id-2"  >
+
+<?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
+<?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
+<?php $sql_contract = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
+		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+			<form method="post" action="manage_users.php?f=filter_clients">
+				<?php echo "<select class='form-control-1' name='search_by_user_name' id='dep_user_list'>"; // list box select command
+					echo"<option value=''>Select client</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_name))
+						{
+							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				
+				<?php echo "<select class='form-control-1' name='search_by_company' id='company_list'>"; // list box select command
+					echo"<option value=''>Select company</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_company))
+						{
+							echo "<option value=$tmp[id]> $tmp[company_name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				<?php echo "<select class='form-control-1' name='search_by_contract' id='contract_list'>"; // list box select command
+					echo"<option value=''>Select contract</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_contract))
+						{
+							echo "<option value=$tmp[id]> $tmp[contract_name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				<select id="client_status" name="search_by_client_status" class="form-control-1">
+				<option value="">Select status</option>
+				<option value="1">Active</option>
+				<option value="0">Inactive</option>
+			</select>
+				<input name="submitbutton_client" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			</form>
+		</div> <!--end div i filtrave -->
 	<table class="table table-bordered manage-clients-table">
 		<tr>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
@@ -408,6 +490,50 @@ EOC;
 		<?php
 
 		$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` ORDER BY `name` ASC');
+		if (isset($_POST['submitbutton_client'])){
+			if (!empty($_POST['search_by_user_name'])) {
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`WHERE id='.$_POST['search_by_user_name']);
+			}
+			elseif(!empty($_POST['search_by_company'])){
+				$clients = array();
+				$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE company_id='.$_POST['search_by_company']);
+				while($query1 = hesk_dbFetchAssoc($query)){
+					$query2 = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$query1['id']);
+					while($query3 = hesk_dbFetchAssoc($query2)){
+						$query4 = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$query3['client_Id']);
+						while($query5 = hesk_dbFetchAssoc($query4)){
+								$clients[] = $query5['id'];
+						}
+						
+					}
+					
+				}
+				$clientsStr = implode(',', $clients);
+				if(!empty($clientsStr)){
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id in ('.$clientsStr.')');
+				} else {
+					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id =99999999'); 
+				}
+			}
+			elseif(!empty($_POST['search_by_contract'])){
+				$users = array();
+			$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$_POST['search_by_contract']);
+					while($query1 = hesk_dbFetchAssoc($query)){
+						$users[] = $query1['client_Id'];
+					};
+				$usersStr = implode(',', $users);
+				if(!empty($usersStr)){
+					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id in ('.$usersStr.')');
+				} else {
+					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id =99999999'); //kjo eshte nje `funny` way per te nxjerre nje rezultat bosh
+				}
+				
+				
+			}
+			elseif($_POST['search_by_client_status'] === '0' || $_POST['search_by_client_status'] === '1'){
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`WHERE active='.$_POST['search_by_client_status']);
+			}
+		}
 		
 			$i=1;
 			while ($row = mysqli_fetch_array($result)) 
@@ -440,7 +566,7 @@ EOC;
 				$remove_code = ' <a href="manage_users.php?a=removec&amp;id='.$row['id'].'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" '.$style.' /></a>';
 			}
 			
-				$result1 = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row['contract_id']);
+				$result1 = hesk_dbQuery("SELECT contract_name FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row['contract_id']."'");
 				$contract_result = mysqli_fetch_array($result1);
 				echo '<tr>
 				<td class="$color">' .$row['name'] .'</td>
