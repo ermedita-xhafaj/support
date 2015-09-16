@@ -183,43 +183,6 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 ?>
 
 <div class="container manage-contract-title"><?php echo $hesklang['manage_contracts']; ?></div>
-<?php $sql = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
-<?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
-<?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
-	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
-		<form method="post">
-			<?php echo "<select class='form-control-1' name='search_by_contract_name' id='contract_name_list'>"; // list box select command
-				echo"<option value=''>Select contract</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql))
-					{
-						echo "<option value=$tmp[id]> $tmp[contract_name] </option>"; 
-					}
-						echo "</select>";
-				?>
-			<?php echo "<select class='form-control-1' name='search_by_project_name' id='project_name_list'>"; // list box select command
-				echo"<option value=''>Select project</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql_project))
-					{
-						echo "<option value=$tmp[id]> $tmp[project_name] </option>"; 
-					}
-						echo "</select>";
-				?>
-			<?php echo "<select class='form-control-1' name='search_by_company_name' id='company_name_list'>"; // list box select command
-				echo"<option value=''>Select company</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql_company))
-					{
-						echo "<option value=$tmp[id]> $tmp[company_name] </option>"; 
-					}
-						echo "</select>";
-				?>
-			<select id="cat_status" name="search_by_contract_status" class="form-control-1">
-				<option value="">Select status</option>
-				<option value="1">Active</option>
-				<option value="0">Inactive</option>
-			</select>
-			<input name="submitbutton_contracts" type="submit" class="btn btn-default execute-btn" value="Search"/>
-		</form>
-	</div> <!--end div i filtrave -->
 <div class="table-responsive container">
 	<table class="table table-bordered manage-contracts-table">
 		<tr>
@@ -285,7 +248,6 @@ else {return false;}
 
 
 	}
-	if($_SESSION['isadmin']){
 		$res = hesk_dbQuery("SELECT 
 		C.id, 
 		C.contract_name,
@@ -303,63 +265,6 @@ else {return false;}
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id
 		ORDER BY `id`");
-	
-	
-	$custom_filters = "SELECT 
-		C.id, 
-		C.contract_name,
-		CO.company_name,
-		C.active,
-		P.project_name,
-		S.name as staff_name,
-		C.starting_date,
-		C.ending_date,
-		C.lastchange,
-		CB.name AS created_by 
-		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS S ON C.staff_id=S.Id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS CB ON C.created_by=CB.Id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id";
-		
-	//FILTRAT NGA ERMEDITA 
-		if (isset($_POST['submitbutton_contracts'])){
-			if (!empty($_POST['search_by_contract_name'])) {
-				$res = hesk_dbQuery($custom_filters.' WHERE C.id ='.$_POST['search_by_contract_name']);
-			}
-			elseif (!empty($_POST['search_by_project_name'])) {
-				$res = hesk_dbQuery($custom_filters.' WHERE P.id ='.$_POST['search_by_project_name']);
-			}
-			elseif (!empty($_POST['search_by_company_name'])) {
-				$res = hesk_dbQuery($custom_filters.' WHERE CO.id ='.$_POST['search_by_company_name']);
-			}
-			elseif($_POST['search_by_contract_status'] === '0' || $_POST['search_by_contract_status'] === '1'){
-				$res = hesk_dbQuery($custom_filters.' WHERE C.active ='.$_POST['search_by_contract_status']);
-			}
-		}
-	}
-	else{
-		$res = hesk_dbQuery("SELECT 
-		C.id, 
-		C.contract_name,
-		CO.company_name,
-		UFC.contractId,
-		C.active,
-		P.project_name,
-		S.name as staff_name,
-		C.starting_date,
-		C.ending_date,
-		C.lastchange,
-		CB.name AS created_by 
-		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS S ON C.staff_id=S.Id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS CB ON C.created_by=CB.Id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
-		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id
-		RIGHT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` AS UFC on UFC.contractId=C.id
-		WHERE UFC.userId=".hesk_dbEscape($_SESSION['id'])."
-		ORDER BY `id`");
-		}
 			$i=1;
 			while ($row = mysqli_fetch_array($res)) 
 			{

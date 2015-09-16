@@ -130,7 +130,7 @@ private $host = 'improdemo.commprog.com';
 		$resp = $this->client->send($msg);
 		$ids = $resp->value();
 		if(empty($ids)){
-				return array(array("state" => "Nuk ka resultat!"));
+				return array(array("state" => "ja ke fut kot"));
 		} else {
 			$this->zhvish_rpc($ids);
 			

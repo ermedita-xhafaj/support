@@ -79,29 +79,6 @@ $sql_count = "SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."
 // This is common SQL for both queries
 $sql = "";
 
-//FILTRAT//////////////////////////////////////////////////////////////////////////////////////
-
-if (isset($_POST['submitbutton_tickets'])){
-			if (!empty($_POST['search_by_ID'])) {
-				$sql .= " `id`=".$_POST['search_by_ID'];
-			}
-			elseif (!empty($_POST['search_by_description_ticket'])) {
-				$sql .= " `subject`='".$_POST['search_by_description_ticket']."'";
-			}
-			elseif (!empty($_POST['search_by_ticket_category'])) {
-				$sql .= " `category`=".$_POST['search_by_ticket_category'];
-			}
-			elseif (!empty($_POST['search_by_ticket_status']) || $_POST['search_by_ticket_status']=='0') {
-				$sql .= " `status`='".$_POST['search_by_ticket_status']."'";
-			}
-			elseif (!empty($_POST['search_by_client_open_ticket'])) {
-				$sql .= " `name`='".$_POST['search_by_client_open_ticket']."'";
-			}
-		}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
 // Some default settings
 $s_my = array(1=>1,2=>1);
 $s_ot = array(1=>1,2=>1);
@@ -143,10 +120,9 @@ if ( $tmp < count($possible_status) )
 		$status = $possible_status;
 		unset($status[3]);
 	}
-if(empty($_POST)){
+
 	// Add to the SQL
 	$sql .= "`status` IN ('" . implode("','", array_keys($status) ) . "') ";
-}
 }
 
 // --> TICKET PRIORITY

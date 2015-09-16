@@ -226,8 +226,7 @@ if ($total > 0)
 } // END ticket list if total > 0
 else
 {
-   // if (isset($is_search) || $href == 'find_tickets.php')
-    if (isset($is_search))
+    if (isset($is_search) || $href == 'find_tickets.php')
     {
         hesk_show_notice($hesklang['no_tickets_crit']);
     }
