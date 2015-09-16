@@ -248,6 +248,7 @@ else {return false;}
 
 
 	}
+	if($_SESSION['isadmin']){
 		$res = hesk_dbQuery("SELECT 
 		C.id, 
 		C.contract_name,
@@ -265,6 +266,28 @@ else {return false;}
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
 		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id
 		ORDER BY `id`");
+		}else{
+		$res = hesk_dbQuery("SELECT 
+		C.id, 
+		C.contract_name,
+		CO.company_name,
+		UFC.contractId,
+		C.active,
+		P.project_name,
+		S.name as staff_name,
+		C.starting_date,
+		C.ending_date,
+		C.lastchange,
+		CB.name AS created_by 
+		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS S ON C.staff_id=S.Id
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS CB ON C.created_by=CB.Id
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` AS CO on C.company_id=CO.id
+		LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` AS P on C.project_id=P.id
+		RIGHT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` AS UFC on UFC.contractId=C.id
+		WHERE UFC.userId=".hesk_dbEscape($_SESSION['id'])."
+		ORDER BY `id`");
+		}
 			$i=1;
 			while ($row = mysqli_fetch_array($res)) 
 			{

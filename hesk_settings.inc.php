@@ -60,7 +60,7 @@ $hesk_settings['select_pri']=0;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=0;
-$hesk_settings['secimg_sum']='AW954Y68EE';
+$hesk_settings['secimg_sum']='UR3XBG348N';
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
 $hesk_settings['recaptcha_private_key']='';
@@ -154,7 +154,7 @@ $hesk_settings['open_only']=1;
 
 // ==> TICKET LIST
 
-$hesk_settings['ticket_list']=array('id','lastchange','name','subject','status');
+$hesk_settings['ticket_list']=array('id','lastchange','category','name','company_ticket_id','contract_ticket_id','subject','status');
 
 // --> Other
 $hesk_settings['submittedformat']='2';

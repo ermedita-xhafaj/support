@@ -1050,10 +1050,10 @@ function hesk_showTopBar($page_title)
 	?>
 		<div class="container page-title">
 			<div class="row">
-				<label class="col-sm-7 showPageTitle" id="page-title-row1"><?php echo $page_title; ?></label>
-				<div class="col-sm-5 showPageTitle-col">
+				<label class="col-sm-9 showPageTitle" id="page-title-row1"><?php echo $page_title; ?></label>
+				<div class="col-sm-3 showPageTitle-col">
 					<?php		
-						hesk_kbSearchLarge();
+						/*hesk_kbSearchLarge();*/
 					?>
 					<label class="showPageTitle" id="page-title-row2">
 						<script language="javascript" type="text/javascript">

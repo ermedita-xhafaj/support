@@ -42,6 +42,8 @@ $sql_final = "SELECT
 `name`,
 `email`,
 `category`,
+`company_ticket_id`,
+`contract_ticket_id`,
 `priority`,
 `subject`,
 LEFT(`message`, 400) AS `message`,
@@ -84,6 +86,14 @@ $archive = array(1=>0,2=>0);
 $s_my = array(1=>1,2=>1);
 $s_ot = array(1=>1,2=>1);
 $s_un = array(1=>1,2=>1);
+
+
+// --> TICKET Contract
+$contract = intval( hesk_GET('contract_ticket_id', 0) );
+
+// --> TICKET Company
+$company = intval( hesk_GET('company_ticket_id', 0) );
+
 
 // --> TICKET CATEGORY
 $category = intval( hesk_GET('category', 0) );

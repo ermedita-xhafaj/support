@@ -42,6 +42,8 @@ $hesk_settings['possible_ticket_list'] = array(
 'dt' => $hesklang['submitted'],
 'lastchange' => $hesklang['last_update'],
 'category' => $hesklang['category'],
+'company_ticket_id' => $hesklang['company'],
+'contract_ticket_id' => $hesklang['contract'],
 'name' => $hesklang['name'],
 'email' => $hesklang['email'],
 'subject' => $hesklang['subject'],
@@ -765,6 +767,32 @@ function hesk_myCategories($what='category')
         return " `".hesk_dbEscape($what)."` IN ('" . implode("','", array_map('intval', $_SESSION['categories']) ) . "')";
     }
 } // END hesk_myCategories()
+
+
+function hesk_myContracts($what='contract_ticket_id')
+{
+    if ( ! empty($_SESSION['isadmin']) )
+    {
+        return '1';
+    }
+    else
+    {
+        return " `".hesk_dbEscape($what)."` IN ('" . implode("','", array_map('intval', $_SESSION['contracts']) ) . "')";
+    }
+} // END hesk_myContracts()
+
+
+function hesk_myCompanies($what='company_ticket_id')
+{
+    if ( ! empty($_SESSION['isadmin']) )
+    {
+        return '1';
+    }
+    else
+    {
+        return " `".hesk_dbEscape($what)."` IN ('" . implode("','", array_map('intval', $_SESSION['companies']) ) . "')";
+    }
+} // END hesk_myCompanies()
 
 
 function hesk_okCategory($cat,$error=1,$user_isadmin=false,$user_cat=false)

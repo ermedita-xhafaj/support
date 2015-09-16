@@ -235,7 +235,8 @@ else
 
 $tmpvar['subject']  = hesk_input( hesk_POST('subject') ) or $hesk_error_buffer['subject']=$hesklang['enter_ticket_subject'];
 $tmpvar['message']  = hesk_input( hesk_POST('message') ) or $hesk_error_buffer['message']=$hesklang['enter_message'];
-
+$tmpvar['contract_ticket_id']  = hesk_input( hesk_POST('contract_name') );
+$tmpvar['company_ticket_id']  = hesk_input( hesk_POST('company_name') );
 // Is category a valid choice?
 if ($tmpvar['category'])
 {
@@ -406,9 +407,10 @@ if ($hesk_settings['attachments']['use'] && ! empty($attachments) )
     }
 }
 
+
 // Insert ticket to database
 $ticket = hesk_newTicket($tmpvar);
-//var_dump($ticket);
+
 
 //insert to ERP
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

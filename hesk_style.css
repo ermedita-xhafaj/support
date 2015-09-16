@@ -284,7 +284,7 @@ hr {border: 0; border-top: 1px dashed #BEBEBE; margin: 0px;}
 					background: -moz-linear-gradient(#008981, #00A79D);
 					background: linear-gradient(#008981, #00A79D);
 				}
-
+#message_client_ticket{margin-left: -15px;}
 
 
 
@@ -525,6 +525,8 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 #name-category-row {margin-top: 10px; }
 .old-new-name-category, .manage-category-priority {margin: 10px 0px 5px;}
 #hr_for_category {margin: 0px 5px;}
+#hr_for_ticket {margin-right: 50px;}
+
 
 .manage-config-tab, .manage-contract-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
 .manage-config, .manage-contract {border-bottom: 1px solid #37B992;}
@@ -983,7 +985,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 /* start style for support/inc/common.inc.php */
 #page-title-row1 {padding-left: 0px;}
 .showPageTitle-col {margin-top: 10px; padding: 0px 20px 0px 50px;}
-#page-title-row2 {margin-left: 49px;}
+#page-title-row2 {margin-left: 43%;}
 .heskTitle {border-radius: 5px; background-color: #EC790F; font-size: 12px; color: #fff; padding: 5px;}
 .error img, .success img, .notice img, .info img {vertical-align:text-bottom;}
 .form-control-1 {     display: inline; height: 34px; padding: 6px 12px; font-size: 14px;

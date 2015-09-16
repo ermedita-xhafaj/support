@@ -69,7 +69,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-			<li id="userMenu-home"><a href="index.php">Home</a></li>
+			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
 			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
 			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?></a></li>
 			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>

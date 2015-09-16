@@ -270,6 +270,14 @@ if (isset($_GET['delete_post']) && $can_delete && hesk_token_check())
     }
 }
 
+/* Get company name and ID */
+$result = hesk_dbQuery("SELECT `id`, `company_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` WHERE `id`='".intval($ticket['company_ticket_id'])."' LIMIT 1");
+$company = hesk_dbFetchAssoc($result);
+
+/* Get conrtact name and ID */
+$result = hesk_dbQuery("SELECT `id`, `contract_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `contract_name`='".intval($ticket['contract_ticket_id'])."' LIMIT 1");
+$contract = hesk_dbFetchAssoc($result);
+
 /* Delete notes action */
 if (isset($_GET['delnote']) && hesk_token_check())
 {
@@ -566,6 +574,26 @@ else
 {
 	$reply = false;
 }
+
+
+/* List of companies */
+$result = hesk_dbQuery("SELECT `id`,`company_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` ORDER BY `id` ASC");
+$company_options='';
+while ($row=hesk_dbFetchAssoc($result))
+{
+    if ($row['id'] == $ticket['company_ticket_id']) {continue;}
+    $company_options.='<option value="'.$row['id'].'">'.$row['company_name'].'</option>';
+}
+
+/* List of contracts */
+$result = hesk_dbQuery("SELECT `id`,`contract_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` ORDER BY `id` ASC");
+$contract_options='';
+while ($row=hesk_dbFetchAssoc($result))
+{
+    if ($row['id'] == $ticket['contract_ticket_id']) {continue;}
+    $contract_options.='<option value="'.$row['id'].'">'.$row['contract_name'].'</option>';
+}
+//var_dump($contract_options); // all contracts name
 
 // Demo mode
 if ( defined('HESK_DEMO') )

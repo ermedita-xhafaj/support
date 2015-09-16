@@ -54,6 +54,24 @@ while ($row=hesk_dbFetchAssoc($res2))
 	$hesk_settings['categories'][$row['id']] = $row['name'];
 }
 
+
+/* List of contracts */
+$hesk_settings['contracts'] = array();
+$res_cont = hesk_dbQuery('SELECT `id`, `contract_name` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE ' . hesk_myContracts('id') . ' ');
+while ($row=hesk_dbFetchAssoc($res_cont))
+{
+	$hesk_settings['contracts'][$row['id']] = $row['contract_name'];
+}
+
+/* List of companies */
+$hesk_settings['companies'] = array();
+$res_comp = hesk_dbQuery('SELECT `id`, `company_name` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE ' . hesk_myCompanies('id') . ' ');
+while ($row=hesk_dbFetchAssoc($res_comp))
+{
+	$hesk_settings['companies'][$row['id']] = $row['company_name'];
+}
+
+
 /* Current MySQL time */
 $mysql_time = hesk_dbTime();
 
@@ -74,6 +92,8 @@ if ($total > 0)
         $query .= '&amp;p' . implode('=1&amp;p',array_keys($priority)) . '=1';
 
 		$query .= '&amp;category='.$category;
+		$query .= '&amp;contract_ticket_id='.$contract;
+		$query .= '&amp;company_ticket_id='.$company;
 		$query .= '&amp;sort='.$sort;
 		$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
@@ -92,6 +112,8 @@ if ($total > 0)
 		$query  = 'q='.$q;
 	    $query .= '&amp;what='.$what;
 		$query .= '&amp;category='.$category;
+		$query .= '&amp;contract_ticket_id='.$contract;
+		$query .= '&amp;company_ticket_id='.$company;
 		$query .= '&amp;dt='.urlencode($date_input);
 		$query .= '&amp;sort='.$sort;
 		$query .= '&amp;asc='.$asc;
@@ -129,6 +151,8 @@ if ($total > 0)
         $query .= '&amp;p' . implode('=1&amp;p',array_keys($priority)) . '=1';
 
 		$query .= '&amp;category='.$category;
+		$query .= '&amp;contract_ticket_id='.$contract;
+		$query .= '&amp;company_ticket_id='.$company;
 		#$query .= '&amp;asc='.(isset($is_default) ? 1 : $asc_rev);
 		$query .= '&amp;limit='.$maxresults;
 		$query .= '&amp;archive='.$archive[1];
@@ -147,6 +171,8 @@ if ($total > 0)
 		$query  = 'q='.$q;
 	    $query .= '&amp;what='.$what;
 		$query .= '&amp;category='.$category;
+		$query .= '&amp;contract_ticket_id='.$contract;
+		$query .= '&amp;company_ticket_id='.$company;
 		$query .= '&amp;dt='.urlencode($date_input);
 		#$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
@@ -226,15 +252,18 @@ if ($total > 0)
 				$ticket['priority']='<img src="../img/flag_low.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['low'].'" title="'.$hesklang['priority'].': '.$hesklang['low'].'" border="0" />';
 		}		
 
+		
 		// Set message (needed for row title)
 		$ticket['message'] = $first_line . substr(strip_tags($ticket['message']),0,200).'...';
 
+		
 		// Start ticket row
 		echo '
 		<tr title="'.$ticket['message'].'">
 		<td><input type="checkbox" name="id[]" value="'.$ticket['id'].'" />&nbsp;</td>
 		';
 
+		
 		// Print sequential ID and link it to the ticket page
 		if ( hesk_show_column('id') )
 		{
@@ -247,6 +276,7 @@ if ($total > 0)
 			echo '<td><a href="admin_ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['trackid'].'</a></td>';
 		}
 
+		
 		// Print date submitted
 		if ( hesk_show_column('dt') )
 		{
@@ -264,6 +294,7 @@ if ($total > 0)
 			echo '<td>'.$ticket['dt'].'</td>';
 		}
 
+		
 		// Print last modified
 		if ( hesk_show_column('lastchange') )
 		{
@@ -281,6 +312,7 @@ if ($total > 0)
 			echo '<td>'.$ticket['lastchange'].'</td>';
 		}
 
+		
 		// Print ticket category
 		if ( hesk_show_column('category') )
 		{
@@ -288,24 +320,42 @@ if ($total > 0)
 			echo '<td>'.$ticket['category'].'</td>';
 		}
 
+		
 		// Print customer name
 		if ( hesk_show_column('name') )
 		{
 			echo '<td>'.$ticket['name'].'</td>';
 		}
-
+		
+				
+		// Print company name
+		if ( hesk_show_column('company_ticket_id') )
+		{
+			$ticket['company_ticket_id'] = isset($hesk_settings['companies'][$ticket['company_ticket_id']]) ? $hesk_settings['companies'][$ticket['company_ticket_id']] : $hesklang['company'];
+			echo '<td>'.$ticket['company_ticket_id'].'</td>';
+		}
+		
+		// Print contract name
+		if ( hesk_show_column('contract_ticket_id') )
+		{
+			$ticket['contract_ticket_id'] = isset($hesk_settings['contracts'][$ticket['contract_ticket_id']]) ? $hesk_settings['contracts'][$ticket['contract_ticket_id']] : $hesklang['contract'];
+			echo '<td>'.$ticket['contract_ticket_id'].'</td>';
+		}
+		
 		// Print customer email
 		/*if ( hesk_show_column('email') )
 		{
 			echo '<td><a href="mailto:'.$ticket['email'].'">'.$hesklang['clickemail'].'</a></td>';
 		}*/
 
+		
 		// Print subject and link to the ticket page
 		if ( hesk_show_column('subject') )
 		{
 			echo '<td>'.($ticket['archive'] ? '<img src="../img/tag.png" width="16" height="16" alt="'.$hesklang['archived'].'" title="'.$hesklang['archived'].'"  border="0" /> ' : '').$owner.'<a href="admin_ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['subject'].'</a></td>';
 		}
 
+		
 		// Print ticket status
 		if ( hesk_show_column('status') )
 		{
@@ -332,6 +382,7 @@ if ($total > 0)
 			echo '<td>'.$ticket['status'].'&nbsp;</td>';
 		}
 
+		
 		// Print ticket owner
 		if ( hesk_show_column('owner') )
 		{
@@ -346,18 +397,21 @@ if ($total > 0)
 			echo '<td>'.$ticket['owner'].'</td>';
 		}
 
+		
 		// Print number of all replies
 		if ( hesk_show_column('replies') )
 		{
 			echo '<td>'.$ticket['replies'].'</td>';
 		}
 
+		
 		// Print number of staff replies
 		if ( hesk_show_column('staffreplies') )
 		{
 			echo '<td>'.$ticket['staffreplies'].'</td>';
 		}
 
+		
 		// Print last replier
 		if ( hesk_show_column('lastreplier') )
 		{
@@ -372,12 +426,14 @@ if ($total > 0)
 			echo '<td>'.$ticket['repliername'].'</td>';
 		}
 
+		
 		// Print time worked
 		if ( hesk_show_column('time_worked') )
 		{
 			echo '<td>'.$ticket['time_worked'].'</td>';
 		}
 
+		
 		// Print custom fields
 		foreach ($hesk_settings['custom_fields'] as $key => $value)
 		{
@@ -385,6 +441,7 @@ if ($total > 0)
 			echo '<td>'.$ticket[$key].'</td>';
 		}
 
+		
 		// End ticket row
 		echo '
 		<td>'.$ticket['priority'].'&nbsp;</td>

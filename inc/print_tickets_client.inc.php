@@ -42,6 +42,8 @@ $sql_final = "SELECT
 `name`,
 `email`,
 `category`,
+`company_ticket_id`,
+`contract_ticket_id`,
 `priority`,
 `subject`,
 LEFT(`message`, 400) AS `message`,
@@ -71,7 +73,20 @@ foreach ($hesk_settings['custom_fields'] as $k=>$v)
 	}
 }
 
-$sql_final.= " FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE ";
+
+$sql_final.= " FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE";
+
+					$result_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$_SESSION["id"]["id"]."' LIMIT 1" ); 
+					$row_client = mysqli_fetch_array($result_client);
+					$result_client = hesk_dbQuery('SELECT company_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row_client['contract_Id']."' LIMIT 1" ); 
+					
+				if ($row_client = mysqli_fetch_array($result_client)) 
+				{
+					$result_company = hesk_dbQuery('SELECT id, company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row_client['company_id']);
+					$company_result = mysqli_fetch_array($result_company);
+				
+					$sql_final .= " company_ticket_id= ".$company_result['id']." AND ";
+				}
 
 // This code will be used to count number of results
 $sql_count = "SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE ";
@@ -83,6 +98,14 @@ $sql = "";
 $s_my = array(1=>1,2=>1);
 $s_ot = array(1=>1,2=>1);
 $s_un = array(1=>1,2=>1);
+
+
+// --> TICKET Contract
+$contract = intval( hesk_GET('contract_ticket_id', 0) );
+
+// --> TICKET Company
+$company = intval( hesk_GET('company_ticket_id', 0) );
+
 
 // --> TICKET STATUS
 $possible_status = array(
