@@ -165,11 +165,10 @@ require_once(HESK_PATH . 'inc/header.inc.php');
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-			<li id="userMenu-home"><a href="index.php">Home</a></li>
-			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="userMenu-viewTicket"><a href="ticket.php">View Ticket</a></li>
-			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
-			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
+			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
+			<li id="userMenu-submitTicket"><a href="index.php?a=add"><?php echo $hesklang['submit_tick']; ?></a></li>
+			<li id="client-username"><a href="client_profile.php"><?php echo $hesklang['hello']; ?><?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
+			<li id="userMenu-logout"><a href="logout.php"><?php echo $hesklang['logout']; ?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -210,7 +209,7 @@ hesk_handle_messages();
 
 			<p><?php echo $hesklang['use_form_below']; ?> <font class="important"> *</font></p><br/>
 
-			<form method="post" action="submit_ticket.php?submit=1" name="form1" enctype="multipart/form-data">
+			<form method="post" action="submit_ticket.php?submit=1" name="form1" enctype="multipart/form-data"  autocomplete="off">
 
 			<!-- Contact info -->
 			<div class="form-group contact-info-support-request">
@@ -243,14 +242,14 @@ hesk_handle_messages();
 			
 			<div class="form-inline" style="margin-bottom: 5px;">
 				<label class="col-sm-2 control-label" for="select-cont"><?php echo $hesklang['contract'] ?>: <font class="important">*</font></label>
-				<select class="form-control" id="select-cont" name="contract_name" style="width: 336px;">
+				<select class="form-control" required="required" title="Required field" id="select-cont" name="contract_name" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_client = hesk_dbQuery('SELECT contract_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$_SESSION["id"]["id"]);
+						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.$_SESSION["id"]["id"] );
 						$i=1;
 						while ($row_client = mysqli_fetch_array($res_client)) 
 						{
-						$result_contract = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row_client['contract_id']);
+						$result_contract = hesk_dbQuery('SELECT id, contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row_client['contract_Id']);
 						$cont_result = mysqli_fetch_array($result_contract);
 							echo 
 								'<option value="' .$cont_result['id'] .'">' .$cont_result['contract_name'] .'</option>';
@@ -259,17 +258,28 @@ hesk_handle_messages();
 					?>		
 				</select>
 				<?php  
-						/*var_dump($res_cont);*/
+						
 				?>
 			</div>
-			
-			
+				<?php
+					$result_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$_SESSION["id"]["id"]."' LIMIT 1" ); 
+					$row_client = mysqli_fetch_array($result_client);
+					$result_client = hesk_dbQuery('SELECT company_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row_client['contract_Id']."' LIMIT 1" ); 
+					
+				if ($row_client = mysqli_fetch_array($result_client)) 
+				{
+					$result_company = hesk_dbQuery('SELECT id, company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row_client['company_id']);
+					$company_result = mysqli_fetch_array($result_company);
+				
+					echo '<input type="hidden" class="form-control"  name="company_name" value="'.$company_result['id'].'" size="40" maxlength="1000" />';
+				}
+			?>
 			<!-- Department and priority -->
 			<?php
 			$is_table = 0;
 			// Get categories
 
-			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' ORDER BY `cat_order` ASC");
+			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' AND `active`='1' ORDER BY `cat_order` ASC");
 
 			/*if (hesk_dbNumRows($res) == 1)
 			{
@@ -291,6 +301,7 @@ hesk_handle_messages();
 					<div class="form-inline" style="margin-bottom: 5px;">
 						<label class="col-sm-2 control-label" for="category-department-priority-support-request"><?php echo $hesklang['category']; ?>: <font class="important">*</font></label>
 						<select class="form-control contact-support-request" id="category-department-priority-support-request" name="category" <?php if (in_array('category',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+						<option></option>
 						<?php
 						// Show the "Click to select"?
 						if ($hesk_settings['select_cat'])
@@ -320,6 +331,7 @@ hesk_handle_messages();
 					<div class="form-inline" style="margin-bottom: 5px;">
 						<label class="col-sm-2 control-label" for="priority-department-priority-support-request"><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
 						<select class="form-control contact-support-request" id="priority-department-priority-support-request" name="priority" <?php if (in_array('priority',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+						<option></option>
 						<?php
 						// Show the "Click to select"?
 						if ($hesk_settings['select_pri'])
@@ -909,9 +921,14 @@ hesk_handle_messages();
 
 			</form>
 		<!-- END FORM -->
-</div><!-- end form-submit-support-request -->			
-<?php
+</div><!-- end form-submit-support-request -->	
 
+		
+<!-- Go back -->
+<div class="container"><a href="javascript:history.go(-1)"> <button type="submit" class="btn btn-default goback-btn"><?php echo $hesklang['back'] ?></button></a></div>
+
+
+<?php
 hesk_cleanSessionVars('iserror');
 hesk_cleanSessionVars('isnotice');
 
@@ -942,8 +959,10 @@ function print_start()
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">		  	
-			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
-			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
+			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
+			<li id="userMenu-submitTicket"><a href="index.php?a=add"><?php echo $hesklang['submit_tick']; ?></a></li>
+			<li id="client-username"><a href="client_profile.php"><?php echo $hesklang['hello']; ?><?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
+			<li id="userMenu-logout"><a href="logout.php"><?php echo $hesklang['logout']; ?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -993,8 +1012,7 @@ function print_start()
 							&nbsp;
 							<img src="img/newticket.jpg" alt="newticket"/>
 							<div class="form-group">
-								<span><b><?php echo $hesklang['sub_support']; ?></b></span><br />
-								<span id="op-ticket"><?php echo $hesklang['open_ticket']; ?></span>
+								<span><b><?php echo $hesklang['sub_support']; ?></b></span>
 							</div>
 							&nbsp;
 						</div>
@@ -1003,8 +1021,64 @@ function print_start()
 				<!-- END SUBMIT -->
 		</div>
 	</div><!-- end submit-view-existing-ticket -->
-<!-- start form login-->	
+<!-- start form login-->
+
+<?php $sql = hesk_dbQuery("SELECT  id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`"); ?>
+<?php $sql_description = hesk_dbQuery("SELECT subject, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`"); ?>
+<?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
+<?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
+
+	<div class="col-sm-8 col-sm-offset-2 filter-ticket-client"> <!-- Krijojme nje div per filtrat -->
+		<form method="post" action="">
+			<?php echo "<select class='form-control-1' name='search_by_ID' id='ID_list' >"; // list box select command
+				echo"<option value=''>Select by ID</option>";
+					while ($tmp = hesk_dbFetchAssoc($sql))
+					{
+						echo "<option value=$tmp[id]> $tmp[id] </option>"; 
+					}
+						echo "</select>";
+				?>
+				<datalist id="ticket_desc_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_description)){
+					echo '<option value='.$tmp["subject"].'>';
+				}
+					?>
+				</datalist>
+				<input placeholder="Select by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" class="form-control-1" />
+				
+				<datalist id="ticket_klient_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_client)){
+					echo '<option value='.$tmp["user"].'>';
+				}
+					?>
+				</datalist>
+				<input placeholder="Select by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" class="form-control-1" />
+
+			<?php echo "<select class='form-control-1' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
+				echo"<option value=''>Select category</option>";
+					while ($tmp = hesk_dbFetchAssoc($sql_category))
+					{
+						echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+					}
+						echo "</select>";
+				?>
+			<?php echo "<select class='form-control-1' name='search_by_ticket_status' id='ticket_status_list'>"; // list box select command
+				echo"<option value=''>Select status</option>";
+						echo "<option value='0'> NEW </option>"; 
+						echo "<option value='1'> WAITING REPLY </option>"; 
+						echo "<option value='2'> REPLIED </option>"; 
+						echo "<option value='3'> RESOLVED </option>"; 
+						echo "<option value='4'> IN PROGRESS </option>"; 
+						echo "<option value='5'> ON HOLD </option>"; 
+				echo "</select>";
+				?>
+			<input name="submitbutton_tickets" type="submit" class="btn btn-default execute-btn" value="Search"/>
+		</form>
+	</div> <!--end div i filtrave -->		
+<div class="print_ticket_for_client">
 <?php require(HESK_PATH . 'inc/print_tickets_client.inc.php'); ?>
+</div>
+
 <?php else: ?>
 	<div class="container">
 		<div class="container col-sm-5 user-login-help-staf">
@@ -1015,20 +1089,18 @@ function print_start()
 					<div class="form-signin-heading">Login</div>
 					<div class="form-group">
 						<div class="form-inline signin-username">
-							<label for="inputUser">User:</label><br/>
-							<input name="user" type="text" id="inputUser" class="form-control" required autofocus style="width: 301px;">
+							<label for="inputUser">{$hesklang['username']}:</label><br/>
+							<input name="user" required="required" title="Required field" type="text" id="inputUser" class="form-control" required autofocus style="width: 301px;">
 						</div>
 						<div class="form-inline signin-password">
-							<label for="inputPassword">Password:</label><br/>
+							<label for="inputPassword">{$hesklang['pass']}:</label><br/>
 							<input name="pass" type="password" id="inputPassword" class="form-control" required style="width: 301px;">
 						</div>
 						<div class="checkbox signin-remember">
-							<label>
-								<input type="checkbox" value="remember-me" /> Remember me
-							</label>
+							<label><input type="checkbox" value="remember-me" /> {$hesklang['remember_user']}</label>
 						</div>
 						<div>
-							<button class="btn btn-default login-user-btn" type="submit">Click here to login</button>
+							<button class="btn btn-default login-user-btn" type="submit">{$hesklang['click_login']}</button>
 						</div>
 					</div>
 				</form>
@@ -1041,10 +1113,12 @@ EOD;
 				echo $login_form;
 				?>
 			</div>
+			<!--
 			<div class="form-inline top-latest-kb-button">
 			<a href="http://localhost/support/knowledgebase.php#tab_home" target="_blank"><button type="submit" class="btn btn-default" id="top-kb-button" onmouseover="hesk_btn(this,'btn btn-defaultover');" onmouseout="hesk_btn(this,'btn btn-default');">Top Knowledgebase <br/> articles</button></a>
 			<a href="http://localhost/support/knowledgebase.php#tab_profile" target="_blank"><button type="submit" class="btn btn-default" id="latest-kb-button" onmouseover="hesk_btn(this,'btn btn-defaultover');" onmouseout="hesk_btn(this,'btn btn-default');">Latest Knowledgebase <br/> articles</button></a>
 			</div>
+			-->
 		</div>		
 		<div class="col-sm-7 help-staf"><img src="img/help.jpg" alt="help" /></div>
 	</div>

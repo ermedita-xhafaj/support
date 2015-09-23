@@ -35,6 +35,18 @@
 /* Check if this is a valid include */
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
+$hesk_settings['ticket_list'] = array(
+'id' => $hesklang['id'],
+'lastchange' => $hesklang['last_update'],
+'category' => $hesklang['category'],
+'name' => $hesklang['name'],
+//'company_ticket_id' => $hesklang['company'],				/*bejme hide kompanise qe mos te perseritet ne tabele perderisa 1company=1client*/
+'contract_ticket_id' => $hesklang['contract'],
+'subject' => $hesklang['subject'],
+'status' => $hesklang['status']
+
+);
+
 /* List of staff */
 if (!isset($admins))
 {
@@ -53,6 +65,24 @@ while ($row=hesk_dbFetchAssoc($res2))
 {
 	$hesk_settings['categories'][$row['id']] = $row['name'];
 }
+
+/* List of contracts */
+$hesk_settings['contracts'] = array();
+$res_cont = hesk_dbQuery('SELECT `id`, `contract_name` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` ');
+while ($row=hesk_dbFetchAssoc($res_cont))
+{
+	$hesk_settings['contracts'][$row['id']] = $row['contract_name'];
+}
+
+
+/* List of companies */
+$hesk_settings['companies'] = array();
+$res_comp = hesk_dbQuery('SELECT `id`, `company_name` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` ');
+while ($row=hesk_dbFetchAssoc($res_comp))
+{
+	$hesk_settings['companies'][$row['id']] = $row['company_name'];
+}
+
 
 /* Current MySQL time */
 $mysql_time = hesk_dbTime();
@@ -87,14 +117,14 @@ if ($total > 0)
     $group_tmp = '';
 	$is_table = 0;
 	$space = 0;
-	var_dump($result);
+
 	while ($ticket=hesk_dbFetchAssoc($result))
 	{
 		// Are we grouping tickets?
-		if ($group)
+		/*if ($group)
         {
 			require(HESK_PATH . 'inc/print_group.inc.php');
-        }
+        }*/
 
 		// Determine line color
 		if ($i) {$color="admin_gray"; $i=0;}
@@ -122,51 +152,27 @@ if ($total > 0)
 		switch ($ticket['priority'])
 		{
 			case 0:
-				$ticket['priority']='<img src="../img/flag_critical.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['critical'].'" title="'.$hesklang['priority'].': '.$hesklang['critical'].'" border="0" />';
+				$ticket['priority']='<img src="img/flag_critical.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['critical'].'" title="'.$hesklang['priority'].': '.$hesklang['critical'].'" border="0" />';
                 $color = 'admin_critical';
 				break;
 			case 1:
-				$ticket['priority']='<img src="../img/flag_high.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['high'].'" title="'.$hesklang['priority'].': '.$hesklang['high'].'" border="0" />';
+				$ticket['priority']='<img src="img/flag_high.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['high'].'" title="'.$hesklang['priority'].': '.$hesklang['high'].'" border="0" />';
 				break;
 			case 2:
-				$ticket['priority']='<img src="../img/flag_medium.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['medium'].'" title="'.$hesklang['priority'].': '.$hesklang['medium'].'" border="0" />';
+				$ticket['priority']='<img src="img/flag_medium.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['medium'].'" title="'.$hesklang['priority'].': '.$hesklang['medium'].'" border="0" />';
 				break;
 			default:
-				$ticket['priority']='<img src="../img/flag_low.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['low'].'" title="'.$hesklang['priority'].': '.$hesklang['low'].'" border="0" />';
+				$ticket['priority']='<img src="img/flag_low.png" width="16" height="16" alt="'.$hesklang['priority'].': '.$hesklang['low'].'" title="'.$hesklang['priority'].': '.$hesklang['low'].'" border="0" />';
 		}		
 
 		// Set message (needed for row title)
 		$ticket['message'] = $first_line . substr(strip_tags($ticket['message']),0,200).'...';
 
 		// Start ticket row
-		echo '
-		<tr title="'.$ticket['message'].'">
-		<td><input type="checkbox" name="id[]" value="'.$ticket['id'].'" />&nbsp;</td>
-		';
+		echo '<td><a href="ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['id'].'</a></td>';
 
-		// Print tracking ID and link it to the ticket page
-
-			echo '<td><a href="admin_ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['trackid'].'</a></td>';
-
-
-		// Print date submitted
-
-			switch ($hesk_settings['submittedformat'])
-			{
-	        	case 1:
-					$ticket['dt'] = hesk_formatDate($ticket['dt']);
-					break;
-				case 2:
-					$ticket['dt'] = hesk_time_lastchange($ticket['dt']);
-					break;
-				default:
-					$ticket['dt'] = hesk_time_since( strtotime($ticket['dt']) );
-			}
-			echo '<td>'.$ticket['dt'].'</td>';
-
-
+		
 		// Print last modified
-
 			switch ($hesk_settings['updatedformat'])
 			{
 	        	case 1:
@@ -180,31 +186,31 @@ if ($total > 0)
 			}
 			echo '<td>'.$ticket['lastchange'].'</td>';
 
-
+			
 		// Print ticket category
-
 			$ticket['category'] = isset($hesk_settings['categories'][$ticket['category']]) ? $hesk_settings['categories'][$ticket['category']] : $hesklang['catd'];
 			echo '<td>'.$ticket['category'].'</td>';
 
 
 		// Print customer name
-
 			echo '<td>'.$ticket['name'].'</td>';
+			
+			
+		// Print company name			/*bejme hide kompanise qe mos te perseritet ne tabele perderisa 1company=1client*/
+			/*$ticket['company_ticket_id'] = isset($hesk_settings['companies'][$ticket['company_ticket_id']]) ? $hesk_settings['companies'][$ticket['company_ticket_id']] : $hesklang['company'];
+			echo '<td class="hidden">'.$ticket['company_ticket_id'].'</td>';*/
+		
+		
+		// Print contract name		
+			$ticket['contract_ticket_id'] = isset($hesk_settings['contracts'][$ticket['contract_ticket_id']]) ? $hesk_settings['contracts'][$ticket['contract_ticket_id']] : $hesklang['contract'];
+			echo '<td>'.$ticket['contract_ticket_id'].'</td>';
 
-
-		// Print customer email
-		/*if ( hesk_show_column('email') )
-		{
-			echo '<td><a href="mailto:'.$ticket['email'].'">'.$hesklang['clickemail'].'</a></td>';
-		}*/
-
+			
 		// Print subject and link to the ticket page
-
-			echo '<td>'.($ticket['archive'] ? '<img src="../img/tag.png" width="16" height="16" alt="'.$hesklang['archived'].'" title="'.$hesklang['archived'].'"  border="0" /> ' : '').$owner.'<a href="admin_ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['subject'].'</a></td>';
+			echo '<td>'.($ticket['archive'] ? '<img src="img/tag.png" width="16" height="16" alt="'.$hesklang['archived'].'" title="'.$hesklang['archived'].'"  border="0" /> ' : '').$owner.'<a href="ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['subject'].'</a></td>';
 		
 
 		// Print ticket status
-
 			switch ($ticket['status'])
 			{
 				case 0:
@@ -228,59 +234,18 @@ if ($total > 0)
 			echo '<td>'.$ticket['status'].'&nbsp;</td>';
 		
 
-		// Print ticket owner
-
-			if ($ticket['owner'])
-			{
-				$ticket['owner'] = isset($admins[$ticket['owner']]) ? $admins[$ticket['owner']] : $hesklang['unas'];
-			}
-			else
-			{
-				$ticket['owner'] = $hesklang['unas'];
-			}
-			echo '<td>'.$ticket['owner'].'</td>';
-		
-
-		// Print number of all replies
-
-			echo '<td>'.$ticket['replies'].'</td>';
-		
-
-		// Print number of staff replies
-
-			echo '<td>'.$ticket['staffreplies'].'</td>';
-		
-
-		// Print last replier
-
-			if ($ticket['lastreplier'])
-			{
-				$ticket['repliername'] = isset($admins[$ticket['replierid']]) ? $admins[$ticket['replierid']] : $hesklang['staff'];
-			}
-			else
-			{
-				$ticket['repliername'] = $ticket['name'];
-			}
-			echo '<td>'.$ticket['repliername'].'</td>';
-		
-
-		// Print time worked
-
-			echo '<td>'.$ticket['time_worked'].'</td>';
-		
 
 		// Print custom fields
 		foreach ($hesk_settings['custom_fields'] as $key => $value)
 		{
-			if ($value['use'] && hesk_show_column($key) )
+			if ($value['use'] )
 			echo '<td>'.$ticket[$key].'</td>';
 		}
 
+		
 		// End ticket row
-		echo '
-		<td>'.$ticket['priority'].'&nbsp;</td>
-		</tr>
-		';
+		echo '</tr>';
+		//<td>.$ticket['priority'].'&nbsp;</td> /*comment for flag priority*/
 
 	} // End while
 	?>
@@ -293,7 +258,10 @@ if ($total > 0)
 } // END ticket list if total > 0
 else
 {
-    if (isset($is_search) || $href == 'find_tickets.php')
+
+   // if (isset($is_search) || $href == 'find_tickets.php')
+
+    if (isset($is_search))
     {
         hesk_show_notice($hesklang['no_tickets_crit']);
     }
@@ -310,14 +278,16 @@ function hesk_print_list_head()
 	<div class="container table-reponsive ticket-list">
 	<table class="table table-bordered table-striped">
 	<tr>
-	<th class="admin_white"><input type="checkbox" name="checkall" value="2" onclick="hesk_changeAll(this)" /></th>
+	<!--<th class="admin_white"><input type="checkbox" name="checkall" value="2" onclick="hesk_changeAll(this)" /></th> -->				<!--comment for flag priority-->
 	<?php
+	
+
 	foreach ($hesk_settings['ticket_list'] as $field)
-	{
-		echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '"></a></th>';
+	{	
+		echo '<th class="admin_white">'.$field.'</th>';
 	}
 	?>
-	<th class="admin_white"><a href="<?php echo $href . '?' . $query . $sort_possible['priority'] . '&amp;sort='; ?>priority"><img src="../img/sort_priority_<?php echo (($sort_possible['priority']) ? 'asc' : 'desc'); ?>.png" width="16" height="16" alt="<?php echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" title="<?php echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" border="0" /></a></th>
+	<!--<th class="admin_white"><a href="<?php /*echo $href . '?' . $query . $sort_possible['priority'] . '&amp;sort=';*/ ?>priority"><img src="img/sort_priority_<?php /*echo (($sort_possible['priority']) ? 'asc' : 'desc');*/ ?>.png" width="16" height="16" alt="<?php /*echo $hesklang['sort_by'].' '.$hesklang['priority'];*/ ?>" title="<?php /*echo $hesklang['sort_by'].' '.$hesklang['priority'];*/ ?>" border="0" /></a></th>-->
 	</tr>
 	<?php
 } // END hesk_print_list_head()
@@ -421,3 +391,4 @@ function hesk_time_lastchange($original)
 	return $day;
 
 } // END hesk_time_lastchange()
+

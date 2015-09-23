@@ -917,6 +917,8 @@ function hesk_show_info($message,$title='',$append_colon=true)
 
 function hesk_token_echo($do_echo = 1)
 {
+	$_SESSION['token']="";					/*added cause it shows an error -> undefined $_SESSION['token'] -> on line 924 in ticket.php fo client */
+	
 	if ( ! defined('SESSION_CLEAN'))
     {
 		$_SESSION['token'] = hesk_htmlspecialchars(strip_tags($_SESSION['token']));
@@ -1050,10 +1052,10 @@ function hesk_showTopBar($page_title)
 	?>
 		<div class="container page-title">
 			<div class="row">
-				<label class="col-sm-7 showPageTitle" id="page-title-row1"><?php echo $page_title; ?></label>
-				<div class="col-sm-5 showPageTitle-col">
+				<label class="col-sm-9 showPageTitle" id="page-title-row1"><?php echo $page_title; ?></label>
+				<div class="col-sm-3 showPageTitle-col">
 					<?php		
-						hesk_kbSearchLarge();
+						/*hesk_kbSearchLarge();*/
 					?>
 					<label class="showPageTitle" id="page-title-row2">
 						<script language="javascript" type="text/javascript">

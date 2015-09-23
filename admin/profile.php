@@ -119,62 +119,9 @@ if (defined('WARN_PASSWORD'))
 
 <div class="container"><h3><?php echo $hesklang['profile_for'].' <b>'.$_SESSION['new']['user']; ?></b></h3></div>
 
-<!--<div class="container preferred-language">-->
-	<?php
-	/*if ($hesk_settings['can_sel_lang'])
-	{
-		* Update preferred language in the database? *
-		if (isset($_GET['save_language']) )
-		{
-			$newlang = hesk_input( hesk_GET('language') );
-
-			* Only update if it's a valid language *
-			if ( isset($hesk_settings['languages'][$newlang]) )
-			{
-            	$newlang = ($newlang == HESK_DEFAULT_LANGUAGE) ? "NULL" : "'" . hesk_dbEscape($newlang) . "'";
-				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` SET `language`=$newlang WHERE `id`='".intval($_SESSION['id'])."' LIMIT 1");
-			}
-		}
-
-		$str  = '<form method="get" action="profile.php" style="margin:0;padding:0;border:0;white-space:nowrap;">';
-        $str .= '<input type="hidden" name="save_language" value="1" />';
-        $str .= '<p>'.$hesklang['chol'].': ';
-
-        if ( ! isset($_GET) )
-        {
-        	$_GET = array();
-        }
-
-		foreach ($_GET as $k => $v)
-		{
-			if ($k == 'language' || $k == 'save_language')
-			{
-				continue;
-			}
-			$str .= '<input type="hidden" name="'.htmlentitieshesk_htmlentities($k).'" value="'.hesk_htmlentities($v).'" />';
-		}
-
-        $str .= '<select name="language" onchange="this.form.submit()">';
-		$str .= hesk_listLanguages(0);
-		$str .= '</select>';
-
-	?>
-        <script language="javascript" type="text/javascript">
-		document.write('<?php echo str_replace(array('"','<','=','>',"'"),array('\42','\74','\75','\76','\47'),$str . '</p></form>'); ?>');
-        </script>
-        <noscript>
-        <?php
-        	echo $str . '<input type="submit" value="'.$hesklang['go'].'" /></p></form>';
-        ?>
-        </noscript>
-	<?php
-	}*/
-    ?>
-<!--</div>-->
-
 <div class="container"><?php echo $hesklang['req_marked_with']; ?> <span class="important">*</span><br />&nbsp;</div>
 
-<form method="post" action="profile.php" name="form1">
+<form method="post" action="profile.php" name="form1" novalidate>
 
 <script language="Javascript" type="text/javascript"><!--
 var tabberOptions = {
@@ -239,6 +186,9 @@ function update_profile() {
 
 	$_SESSION['new']['name']  = hesk_input( hesk_POST('name') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_your_name'] . '</li>';
 	$_SESSION['new']['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer = '<li>' . $hesklang['enter_valid_email'] . '</li>';
+	$_SESSION['new']['address'] = hesk_input( hesk_POST('address') );
+	$_SESSION['new']['phonenumber'] = hesk_input( hesk_POST('phonenumber') );
+	$_SESSION['new']['poz_detyres'] = hesk_input( hesk_POST('poz_detyres') );
 	$_SESSION['new']['signature'] = hesk_input( hesk_POST('signature') );
 
 	/* Signature */
@@ -333,6 +283,9 @@ function update_profile() {
 		"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` SET
 		`name`='".hesk_dbEscape($_SESSION['new']['name'])."',
 		`email`='".hesk_dbEscape($_SESSION['new']['email'])."',
+		`address`='".hesk_dbEscape($_SESSION['new']['address'])."',
+		`phonenumber`='".hesk_dbEscape($_SESSION['new']['phonenumber'])."',
+		`poz_detyres`='".hesk_dbEscape($_SESSION['new']['poz_detyres'])."',
 		`signature`='".hesk_dbEscape($_SESSION['new']['signature'])."'
 		$sql_username
 		$sql_pass ,

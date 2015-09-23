@@ -213,9 +213,8 @@ require_once(HESK_PATH . 'inc/header.inc.php');
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-			<li id="userMenu-home"><a href="index.php">Home</a></li>
+			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
 			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="userMenu-viewTicket"><a href="ticket.php">View Ticket</a></li>
 			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
 			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
           </ul>
@@ -224,7 +223,6 @@ require_once(HESK_PATH . 'inc/header.inc.php');
     </nav>	
 <!--$hesklang['cid'].': '.$trackingID-->
 <br/>
-
 <div class="container siteUrl-title-ticketPhp">
 	<div class="form-inline">
 		<span><a href="<?php echo $hesk_settings['site_url']; ?>" class="smaller"><?php echo $hesk_settings['site_title']; ?></a> &gt;
@@ -235,13 +233,6 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 
 <br/>
 
-<!--
-</td>
-</tr>-->
-
-<!-- start in this page end in line 539
-<tr>
-<td>-->
 
 <?php
 /* This will handle error, success and notice messages */
@@ -278,15 +269,15 @@ if (isset($_SESSION['force_form_top']))
 					if ($hesk_settings['sequential'])
 					{
 						echo '<div class="row">
-						<label class="col-sm-2">'.$hesklang['trackID'].': </label>
-						<span>'.$trackingID.' ('.$hesklang['seqid'].': '.$ticket['id'].')</span>
+						<label class="col-sm-2">'.$hesklang['seqid'].': </label>
+						<span>' .$ticket['id'].'</span>
 						</div>';
 					}
 					else
 					{
 						echo '<div class="row">
-						<label class="col-sm-2">'.$hesklang['trackID'].': </label>
-						<span>'.$trackingID.'</span>
+						<label class="col-sm-2">'.$hesklang['seqid'].': </label>
+						<span>'.$ticket['id'].'</span>
 						</div>';
 					}
 
@@ -295,7 +286,7 @@ if (isset($_SESSION['force_form_top']))
 					<label class="col-sm-2">'.$hesklang['ticket_status'].': </label>
 					<span>';
 
-					$close_link = $hesk_settings['custclose'] ? ' [<a href="change_status.php?track='.$trackingID.$hesk_settings['e_query'].'&amp;s=3&amp;Refresh='.rand(10000,99999).'&amp;token='.hesk_token_echo(0).'">'.$hesklang['close_action'].'</a>]' : '';
+					$close_link = $hesk_settings['custclose'] ? ' [<a class="" href="change_status.php?track='.$trackingID.$hesk_settings['e_query'].'&amp;s=3&amp;Refresh='.rand(10000,99999).'&amp;token='.hesk_token_echo(0).'">'.$hesklang['close_action'].'</a>]' : '';
 
 					switch ($ticket['status'])
 					{
@@ -371,6 +362,7 @@ if (isset($_SESSION['force_form_top']))
 		</div>
 	</div><!-- end ticket-head-info-ticketPhp -->
 
+<hr />
 <?php
 // Print "Submit a reply" form?
 if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_top'] == 1)
@@ -378,9 +370,6 @@ if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_to
 	hesk_printCustomerReplyForm();
 }
 ?>
-
-<hr />
-
 
 <!-- TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES -->
 <div class="row ticket-info-name-dt-email-message">
@@ -422,7 +411,7 @@ if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_to
 									</div>
 									<div class="row">
 										<label class="col-sm-2 tickettd"><?php echo $hesklang['email']; ?>:</label>
-										<span class="tickettd"><?php echo str_replace(array('@','.'),array(' (at) ',' (dot) '),$ticket['email']); ?></span>
+										<span class="tickettd"><?php echo $ticket['email']; ?></span>
 									</div><!-- end name-dt-email-table -->
 						</div><!-- end name-dt-email-info -->
 
@@ -454,9 +443,9 @@ if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_to
 						echo '</div>';						/*end custom-fields-before-message*/
 					}
 					?>
-					<div class="row">
+					<div class="form-inline" id="message_client_ticket">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['message']; ?>:</label>
-						<textarea class="form-control" name="message" rows="6" cols="60" style="width: 443px; height: 123px;"><?php echo $ticket['message']; ?></textarea>
+						<span id="msg-ticketReplies" class="form-control" style="width: 443px; height: 123px;"><?php echo $ticket['message']; ?></span>
 					</div>
 
 					<?php
@@ -508,7 +497,8 @@ if ($ticket['locked'] != 1 && $ticket['status'] != 3 && $hesk_settings['reply_to
 		&nbsp;
 	</div>
 </div><!-- end ticket-info-name-dt-email-message -->
-<hr/> 
+</div>
+
 <!-- TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES TICKET REPLIES -->
 <?php
 /* Print "Submit a reply" form? */
@@ -525,7 +515,6 @@ if ( count($unread_replies) )
 
 /* Clear unneeded session variables */
 hesk_cleanSessionVars('ticket_message');
-
 require_once(HESK_PATH . 'inc/footer.inc.php');
 
 /*** START FUNCTIONS ***/
@@ -550,9 +539,8 @@ function print_form()
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-			<li id="userMenu-home"><a href="index.php">Home</a></li>
+			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
 			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="userMenu-viewTicket"><a href="ticket.php">View Ticket</a></li>
 			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
 			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
           </ul>
@@ -569,13 +557,6 @@ function print_form()
 	</div>
 </div>
 
-<!--
-</td>
-</tr>-->
-
-<!--start in this page end somewhere
-<tr>
-<td>-->
 
 <br/><br/><br/>
 
@@ -658,74 +639,68 @@ function hesk_printCustomerReplyForm($reopen=0)
 
 <br />
 
-<div class="row add-reply-ticket-ticketPhp">
+<div class="col-sm-8 col-sm-offset-2" id="addreply-title"><?php echo $hesklang['add_reply']; ?></div>
+<br/>
+<div class="conatiner col-sm-8 col-sm-offset-2 start-helpDesk-ticket">
+	<div class="row add-reply-ticket-ticketPhp">
+			<br/>
+			<div class="container">
+				<form method="post" action="reply_ticket.php" enctype="multipart/form-data">
+					<div class="form-inline">
+						<label class="col-sm-2 control-label addreply-message"><?php echo $hesklang['message']; ?>: <span class="important">*</span></label>
+						<textarea class="form-control" name="message" rows="12" cols="60" style="width: 443px; height: 246px;"><?php if (isset($_SESSION['ticket_message'])) {echo stripslashes(hesk_input($_SESSION['ticket_message']));} ?></textarea>
+					</div>					
+	<br/>						
+					<?php
+					/* attachments */
+					if ($hesk_settings['attachments']['use'])
+					{
+					?>
 
-	<div>
-		&nbsp;
-		<div class="container">
-
-			<div id="addreply-title"><?php echo $hesklang['add_reply']; ?></div><br/>
-
-			<form method="post" action="reply_ticket.php" enctype="multipart/form-data">
-				<div class="form-inline">
-					<label class="col-sm-2 control-label addreply-message"><?php echo $hesklang['message']; ?>: <span class="important">*</span></label>
-					<textarea class="form-control" name="message" rows="12" cols="60" style="width: 443px; height: 246px;"><?php if (isset($_SESSION['ticket_message'])) {echo stripslashes(hesk_input($_SESSION['ticket_message']));} ?></textarea>
-				</div>
-				
-<br/>				
-				
-				<?php
-				/* attachments */
-				if ($hesk_settings['attachments']['use'])
-				{
-				?>
-
-			<div class="form-group attachments-support-request">
-				<div class="form-inline">
-					<label class="col-sm-2 control-label addreply-attachments"><?php echo $hesklang['attachments']; ?>:</label>
-					<div class="form-group">
-						<?php
-						for ($i=1;$i<=$hesk_settings['attachments']['max_number'];$i++)
-						{
-							
-							echo '<input type="file" name="attachment['.$i.']" size="50" ' .' style="margin-bottom: 10px;"/>';
-						}
-						?>
-						<a href="file_limits.php" target="_blank" onclick="Javascript:hesk_window('file_limits.php',250,500);return false;"><?php echo $hesklang['ful']; ?></a>
+				<div class="form-group attachments-support-request">
+					<div class="form-inline">
+						<label class="col-sm-2 control-label addreply-attachments"><?php echo $hesklang['attachments']; ?>:</label>
+						<div class="form-group">
+							<?php
+							for ($i=1;$i<=$hesk_settings['attachments']['max_number'];$i++)
+							{
+								
+								echo '<input type="file" name="attachment['.$i.']" size="50" ' .' style="margin-bottom: 10px;"/>';
+							}
+							?>
+							<a href="file_limits.php" target="_blank" onclick="Javascript:hesk_window('file_limits.php',250,500);return false;"><?php echo $hesklang['ful']; ?></a>
+						</div>
 					</div>
-				</div>
-			</div><!-- end attachments-support-request -->
-			
-<br/><br/>
-				<?php
-				}
-				if (isset($_SESSION['ticket_message'])) {echo stripslashes(hesk_input($_SESSION['ticket_message']));}
-				?>
+				</div><!-- end attachments-support-request -->
+				
+	<br/><br/>
+					<?php
+					}
+					if (isset($_SESSION['ticket_message'])) {echo stripslashes(hesk_input($_SESSION['ticket_message']));}
+					?>
 
 
-				<p align="center">
-				<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-				<input type="hidden" name="orig_track" value="<?php echo $trackingID; ?>" />
-				<?php
-				if ($hesk_settings['email_view_ticket'])
-				{
-					echo '<input type="hidden" name="e" value="' . $my_email . '" />';
-				}
-				if ($reopen)
-				{
-					echo '<input type="hidden" name="reopen" value="1" />';
-				}
-				?>
-				<input type="submit" value="<?php echo $hesklang['submit_reply']; ?>" class="btn btn-default" id="submit-addReply" /></p>
+					<p align="center">
+					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
+					<input type="hidden" name="orig_track" value="<?php echo $trackingID; ?>" />
+					<?php
+					if ($hesk_settings['email_view_ticket'])
+					{
+						echo '<input type="hidden" name="e" value="' . $my_email . '" />';
+					}
+					if ($reopen)
+					{
+						echo '<input type="hidden" name="reopen" value="1" />';
+					}
+					?>
+					<input type="submit" value="<?php echo $hesklang['submit_reply']; ?>" class="btn btn-default" id="submit-addReply" /></p>
 
-			</form>
+				</form>
 
-		</div>
-		&nbsp;
-	</div>
-
+			</div>
 	</div><!-- end add-reply-ticket-ticketPhp -->
-</div><!-- end all table-->
+</div>
+
 
 	<?php
 
@@ -754,31 +729,27 @@ function hesk_printCustomerTicketReplies()
 
 		$reply['dt'] = hesk_date($reply['dt'], true);
 		?>
-		<div class="container store-unread-reply-ids-later" style="width: 70%; margin-left: 0px; margin-right: 0px;">
+		
+		<br/>
+		<div id="hr_for_ticket"><hr/></div>
+		<br/>
+		<div class="store-unread-reply-ids-later">
 			<div <?php echo $color; ?>>
-
-				<div>
-					<div class="date-dt-name-getCustomerButtons-second">
-						<div>
-							<div  class="form-group date-dt-name-second">
-								<div class="form-inline date-dt-second">
-									<span><?php echo $hesklang['date']; ?>:</span>
-									<span><?php echo $reply['dt']; ?></span>
-									<span id="getCustomerButtons-ticket.php-second">
-										<?php echo hesk_getCustomerButtons($i); ?>
-									</span>
-								</div>
-								<div class="form-inline name-ticket-second">
-									<span><?php echo $hesklang['name']; ?>:</span>
-									<span><?php echo $reply['name']; ?></span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<p><b><?php echo $hesklang['message']; ?>:</b></p>
-				<p><?php echo $reply['message']; ?></p>
+			<div class="row date-dt-second">
+				<label class="col-sm-2"><?php echo $hesklang['date']; ?>:</label>
+				<span><?php echo $reply['dt']; ?></span>
+				<span id="getCustomerButtons-ticket.php-second">
+					<?php /*echo hesk_getCustomerButtons($i);*/ ?>
+				</span>
+			</div>
+			<div class="row name-ticket-second">
+				<label class="col-sm-2"><?php echo $hesklang['name']; ?>:</label>
+				<span><?php echo $reply['name']; ?></span>
+			</div>
+			<div class="row name-ticket-second">
+				<label class="col-sm-2"><?php echo $hesklang['message']; ?>:</label>
+				<span><?php echo $reply['message']; ?></span>
+			</div>
 
 				<?php
 

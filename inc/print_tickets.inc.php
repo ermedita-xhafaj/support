@@ -42,6 +42,8 @@ $sql_final = "SELECT
 `name`,
 `email`,
 `category`,
+`company_ticket_id`,
+`contract_ticket_id`,
 `priority`,
 `subject`,
 LEFT(`message`, 400) AS `message`,
@@ -79,24 +81,77 @@ $sql_count = "SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."
 // This is common SQL for both queries
 $sql = "";
 
+//FILTRAT//////////////////////////////////////////////////////////////////////////////////////
+
+//var_dump($_POST);
+//exit();
+
+if (isset($_POST['submitbutton_tickets'])){
+			if (!empty($_POST['search_by_ID'])) {
+				$sql .= " `id`=".$_POST['search_by_ID'];
+			}
+			elseif (!empty($_POST['search_by_description_ticket'])) {
+				$sql .= " `subject`='".$_POST['search_by_description_ticket']."'";
+			}
+			elseif (!empty($_POST['search_by_ticket_category'])) {
+				$sql .= " `category`=".$_POST['search_by_ticket_category'];
+			}
+			elseif (!empty($_POST['search_by_ticket_status']) || $_POST['search_by_ticket_status']=='0') {
+				$sql .= " `status`='".$_POST['search_by_ticket_status']."'";
+			}
+			elseif (!empty($_POST['search_by_client_open_ticket'])) {
+				$sql .= " `name`='".$_POST['search_by_client_open_ticket']."'";
+			}
+		}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // Some default settings
 $archive = array(1=>0,2=>0);
 $s_my = array(1=>1,2=>1);
 $s_ot = array(1=>1,2=>1);
 $s_un = array(1=>1,2=>1);
 
+
+// --> TICKET Contract
+$contract = intval( hesk_GET('contract_ticket_id', 0) );
+
+// --> TICKET Company
+$company = intval( hesk_GET('company_ticket_id', 0) );
+
+
 // --> TICKET CATEGORY
 $category = intval( hesk_GET('category', 0) );
 
 // Make sure user has access to this category
-if ($category && hesk_okCategory($category, 0) )
+if ($category)
 {
 	$sql .= " `category`='{$category}' ";
 }
 // No category selected, show only allowed categories
 else
-{
-	$sql .= hesk_myCategories();
+{	if(empty($_POST)){
+		$sql .= '1=1';
+	}
+}
+
+
+//check if admin
+if(!$_SESSION['isadmin']){
+
+$res = hesk_dbQuery('SELECT contractId FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE userId='.$_SESSION['id']);
+	if($res_user = mysqli_fetch_all($res)){
+		foreach($res_user as $user){
+			$ticket_staff[] = $user[0];
+		}
+		$ticket_staff1 = implode($ticket_staff,',');
+
+		$sql .= " AND contract_ticket_id IN(".$ticket_staff1.")";
+	} else {
+		$sql .= " AND contract_ticket_id IN(0)";
+	}
 }
 
 // Show only tagged tickets?
@@ -146,9 +201,11 @@ if ( $tmp < count($possible_status) )
 		$status = $possible_status;
 		unset($status[3]);
 	}
-
-	// Add to the SQL
-	$sql .= " AND `status` IN ('" . implode("','", array_keys($status) ) . "') ";
+	if(empty($_POST)){
+		// Add to the SQL
+		$sql .= " AND `status` IN ('" . implode("','", array_keys($status) ) . "') ";
+		}
+	
 }
 
 // --> TICKET PRIORITY
@@ -184,10 +241,11 @@ else
 	$sql .= " AND `priority` IN ('" . implode("','", array_keys($priority) ) . "') ";
 }
 
+//if( empty($_POST['search_by_ticket_category'])){
 // That's all the SQL we need for count
 $sql_count .= $sql;
 $sql = $sql_final . $sql;
-
+//}
 // Prepare variables used in search and forms
 require(HESK_PATH . 'inc/prepare_ticket_search.inc.php');
 

@@ -270,6 +270,14 @@ if (isset($_GET['delete_post']) && $can_delete && hesk_token_check())
     }
 }
 
+/* Get company name and ID */
+$result = hesk_dbQuery("SELECT `id`, `company_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` WHERE `id`='".intval($ticket['company_ticket_id'])."' LIMIT 1");
+$company = hesk_dbFetchAssoc($result);
+
+/* Get conrtact name and ID */
+$result = hesk_dbQuery("SELECT `id`, `contract_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `contract_name`='".intval($ticket['contract_ticket_id'])."' LIMIT 1");
+$contract = hesk_dbFetchAssoc($result);
+
 /* Delete notes action */
 if (isset($_GET['delnote']) && hesk_token_check())
 {
@@ -567,6 +575,26 @@ else
 	$reply = false;
 }
 
+
+/* List of companies */
+$result = hesk_dbQuery("SELECT `id`,`company_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` ORDER BY `id` ASC");
+$company_options='';
+while ($row=hesk_dbFetchAssoc($result))
+{
+    if ($row['id'] == $ticket['company_ticket_id']) {continue;}
+    $company_options.='<option value="'.$row['id'].'">'.$row['company_name'].'</option>';
+}
+
+/* List of contracts */
+$result = hesk_dbQuery("SELECT `id`,`contract_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` ORDER BY `id` ASC");
+$contract_options='';
+while ($row=hesk_dbFetchAssoc($result))
+{
+    if ($row['id'] == $ticket['contract_ticket_id']) {continue;}
+    $contract_options.='<option value="'.$row['id'].'">'.$row['contract_name'].'</option>';
+}
+//var_dump($contract_options); // all contracts name
+
 // Demo mode
 if ( defined('HESK_DEMO') )
 {
@@ -628,8 +656,8 @@ $can_options = hesk_printCanned();
 				echo '
 
 				<div class="form-inline ticket-head-row1">
-				<span class="col-sm-2 ticket-head-row1-col1">'.$hesklang['trackID'].': </span>
-				<span class="ticket-head-row1-col2">'.$trackingID.' '.$tmp.'</span>
+				<span class="col-sm-2 ticket-head-row1-col1">'.$hesklang['seqid'].': </span>
+				<span class="ticket-head-row1-col2">'.$ticket['id'].'</span>
 				<span class="ticket-head-row1-col3" style="float:right; margin-right: 40px;">'.hesk_getAdminButtons().'</span>
 				</div>
 
@@ -810,7 +838,7 @@ $can_options = hesk_printCanned();
 				';
 				?>
 
-				<div class="form-inline ticket-head-row9">
+				<div class="hidden form-inline ticket-head-row9">
 						<span class="col-sm-2 ticket-head-row9-col1"><?php echo $hesklang['owner']; ?>: </span>
 						<span class="ticket-head-row8-col2">
 							<?php
@@ -1360,8 +1388,8 @@ function hesk_getAdminButtons($reply=0,$white=1)
 	}
 
 	/* Tag ticket button */
-	if ( /* ! $reply && */ $can_archive)
-	{
+	//if ( /* ! $reply && */ $can_archive)
+	/*{
 		if ($ticket['archive'])
 		{
         	$options .= '<a href="archive.php?track='.$trackingID.'&amp;archived=0&amp;Refresh='.mt_rand(10000,99999).'&amp;token='.hesk_token_echo(0).'"><img src="../img/tag.png" width="16" height="16" alt="'.$hesklang['remove_archive'].'" title="'.$hesklang['remove_archive'].'" '.$style.' /></a> ';
@@ -1370,13 +1398,13 @@ function hesk_getAdminButtons($reply=0,$white=1)
 		{
         	$options .= '<a href="archive.php?track='.$trackingID.'&amp;archived=1&amp;Refresh='.mt_rand(10000,99999).'&amp;token='.hesk_token_echo(0).'"><img src="../img/tag_off.png" width="16" height="16" alt="'.$hesklang['add_archive'].'" title="'.$hesklang['add_archive'].'" '.$style.' /></a> ';
 		}
-	}
+	}*/
 
 	/* Import to knowledgebase button */
-	if ($hesk_settings['kb_enable'] && hesk_checkPermission('can_man_kb',0))
+	/*if ($hesk_settings['kb_enable'] && hesk_checkPermission('can_man_kb',0))
 	{
 		$options .= '<a href="manage_knowledgebase.php?a=import_article&amp;track='.$trackingID.'"><img src="../img/import_kb.png" width="16" height="16" alt="'.$hesklang['import_kb'].'" title="'.$hesklang['import_kb'].'" '.$style.' /></a> ';
-	}
+	}*/
 
 	/* Print ticket button */
     $options .= '<a href="../print.php?track='.$trackingID.'"><img src="../img/print.png" width="16" height="16" alt="'.$hesklang['printer_friendly'].'" title="'.$hesklang['printer_friendly'].'" '.$style.' /></a> ';
@@ -1573,15 +1601,14 @@ function hesk_printReplyForm() {
 	<div class="container replyTicket-form">
 		<form method="post" action="admin_reply_ticket.php" enctype="multipart/form-data" name="form1" onsubmit="javascript:force_stop();return true;">
 		
-		<br/><br/>
+		<br/>
 		
 			<?php
-
 			/* Ticket assigned to someone else? */
-			if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id'] && isset($admins[$ticket['owner']]) )
+			/*if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id'] && isset($admins[$ticket['owner']]) )
 			{
 				hesk_show_notice($hesklang['nyt'] . ' ' . $admins[$ticket['owner']]);
-			}
+			}*/
 
 			/* Ticket locked? */
 			if ($ticket['locked'])
@@ -1602,7 +1629,7 @@ function hesk_printReplyForm() {
 						<button type="button" class="btn btn-default" onclick="r()"><?php echo $hesklang['reset']; ?></button>
 					</div>
 				</div><!-- end table-track-time-worked-->
-<br/> <br/>
+<br/>
 			<?php
 			}
 
@@ -1680,7 +1707,7 @@ function hesk_printReplyForm() {
 			<br/>
 	<div class="first-table">
 		<?php
-			if ($ticket['owner'] != $_SESSION['id'] && $can_assign_self)
+			/*if ($ticket['owner'] != $_SESSION['id'] && $can_assign_self)
 			{
 				if (empty($ticket['owner']))
 				{
@@ -1690,7 +1717,7 @@ function hesk_printReplyForm() {
 				{
 					echo '<label class="container"><input type="checkbox" name="assign_self" value="1" /> '.$hesklang['asss2'].'</label><br />';
 				}
-			}
+			}*/
 		?>
 		<div class="form-inline">
 		<label class="col-sm-2 control-label"><input type="checkbox" name="set_priority" value="1" /> <?php echo $hesklang['change_priority']; ?> </label>
@@ -1698,12 +1725,14 @@ function hesk_printReplyForm() {
 			<?php echo implode('',$options); ?>
 		</select>
 		</div>
+		
 		<br />
-		<div class="form-inline">
-		<label class="col-sm-2"><input type="checkbox" name="signature" value="1" checked="checked" /> <?php echo $hesklang['attach_sign']; ?></label>
-		<span>(<a href="profile.php"><?php echo $hesklang['profile_settings']; ?></a>)</span>
-		</div>
-		<br />
+		
+		<!--<div class="form-inline">
+		<label class="col-sm-2"><input type="checkbox" name="signature" value="1" checked="checked" /> <?php //echo $hesklang['attach_sign']; ?></label>
+		<span>(<a href="profile.php"><?php //echo $hesklang['profile_settings']; ?></a>)</span>
+		</div>-->
+		
 		<label class="container"><input type="checkbox" name="no_notify" value="1" <?php echo $_SESSION['notify_customer_reply'] ? '' : 'checked="checked"'; ?> /> <?php echo $hesklang['dsen']; ?></label>
 	</div><!-- end first-table-->
 <br/>

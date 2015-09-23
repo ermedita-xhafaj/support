@@ -48,7 +48,7 @@ $num_mail = $num_mail ? '<b>'.$num_mail.'</b>' : 0;
     <div class="collapse navbar-collapse adminMenu">
 	<div class="container">
 		<ul class="nav nav-pills nav-justified" id="admin-nav-menu">
-			<li><a href="admin_main.php"><?php echo $hesklang['main_page']; ?><span class="sr-only">(current)</span></a></li>
+			<li><a href="admin_main.php"><?php echo $hesklang['tickets']; ?><span class="sr-only">(current)</span></a></li>
 			
 			<li><a href="contracts.php"><?php echo $hesklang['menu_contracts']; ?></a></li>
 			
@@ -104,7 +104,7 @@ $num_mail = $num_mail ? '<b>'.$num_mail.'</b>' : 0;
 				echo '<li><a href="admin_settings.php">' .$hesklang['settings'] .'</a></li>';
 				}
 			?>
-						
+			<li><a href="profile.php"> <?php echo 'Hello,' .$_SESSION['user']; ?> </a></li>	
 			<li><a href="index.php?a=logout&amp;token=<?php echo hesk_token_echo(); ?>"><?php echo $hesklang['logout']; ?></a></li>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 		</ul>
@@ -120,7 +120,7 @@ $num_mail = $num_mail ? '<b>'.$num_mail.'</b>' : 0;
 
 			<div class="form-inline" id="admin-box-menu">
 
-				<a href="admin_main.php"><button type="submit" class="btn btn-default ico-button" id="ico-button-home"><label id="main-page"><?php echo $hesklang['main_page']; ?></label></button></a>
+				<a href="admin_main.php"><button type="submit" class="btn btn-default ico-button" id="ico-button-home"><label id="main-page"><?php echo $hesklang['tickets']; ?></label></button></a>
 
 				<a href="contracts.php"><button type="submit" class="btn btn-default ico-button" id="ico-button-contracts"><label id="menu-profile"><?php echo $hesklang['menu_contracts']; ?></label></button></a>
 				

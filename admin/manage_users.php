@@ -88,8 +88,15 @@ $default_userdata = array(
 	'name' => '',
 	'email' => '',
 	'cleanpass' => '',
+	'address' => '',		
+	'phonenumber' => '',	
+	'poz_detyres' => '',	
 	'user' => '',
+	'active' => 1,
 	'autoassign' => 'Y',
+	
+	// Clients (for test)
+	'contract_id' => '',
 
 	// Signature
 	'signature' => '',
@@ -117,6 +124,14 @@ $default_userdata = array(
 	'notify_note' => 1,
 	'notify_pm' => 1,
 );
+
+// testtest
+if(isset($_POST['contract_id'])){
+	$contract_id = hesk_input( hesk_POST('contract_id') );
+}
+else {
+	$contract_id = '';
+}
 
 /* A list of all categories */
 $hesk_settings['categories'] = array();
@@ -167,13 +182,16 @@ if ( $action = hesk_REQUEST('a') )
 		$_SESSION['edit_userdata'] = TRUE;
 		header('Location: ./manage_users.php');
 	}
-	elseif ($action == 'edit')       {edit_user();}
-	elseif ( defined('HESK_DEMO') )  {hesk_process_messages($hesklang['ddemo'], 'manage_users.php', 'NOTICE');}
-	elseif ($action == 'new')        {new_user();}
-	elseif ($action == 'save')       {update_user();}
-	elseif ($action == 'remove')     {remove();}
-	elseif ($action == 'autoassign') {toggle_autoassign();}
-    else 							 {hesk_error($hesklang['invalid_action']);}
+	elseif ($action == 'edit' || $action == 'editb')       		{edit_user();}
+	elseif ($action == 'editc')       		{edit_clients();}
+	elseif ( defined('HESK_DEMO') )  		{hesk_process_messages($hesklang['ddemo'], 'manage_users.php', 'NOTICE');}
+	elseif ($action == 'new')        		{new_user();}
+	elseif ($action == 'save')       		{update_user();}
+	elseif ($action == 'update_client')     {update_client();}
+	elseif ($action == 'remove')     		{remove();}
+	elseif ($action == 'removec')     		{remove_clients();}
+	elseif ($action == 'autoassign') 		{toggle_autoassign();}
+    else 							 		{hesk_error($hesklang['invalid_action']);}
 }
 
 else
@@ -199,13 +217,6 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 ?>
 
-<!--
-</td>
-</tr>-->
-
-<!-- start in this page end in line 513
-<tr>
-<td>-->
 
 <script language="Javascript" type="text/javascript"><!--
 function confirm_delete()
@@ -221,18 +232,47 @@ else {return false;}
 hesk_handle_messages();
 ?>
 
-
+<!--MANAGE COMMPROG STAFF -->
 <div class="container manage-user-title">
 	<a data-toggle="collapse" data-parent="#accordion" href="#div-id-1" ><?php echo $hesklang['manage_users']; ?></a>
 	<!--[<a href="javascript:void(0)" onclick="javascript:alert('<?php /*echo hesk_makeJsString($hesklang['users_intro']);*/ ?>')">?</a>]-->
 </div>
 
-<div class="table-responsive container collapse" id="div-id-1"  >
+<div class="table-responsive container collapse <?php if(isset($_GET['f']) && ($_GET['f']=="filter_users")) echo "in"; ?> " <?php if(isset($_GET['f']) && ($_GET['f']=="filter_users")) echo 'aria-expanded="true"'; ?>id="div-id-1"  >
+
+<?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users`"); ?>
+<?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
+		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+			<form method="post" action="manage_users.php?f=filter_users">
+				<?php echo "<select class='form-control-1' name='search_by_user_name' id='dep_user_list'>"; // list box select command
+					echo"<option value=''>Select staff</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_name))
+						{
+							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				
+				<?php echo "<select class='form-control-1' name='search_by_project' id='project_list'>"; // list box select command
+					echo"<option value=''>Select project</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_project))
+						{
+							echo "<option value=$tmp[id]> $tmp[project_name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				<input name="submitbutton_user" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			</form>
+		</div> <!--end div i filtrave -->
 	<table class="table table-bordered manage-users-table">
 		<tr>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['email']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['username']; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Address'; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Phone Number'; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Pozicioni Detyres'; ?></i></b></th>
+		<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 		<th class="admin_white" style="text-align:center;white-space:nowrap;width:1px;"><b><i><?php echo $hesklang['administrator']; ?></i></b></th>
 		<?php
 		/* Is user rating enabled? */
@@ -248,7 +288,25 @@ hesk_handle_messages();
 
 		<?php
 		$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `name` ASC');
-
+		if (isset($_POST['submitbutton_user'])){
+				if (!empty($_POST['search_by_user_name'])) {
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id='.$_POST['search_by_user_name']);
+				}
+				if (!empty($_POST['search_by_project'])) {
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE project_id='.$_POST['search_by_project']);
+					$users = array();
+					while($con = hesk_dbFetchAssoc($res)){
+						$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE contractId='.$con['id']);
+						while($query1 = hesk_dbFetchAssoc($query)){
+							$users[] = $query1['userId'];
+						};
+					}
+					//var_dump($users);
+					//exit();
+					$usersStr = implode(',', $users);
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id in ('.$usersStr.')');
+				}
+			}
 		$i=1;
 		$cannot_manage = array();
 
@@ -295,7 +353,12 @@ hesk_handle_messages();
 			}
 			else
 			{
-				$edit_code = '<a href="manage_users.php?a=edit&amp;id='.$myuser['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+				if ($myuser['isadmin']){
+					$edit_code = '<a class="" href="manage_users.php?a=edit&amp;id='.$myuser['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+				}
+				else{
+					$edit_code = '<a class="" href="manage_users.php?a=editb&amp;id='.$myuser['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+				}
 			}
 
 			if ($myuser['isadmin'])
@@ -333,12 +396,16 @@ hesk_handle_messages();
 			{
 				$autoassign_code = '';
 			}
-
+		if($myuser['active']=='1') $a="Yes"; else $a="No";
 		echo <<<EOC
 		<tr>
 		<td class="$color">$myuser[name]</td>
 		<td class="$color"><a href="mailto:$myuser[email]">$myuser[email]</a></td>
 		<td class="$color">$myuser[user]</td>
+		<td class="$color">$myuser[address]</td>
+		<td class="$color">$myuser[phonenumber]</td>
+		<td class="$color">$myuser[poz_detyres]</td>
+		<td class="$color">$a</td>
 		<td class="$color">$myuser[isadmin]</td>
 
 EOC;
@@ -350,7 +417,7 @@ EOC;
 		}
 		*/
 		echo <<<EOC
-		<td class="$color" style="text-align:center">$autoassign_code $edit_code $remove_code</td>
+		<td class="$color" style="text-align:center">$autoassign_code $edit_code</td>
 		</tr>
 
 EOC;
@@ -360,36 +427,153 @@ EOC;
 </div>
 
 
-
 <div class="container manage-client-title">
 	<a data-toggle="collapse" data-parent="#accordion" href="#div-id-2" ><?php echo $hesklang['manage_clients']; ?></a>
 </div>
-<div class="table-responsive container collapse" id="div-id-2">
+<div class="table-responsive container collapse <?php if(isset($_GET['f']) && ($_GET['f']=="filter_clients")) echo "in"; ?> " <?php if(isset($_GET['f']) && ($_GET['f']=="filter_clients")) echo 'aria-expanded="true"'; ?>id="div-id-2"  >
+
+<?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
+<?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
+<?php $sql_contract = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
+		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+			<form method="post" action="manage_users.php?f=filter_clients">
+				<?php echo "<select class='form-control-1' name='search_by_user_name' id='dep_user_list'>"; // list box select command
+					echo"<option value=''>Select client</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_name))
+						{
+							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				
+				<?php echo "<select class='form-control-1' name='search_by_company' id='company_list'>"; // list box select command
+					echo"<option value=''>Select company</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_company))
+						{
+							echo "<option value=$tmp[id]> $tmp[company_name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				<?php echo "<select class='form-control-1' name='search_by_contract' id='contract_list'>"; // list box select command
+					echo"<option value=''>Select contract</option>";
+						while ($tmp = hesk_dbFetchAssoc($sql_contract))
+						{
+							echo "<option value=$tmp[id]> $tmp[contract_name] </option>"; 
+						}
+							echo "</select>";
+					?>
+				<select id="client_status" name="search_by_client_status" class="form-control-1">
+				<option value="">Select status</option>
+				<option value="1">Active</option>
+				<option value="0">Inactive</option>
+			</select>
+				<input name="submitbutton_client" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			</form>
+		</div> <!--end div i filtrave -->
 	<table class="table table-bordered manage-clients-table">
 		<tr>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['email']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['username']; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Address'; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Phone Number'; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Pozicioni Detyres'; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Kontrata'; ?></i></b></th>
+		<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 		<th class="admin_white" style="width:100px"><b><i>&nbsp;<?php echo $hesklang['opt']; ?>&nbsp;</i></b></th>
 		</tr>
 
 		<?php
 
 		$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` ORDER BY `name` ASC');
+		if (isset($_POST['submitbutton_client'])){
+			if (!empty($_POST['search_by_user_name'])) {
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`WHERE id='.$_POST['search_by_user_name']);
+			}
+			elseif(!empty($_POST['search_by_company'])){
+				$clients = array();
+				$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE company_id='.$_POST['search_by_company']);
+				while($query1 = hesk_dbFetchAssoc($query)){
+					$query2 = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$query1['id']);
+					while($query3 = hesk_dbFetchAssoc($query2)){
+						$query4 = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id='.$query3['client_Id']);
+						while($query5 = hesk_dbFetchAssoc($query4)){
+								$clients[] = $query5['id'];
+						}
+						
+					}
+					
+				}
+				$clientsStr = implode(',', $clients);
+				if(!empty($clientsStr)){
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id in ('.$clientsStr.')');
+				} else {
+					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id =99999999'); 
+				}
+			}
+			elseif(!empty($_POST['search_by_contract'])){
+				$users = array();
+			$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$_POST['search_by_contract']);
+					while($query1 = hesk_dbFetchAssoc($query)){
+						$users[] = $query1['client_Id'];
+					};
+				$usersStr = implode(',', $users);
+				if(!empty($usersStr)){
+					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id in ('.$usersStr.')');
+				} else {
+					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id =99999999'); //kjo eshte nje `funny` way per te nxjerre nje rezultat bosh
+				}
+				
+				
+			}
+			elseif($_POST['search_by_client_status'] === '0' || $_POST['search_by_client_status'] === '1'){
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`WHERE active='.$_POST['search_by_client_status']);
+			}
+		}
 		
 			$i=1;
 			while ($row = mysqli_fetch_array($result)) 
 			{
+			$contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$row['id']."'");
+				$contract_string= "";
+				while ($row1 = mysqli_fetch_array($contract)){
+					$cont_cl = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row1["contract_Id"].'"');
+					$cont = mysqli_fetch_array($cont_cl);
+					$contract_string .= $cont['contract_name']."<br/>";
+				}
 			
-				$result1 = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE id='.$row['contract_id']);
+			/* To edit yourself go to "Profile" page, not here. */
+			if ($row['id'] == $_SESSION['id'])
+			{
+				$edit_code = '<a href="profile.php"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+			}
+			else
+			{
+				$edit_code = '<a href="manage_users.php?a=editc&amp;id='.$row['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+			}
+			
+			/* Deleting client */
+			if ($row['id'] == 1)
+			{
+				$remove_code = ' <img src="../img/blank.gif" width="16" height="16" alt="" style="padding:3px;border:none;" />';
+			}
+			else
+			{
+				$remove_code = ' <a href="manage_users.php?a=removec&amp;id='.$row['id'].'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" '.$style.' /></a>';
+			}
+			
+				$result1 = hesk_dbQuery("SELECT contract_name FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row['contract_id']."'");
 				$contract_result = mysqli_fetch_array($result1);
 				echo '<tr>
 				<td class="$color">' .$row['name'] .'</td>
 				<td class="$color"><a href="mailto:' .$row['email'] .'">' .$row['email'] .'</a></td>
 				<td class="$color">' .$row['user'] .'</td>
-				<td class="$color">' .$contract_result['contract_name'] .'</td>
-				<td class="$color">' .'</td></tr>';
+				<td class="$color">' .$row['address'] .'</td>
+				<td class="$color">' .$row['phonenumber'] .'</td>
+				<td class="$color">' .$row['poz_detyres'] .'</td>
+				<td class="$color">' .$contract_string .'</td>
+				<td class="$color">'.$row['active'].'</td>
+				<td class="$color">' .$edit_code.'</td>';
 				}
 		?>
 			
@@ -428,7 +612,7 @@ var tabberOptions = {
 
 <script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-<form name="form1" method="post" action="manage_users.php">
+<form name="form1" method="post" action="manage_users.php" novalidate>
 	<?php hesk_profile_tab('userdata', false); ?>
 	<!-- Submit -->
 	<div class="container">
@@ -495,6 +679,9 @@ function compare_user_permissions($compare_id, $compare_isadmin, $compare_catego
 function edit_user()
 {
 	global $hesk_settings, $hesklang, $default_userdata;
+	
+	//var_dump($_SESSION);
+	//exit();
 
 	$id = intval( hesk_GET('id') ) or hesk_error("$hesklang[int_error]: $hesklang[no_valid_id]");
 
@@ -527,7 +714,7 @@ function edit_user()
         }
         $_SESSION['userdata']['cleanpass'] = '';
     }
-
+	$_SESSION['new'] = $_SESSION['userdata'];
 	/* Make sure we have permission to edit this user */
 	if ( ! compare_user_permissions($id, $_SESSION['userdata']['isadmin'], $_SESSION['userdata']['categories'], $_SESSION['userdata']['features']) )
 	{
@@ -540,15 +727,6 @@ function edit_user()
 	/* Print main manage users page */
 	require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	?>
-
-
-<!--	
-</td>
-</tr>-->
-	
-<!-- start in this page end somewhere..	
-<tr>
-<td>-->
 
 	<div class="container manage-users-title"><a href="manage_users.php" class="smaller"><?php echo '<b>' .$hesklang['manage_users'] .'</b>'; ?></a> &gt; <?php echo $hesklang['editing_user'].' '.$_SESSION['original_user']; ?></div>
 
@@ -589,7 +767,7 @@ function edit_user()
 
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-	<form name="form1" method="post" action="manage_users.php">
+	<form name="form1" method="post" action="manage_users.php" novalidate>
 	<?php hesk_profile_tab('userdata', false); ?>
 
 	<!-- Submit -->
@@ -611,6 +789,104 @@ function edit_user()
 } // End edit_user()
 
 
+function edit_clients(){
+	global $hesk_settings, $hesklang, $default_userdata;
+
+	$id = intval( hesk_GET('id') ) or hesk_error("$hesklang[int_error]: $hesklang[no_valid_id]");
+
+	/* To edit self fore using "Profile" page */
+    if ($id == $_SESSION['id'])
+    {
+    	hesk_process_messages($hesklang['eyou'],'profile.php','NOTICE');
+    }
+
+    $_SESSION['edit_userdata'] = TRUE;
+
+	if ( ! isset($_SESSION['save_userdata']))
+    {			
+		$result = hesk_dbQuery('SELECT * from `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE `id`='.$id);
+
+		$row = mysqli_fetch_array($result);
+
+	$_SESSION['new']['name'] = $row['name'];
+	$_SESSION['new']['email'] = $row['email'];
+	$_SESSION['new']['user'] = $row['user'];
+	$_SESSION['new']['address'] = $row['address'];
+	$_SESSION['new']['phonenumber'] = $row['phonenumber'];
+	$_SESSION['new']['poz_detyres'] = $row['poz_detyres'];
+	$_SESSION['new']['active'] = $row['active'];
+	
+        /* Store original username for display until changes are saved successfully */
+        $_SESSION['original_user'] = $_SESSION['new']['user'];
+    }
+
+    /* Print header */
+	require_once(HESK_PATH . 'inc/header.inc.php');
+
+	/* Print main manage users page */
+	require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
+	?>
+
+	<div class="container manage-users-title"><a href="manage_users.php" class="smaller"><?php echo '<b>' .$hesklang['manage_users'] .'</b>'; ?></a> &gt; <?php echo $hesklang['editing_user'].' '.$_SESSION['original_user']; ?></div>
+
+	<?php
+	/* This will handle error, success and notice messages */
+	hesk_handle_messages();
+	?>
+
+	<div class="container editing-users-title"><?php echo '<b>' .$hesklang['editing_user'].' '.$_SESSION['original_user'] .'</b>'; ?></div>
+
+	<div class="container"><?php echo $hesklang['req_marked_with']; ?> <font class="important">*</font></div>
+
+	<script language="Javascript" type="text/javascript"><!--
+	var tabberOptions = {
+		'cookie':"tabbereu",
+		'onLoad': function(argsObj)
+		{
+			var t = argsObj.tabber;
+			var i;
+			if (t.id) {
+			t.cookie = t.id + t.cookie;
+		}
+
+		i = parseInt(getCookie(t.cookie));
+		if (isNaN(i)) { return; }
+			t.tabShow(i);
+		},
+
+		'onClick':function(argsObj)
+		{
+			var c = argsObj.tabber.cookie;
+			var i = argsObj.index;
+			setCookie(c, i);
+		}
+	};
+	//-->
+	</script>
+
+	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
+
+	<form name="form1" method="post" action="manage_users.php?a=update_client" novalidate>
+	<?php hesk_profile_tab('userdata', false); ?>
+
+	<!-- Submit -->
+	<div class="container"><input type="hidden" name="a" value="save" />
+		<input type="hidden" name="userid" value="<?php echo $id; ?>" />
+		<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
+		<input type="submit" value="<?php echo $hesklang['save_changes']; ?>" class="btn btn-default" />
+		|
+		<a href="manage_users.php"><?php echo $hesklang['dich']; ?></a>
+	</div>
+	</form>
+
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+
+	<?php
+	require_once(HESK_PATH . 'inc/footer.inc.php');
+	exit();
+}
+
 function new_user()
 {
 	global $hesk_settings, $hesklang;
@@ -624,6 +900,9 @@ function new_user()
     /* Categories and Features will be stored as a string */
     $myuser['categories'] = implode(',',$myuser['categories']);
     $myuser['features'] = implode(',',$myuser['features']);
+	/* user active */
+	$user_active = hesk_input( hesk_POST('prof_active'));
+	if(empty($user_active)) { $user_active = "0"; }
 
     /* Check for duplicate usernames */
 	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
@@ -638,6 +917,8 @@ function new_user()
 		$myuser['categories'] = '';
 		$myuser['features'] = '';
     }
+	
+
 
 	// Check if user is client
 	if(hesk_dbEscape($myuser['isclient'])=="1"){
@@ -647,25 +928,40 @@ function new_user()
 		`isclient`,
 		`name`,
 		`email`,
-		`signature`,
-		`contract_id`
+		`address`,
+		`phonenumber`,
+		`poz_detyres`,
+		`active`,
+		`signature`
 		) VALUES (
 		'".hesk_dbEscape($myuser['user'])."',
 		'".hesk_dbEscape($myuser['pass'])."',
 		'".intval($myuser['isclient'])."',
 		'".hesk_dbEscape($myuser['name'])."',
 		'".hesk_dbEscape($myuser['email'])."',
-		'".hesk_dbEscape($myuser['signature'])."',
-		'".hesk_dbEscape($myuser['contract_id'])."'
+		'".hesk_dbEscape($myuser['address'])."',
+		'".hesk_dbEscape($myuser['phonenumber'])."',
+		'".hesk_dbEscape($myuser['poz_detyres'])."',
+		'".hesk_dbEscape($user_active)."',
+		'".hesk_dbEscape($myuser['signature'])."'
 		)" );
+		$id = hesk_dbInsertID();
+		foreach($_POST['contract_id'] as $contract){
+				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` (
+					`contract_Id`, `client_Id`) VALUES('".hesk_dbEscape($contract)."', '".$id."')" );
+		}
 	} 
-	else {	
+	else {
 		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."users` (
 		`user`,
 		`pass`,
 		`isadmin`,
 		`name`,
 		`email`,
+		`address`,
+		`phonenumber`,
+		`poz_detyres`,
+		`active`,
 		`signature`,
 		`categories`,
 		`autoassign`,
@@ -688,6 +984,10 @@ function new_user()
 		'".intval($myuser['isadmin'])."',
 		'".hesk_dbEscape($myuser['name'])."',
 		'".hesk_dbEscape($myuser['email'])."',
+		'".hesk_dbEscape($myuser['address'])."',
+		'".hesk_dbEscape($myuser['phonenumber'])."',
+		'".hesk_dbEscape($myuser['poz_detyres'])."',
+		'".hesk_dbEscape($user_active)."',
 		'".hesk_dbEscape($myuser['signature'])."',
 		'".hesk_dbEscape($myuser['categories'])."',
 		'".intval($myuser['autoassign'])."',
@@ -732,9 +1032,12 @@ function update_user()
     	hesk_process_messages($hesklang['eyou'],'profile.php','NOTICE');
     }
 
-    $_SERVER['PHP_SELF'] = './manage_users.php?a=edit&id='.$tmp;
+    $_SERVER['PHP_SELF'] = './manage_users.php';
 	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
+	
+	
     $myuser['id'] = $tmp;
+	$active = (isset($_POST['prof_active'])) ? $_POST['prof_active'] : "0";
 
     /* Check for duplicate usernames */
 	$res = hesk_dbQuery("SELECT `id`,`isadmin`,`categories`,`heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
@@ -767,9 +1070,10 @@ function update_user()
 		/* Categories and Features will be stored as a string */
 	    $myuser['categories'] = implode(',',$myuser['categories']);
 	    $myuser['features'] = implode(',',$myuser['features']);
+		$active = (isset($myuser['prof_active'])) ? $myuser['prof_active'] : "0";
 
     	/* Unassign tickets from categories that the user had access before but doesn't anymore */
-        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
+        //hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
     }
 
 	hesk_dbQuery(
@@ -777,6 +1081,10 @@ function update_user()
     `user`='".hesk_dbEscape($myuser['user'])."',
     `name`='".hesk_dbEscape($myuser['name'])."',
     `email`='".hesk_dbEscape($myuser['email'])."',
+    `address`='".hesk_dbEscape($myuser['address'])."',
+    `phonenumber`='".hesk_dbEscape($myuser['phonenumber'])."',
+    `poz_detyres`='".hesk_dbEscape($myuser['poz_detyres'])."',
+    `active`='".hesk_dbEscape($active)."',
     `signature`='".hesk_dbEscape($myuser['signature'])."'," . ( isset($myuser['pass']) ? "`pass`='".hesk_dbEscape($myuser['pass'])."'," : '' ) . "
     `categories`='".hesk_dbEscape($myuser['categories'])."',
     `isadmin`='".intval($myuser['isadmin'])."',
@@ -802,6 +1110,56 @@ function update_user()
     hesk_process_messages( $hesklang['user_profile_updated_success'],$_SERVER['PHP_SELF'],'SUCCESS');
 } // End update_profile()
 
+function update_client(){
+	global $hesk_settings, $hesklang;
+
+	/* A security check */
+	hesk_token_check('POST');
+
+    $_SESSION['save_userdata'] = TRUE;
+
+	$tmp = intval( hesk_POST('userid') ) or hesk_error("$hesklang[int_error]: $hesklang[no_valid_id]");
+
+	/* To edit self fore using "Profile" page */
+    if ($tmp == $_SESSION['id'])
+    {
+    	hesk_process_messages($hesklang['eyou'],'profile.php','NOTICE');
+    }
+
+    $_SERVER['PHP_SELF'] = './manage_users.php';
+	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
+    $myuser['id'] = $tmp;
+
+	$active = (isset($_POST['prof_active'])) ? $_POST['prof_active'] : "0";
+
+	$query = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` SET
+	`user`='".hesk_dbEscape($myuser['user'])."',
+    `name`='".hesk_dbEscape($myuser['name'])."',
+    `email`='".hesk_dbEscape($myuser['email'])."',
+    `address`='".hesk_dbEscape($myuser['address'])."',
+    `phonenumber`='".hesk_dbEscape($myuser['phonenumber'])."',
+    `poz_detyres`='".hesk_dbEscape($myuser['poz_detyres'])."',
+    `active`='".hesk_dbEscape($active)."'
+	" . ( isset($myuser['pass']) ? ", `pass`='".hesk_dbEscape($myuser['pass'])."'" : '' ) . "
+	 WHERE `id`=".intval($myuser['id'])." LIMIT 1");
+	 
+	$query2 = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".intval($myuser['id'])."'");
+	foreach($_POST['contract_id'] as $contract){
+		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` (
+			`contract_Id`, 
+			`client_Id`
+			)
+			VALUES(
+			'".hesk_dbEscape($contract)."', 
+			'".$myuser['id']."'
+			)" );
+	}
+	unset($_SESSION['save_userdata']);
+    unset($_SESSION['userdata']);
+
+    hesk_process_messages( $hesklang['user_profile_updated_success'],$_SERVER['PHP_SELF'],'SUCCESS');
+} // End update_client()
+
 
 function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_users.php')
 {
@@ -811,6 +1169,9 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 
 	$myuser['name']		  = hesk_input( hesk_POST('name') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_real_name'] . '</li>';
 	$myuser['email']	  = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer .= '<li>' . $hesklang['enter_valid_email'] . '</li>';
+	$myuser['address']  = hesk_input( hesk_POST('address') );
+	$myuser['phonenumber']  = hesk_input( hesk_POST('phonenumber') );
+	$myuser['poz_detyres']  = hesk_input( hesk_POST('poz_detyres') );
 	$myuser['user']		  = hesk_input( hesk_POST('user') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_username'] . '</li>';
 	$myuser['isadmin']	  = empty($_POST['isadmin']) ? 0 : 1;
 	$myuser['isclient']	  = empty($_POST['isclient']) ? 0 : 1;
@@ -824,7 +1185,7 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 
     if ($myuser['isadmin']==0)
     {
-    	if (empty($_POST['categories']) || ! is_array($_POST['categories']) )
+    	/*if (empty($_POST['categories']) || ! is_array($_POST['categories']) )
         {
 			$hesk_error_buffer .= '<li>' . $hesklang['asign_one_cat'] . '</li>';
         }
@@ -842,7 +1203,7 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 					$myuser['categories'][] = $tmp;
 				}
 			}
-        }
+        }*/
 
     	if (empty($_POST['features']) || ! is_array($_POST['features']) )
         {
@@ -982,6 +1343,38 @@ function remove()
 
     hesk_process_messages($hesklang['sel_user_removed'],'./manage_users.php','SUCCESS');
 } // End remove()
+
+
+function remove_clients()
+{
+	global $hesk_settings, $hesklang;
+
+	/* A security check */
+	hesk_token_check();
+
+	$myuser = intval( hesk_GET('id' ) ) or hesk_error($hesklang['no_valid_id']);
+
+    /* You can't delete the default client */
+	if ($myuser == 1)
+    {
+        hesk_process_messages($hesklang['cant_del_admin'],'./manage_users.php');
+    }
+
+    /* You can't delete your own account (the one you are logged in) */
+	if ($myuser == $_SESSION['id'])
+    {
+        hesk_process_messages($hesklang['cant_del_own'],'./manage_users.php');
+    }
+
+    /* Delete client info */
+	$res = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` WHERE `id`='".intval($myuser)."'");
+	if (hesk_dbAffectedRows() != 1)
+    {
+        hesk_process_messages($hesklang['int_error'].': '.$hesklang['user_not_found'],'./manage_users.php');
+    }
+
+    hesk_process_messages($hesklang['sel_user_removed'],'./manage_users.php','SUCCESS');
+} // End remove_clients()
 
 
 function toggle_autoassign()

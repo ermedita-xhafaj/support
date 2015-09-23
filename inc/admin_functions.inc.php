@@ -38,19 +38,21 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 // Possible fields to be displayed in ticket list
 $hesk_settings['possible_ticket_list'] = array(
 'id' => $hesklang['id'],
-'trackid' => $hesklang['trackID'],
-'dt' => $hesklang['submitted'],
+//'trackid' => $hesklang['trackID'],									/*komentuar per mos tu shfaqur te settings -> ticket list -> Fields in ticket list  */
+//'dt' => $hesklang['submitted'],
 'lastchange' => $hesklang['last_update'],
 'category' => $hesklang['category'],
+'company_ticket_id' => $hesklang['company'],
+'contract_ticket_id' => $hesklang['contract'],
 'name' => $hesklang['name'],
-'email' => $hesklang['email'],
+//'email' => $hesklang['email'],
 'subject' => $hesklang['subject'],
 'status' => $hesklang['status'],
-'owner' => $hesklang['owner'],
-'replies' => $hesklang['replies'],
-'staffreplies' => $hesklang['replies'] . ' (' . $hesklang['staff'] .')',
-'lastreplier' => $hesklang['last_replier'],
-'time_worked' => $hesklang['ts'],
+//'owner' => $hesklang['owner'],
+//'replies' => $hesklang['replies'],
+//'staffreplies' => $hesklang['replies'] . ' (' . $hesklang['staff'] .')',  
+//'lastreplier' => $hesklang['last_replier'],
+//'time_worked' => $hesklang['ts'],
 );
 
 // Also possible to display all custom fields
@@ -765,6 +767,34 @@ function hesk_myCategories($what='category')
         return " `".hesk_dbEscape($what)."` IN ('" . implode("','", array_map('intval', $_SESSION['categories']) ) . "')";
     }
 } // END hesk_myCategories()
+
+
+function hesk_myContracts($what='contract_ticket_id')
+{
+    if ( ! empty($_SESSION['isadmin']) )
+    {
+        return '1';
+    }
+    else
+    {
+        //return " `".hesk_dbEscape($what)."` IN ('" . implode("','", array_map('intval', $_SESSION['contracts']) ) . "')";			/*koment per te hequr error-t kur login si staf*/
+		return " `".hesk_dbEscape($what)."`";
+    }
+} // END hesk_myContracts()
+
+
+function hesk_myCompanies($what='company_ticket_id')
+{
+    if ( ! empty($_SESSION['isadmin']) )
+    {
+        return '1';
+    }
+    else
+    {
+        //return " `".hesk_dbEscape($what)."` IN ('" . implode("','", array_map('intval', $_SESSION['companies']) ) . "')";			/*koment per te hequr error-t kur login si staf*/
+		return " `".hesk_dbEscape($what)."`";
+    }
+} // END hesk_myCompanies()
 
 
 function hesk_okCategory($cat,$error=1,$user_isadmin=false,$user_cat=false)
