@@ -37,16 +37,16 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 /* Acceptable $sort values and default asc(1)/desc(0) setting */
 $sort_possible = array(
-'trackid' 		=> 1,
-'lastchange' 	=> 0,
-'name' 			=> 1,
-'subject' 		=> 1,
-'status' 		=> 1,
-'lastreplier' 	=> 1,
-'priority' 		=> 1,
-'category' 		=> 1,
-'dt' 			=> 0,
 'id' 			=> 1,
+'trackid' 		=> 0,
+'lastchange' 	=> 0,
+'name' 			=> 0,
+'subject' 		=> 0,
+'status' 		=> 0,
+'lastreplier' 	=> 0,
+'priority' 		=> 0,
+'category' 		=> 0,
+'dt' 			=> 0,
 );
 
 // These values should have collate appended in SQL

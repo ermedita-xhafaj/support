@@ -43,7 +43,7 @@ require(HESK_PATH . 'inc/common.inc.php');
 hesk_check_maintenance();
 
 hesk_load_database_functions();
-hesk_session_start();
+session_start();
 
 // A security check
 hesk_token_check();

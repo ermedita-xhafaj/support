@@ -59,7 +59,7 @@ if ( empty($_POST) && ! empty($_SERVER['CONTENT_LENGTH']) )
 	hesk_error($hesklang['maxpost']);
 }
 
-hesk_session_start();
+session_start();
 
 /* A security check */
 # hesk_token_check('POST');
@@ -196,9 +196,13 @@ $ticket['status'] = $ticket['status'] ? 1 : 0;
 
 /* Update ticket as necessary */
 $res = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `lastchange`=NOW(), `status`='{$ticket['status']}', `replies`=`replies`+1, `lastreplier`='0' WHERE `id`='{$ticket['id']}' LIMIT 1");
-
+if(isset($_SESSION['id']['user'])){
+	$name = $_SESSION['id']['user'];
+}else{
+	$name = $ticket['name'];
+}
 // Insert reply into database
-hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`dt`,`attachments`) VALUES ({$ticket['id']},'".hesk_dbEscape($ticket['name'])."','".hesk_dbEscape($message)."',NOW(),'".hesk_dbEscape($myattachments)."')");
+hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`dt`,`attachments`) VALUES ({$ticket['id']},'".hesk_dbEscape($name)."','".hesk_dbEscape($message)."',NOW(),'".hesk_dbEscape($myattachments)."')");
 
 
 /*** Need to notify any staff? ***/

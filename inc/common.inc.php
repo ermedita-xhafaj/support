@@ -917,6 +917,8 @@ function hesk_show_info($message,$title='',$append_colon=true)
 
 function hesk_token_echo($do_echo = 1)
 {
+	$_SESSION['token']="";					/*added cause it shows an error -> undefined $_SESSION['token'] -> on line 924 in ticket.php fo client */
+	
 	if ( ! defined('SESSION_CLEAN'))
     {
 		$_SESSION['token'] = hesk_htmlspecialchars(strip_tags($_SESSION['token']));

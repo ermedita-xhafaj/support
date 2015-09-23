@@ -167,7 +167,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			}
 			
 			//ermedita search by filters
-			$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC"); /* Get list of categories */
+			$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `categ_impro_id` ASC "); /* Get list of categories */
 			if (isset($_POST['submitbutton'])){
 			if (!empty($_POST['search_by_cat_name'])) {
 				$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories`WHERE id='.$_POST['search_by_cat_name']);
@@ -278,8 +278,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 	<?php
 	?>
 
-	<div class="container add-cat-title"><?php echo $hesklang['add_cat']; ?></div>
+	
 	<div class="manage-categories-add-new-category">
+	<div class="container add-cat-title"><?php echo $hesklang['add_cat']; ?></div>
 		<div>	
 		<!-- Add NEW Category -->
 			<form action="manage_categories.php" method="post">
@@ -445,9 +446,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				$valuedep_department_manager = '' ;
 			}
 			
+			if(isset($_POST['note'])){
+				$valuedep_note = hesk_input( hesk_POST('note') );
+			}
+			else {
+				$valuedep_note = '' ;
+			}
+			
 
 			//celja e nje departamenti
-			if(!empty($valuedep_department_code) && !empty($valuedep_department_name) && !empty($valuedep_department_manager))
+			if(!empty($valuedep_department_code) && !empty($valuedep_department_name))
 			{	
 				$departament_active = hesk_input( hesk_POST('dep_active'));
 				if(empty($departament_active)) { $departament_active = "0"; }
@@ -455,11 +463,13 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						`department_code`,
 						`department_name`,
 						`department_manager`,
+						`note`,
 						`active`
 						) VALUES (
 						'".hesk_dbEscape($valuedep_department_code)."',
 						'".hesk_dbEscape($valuedep_department_name)."',
 						'".hesk_dbEscape($valuedep_department_manager)."',
+						'".hesk_dbEscape($valuedep_note)."',
 						'".hesk_dbEscape($departament_active)."'
 						)" );
 			}
@@ -492,6 +502,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_name']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_manager']; ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['notes']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 				</tr>
@@ -501,6 +512,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					{
 					$valuedep_department_name = hesk_input( hesk_POST('department_name') );
 					$valuedep_department_manager = hesk_input( hesk_POST('department_manager'));
+					$valuedep_note = hesk_input( hesk_POST('note'));
 					$valuedep_department_active = hesk_input( hesk_POST('dep_active'));
 					$valuedep_department_id = hesk_input( hesk_POST('dep_id'));
 
@@ -508,6 +520,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."departments` SET
 						`department_name`='".hesk_dbEscape($valuedep_department_name)."',
 						`department_manager`='".hesk_dbEscape($valuedep_department_manager)."',
+						`note`='".hesk_dbEscape($valuedep_note)."',
 						`active`='".hesk_dbEscape($valuedep_department_active)."'
 						WHERE `id`='".intval($valuedep_department_id)."' LIMIT 1"
 						);	
@@ -541,6 +554,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							<td>' .$row_dep['department_code'] .'</td>
 							<td>' .$row_dep['department_name'] .'</td>
 							<td>' .$row_dep['department_manager'] .'</td>
+							<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;">' .$row_dep['note'] .'</td>
 							<td>' .$row_dep['active'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
@@ -567,13 +581,19 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 				
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_manager" size="40" maxlength="50" value=""/>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>:</label>
+						<input class="form-control" id="" name="department_manager" type="text" size="40" maxlength="50" value=""/>
+					</div>
+
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['addnote'] ?>:</label>
+						<textarea class="form-control" id="" name="note" rows="12" cols="60"></textarea>
 					</div>	
+					
 					<!--shtohim fushen "Active" kur celim nje departament -->
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>:</label>
 						<input class="form-control" type="checkbox" name="dep_active" value="1" checked />
 					</div>
 				</div>
@@ -593,6 +613,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		$valuedep_department_code = '';
 		$valuedep_department_name = '';
 		$valuedep_department_manager = '';
+		$valuedep_note = '';
 		if(empty($departament_active)) { $departament_active = "0"; }
 
 
@@ -604,6 +625,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			$valuedep_department_code = $row_dep['department_code'];
 			$valuedep_department_name = $row_dep['department_name'];
 			$valuedep_department_manager = $row_dep['department_manager'];	
+			$valuedep_note = $row_dep['note'];	
 			$departament_active = $row_dep['active'];	
 		}
 		
@@ -623,13 +645,19 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 				
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="department_manager" size="40" maxlength="50" value="<?php echo $valuedep_department_manager ?>" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_manager'] ?>:</label>
+						<input class="form-control" id="" name="department_manager" size="40" maxlength="50" value="<?php echo $valuedep_department_manager ?>" />
 					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['addnote'] ?>:</label>
+						<textarea class="form-control" id="" name="note" rows="12" cols="60"><?php echo $valuedep_note ?></textarea>
+					</div>	
+					
 					<!--shtojme fushen "Active" kur celim nje departament -->
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>:</label>
 						<input class="form-control" type="checkbox" name="dep_active" value="1" <?php if($departament_active=='1') echo "checked"; ?> />
 					</div>
 				</div>
@@ -711,9 +739,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			else {
 				$valuecomp_telephone = '' ;
 			}
+			
+			if(isset($_POST['note'])){
+				$valuecomp_note = hesk_input( hesk_POST('note') );
+			}
+			else {
+				$valuecomp_note = '' ;
+			}
 
 			if(isset($_POST['action']) && $_POST['action'] == 'save') {
-			if(!empty($valuecomp_company_name) && !empty($valuecomp_email) && !empty($valuecomp_telephone))
+			if(!empty($valuecomp_company_name) && !empty($valuecomp_email))
 			{	
 				$valuecomp_active = hesk_input( hesk_POST('comp_active'));
 				if(empty($valuecomp_active)) { $valuecomp_active = "0"; }
@@ -726,6 +761,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						`city`, 
 						`zip_code`, 
 						`telephone`,
+						`note`
 						`active`
 						) VALUES (
 						'".hesk_dbEscape($valuecomp_company_name)."',
@@ -736,6 +772,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						'".hesk_dbEscape($valuecomp_city)."',
 						'".hesk_dbEscape($valuecomp_zip_code)."',
 						'".hesk_dbEscape($valuecomp_telephone)."',
+						'".hesk_dbEscape($valuecomp_note)."',
 						'".hesk_dbEscape($valuecomp_active)."'
 						)" );
 			}
@@ -775,6 +812,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<th style="text-align:left"><b><i><?php echo $hesklang['city']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['zip_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['telephone']; ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['notes']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 				</tr>
@@ -790,6 +828,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					$valuecomp_city = hesk_input( hesk_POST('city') );
 					$valuecomp_zip_code = hesk_input( hesk_POST('zip_code') );
 					$valuecomp_telephone = hesk_input( hesk_POST('telephone') );
+					$valuecomp_note = hesk_input( hesk_POST('note') );
 					$valuecomp_active = hesk_input( hesk_POST('comp_active') );
 					$valuecomp_id = hesk_input( hesk_POST('comp_id') );
 					if(empty($valuecomp_active)) { $valuecomp_active = "0"; }
@@ -804,6 +843,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						`city`='".hesk_dbEscape($valuecomp_city)."',
 						`zip_code`='".hesk_dbEscape($valuecomp_zip_code)."',
 						`telephone`='".hesk_dbEscape($valuecomp_telephone)."',
+						`note`='".hesk_dbEscape($valuecomp_note)."',
 						`active`='".hesk_dbEscape($valuecomp_active)."'
 						WHERE `id`='".intval($valuecomp_id)."' LIMIT 1"
 						);		
@@ -843,6 +883,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							<td>' .$row_comp['city'] .'</td>
 							<td>' .$row_comp['zip_code'] .'</td>
 							<td>' .$row_comp['telephone'] .'</td>
+							<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;">' .$row_comp['note'] .'</td>
 							<td>' .$row_comp['active'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
@@ -893,9 +934,15 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['telephone'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="" name="telephone" size="40" maxlength="50" value="" />
+						<label class="col-sm-2 control-label"><?php echo $hesklang['telephone'] ?>:</label>
+						<input class="form-control" type="number" id="" name="telephone" size="40" maxlength="50" value="" />
 					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['addnote'] ?>:</label>
+						<textarea class="form-control" id="" name="note" rows="12" cols="60"></textarea>
+					</div>
+					
 					<!--shtojme fushen "Active" kur celim nje kompani -->
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
@@ -923,6 +970,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		$valuecomp_city = '' ;
 		$valuecomp_zip_code = '' ;
 		$valuecomp_telephone = '' ;
+		$valuecomp_note = '' ;
 		if(empty($valuecomp_active)) { $valuecomp_active = "0"; }
 
 		if(isset($_GET['id'])) {
@@ -938,6 +986,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			$valuecomp_city = $row_comp['city'];
 			$valuecomp_zip_code = $row_comp['zip_code'];
 			$valuecomp_telephone = $row_comp['telephone'];			
+			$valuecomp_note = $row_comp['note'];			
 			$valuecomp_active = $row_comp['active'];			
 		}		
 	}
@@ -985,8 +1034,13 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 					
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['telephone'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="" name="telephone" size="40" maxlength="50" value="<?php echo $valuecomp_telephone ?>"/>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['telephone'] ?>:</label>
+						<input class="form-control" type="number" id="" name="telephone" size="40" maxlength="50" value="<?php echo $valuecomp_telephone ?>"/>
+					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['addnote'] ?>:</label>
+						<textarea class="form-control" id="" name="note" rows="12" cols="60"><?php echo $valuecomp_note ?></textarea>
 					</div>
 					
 					<!--shtojme fushen "Active" kur editojm nje kompani -->
@@ -1040,6 +1094,13 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				$valueproj_project_manager = '';
 			}
 			
+			if(isset($_POST['note'])){
+				$valueproj_note = hesk_input( hesk_POST('note') );
+			}
+			else {
+				$valueproj_note = '';
+			}
+			
 			if(isset($_POST['company_id'])){
 				$valueproj_company_id = hesk_input( hesk_POST('company_id') );
 			}
@@ -1055,7 +1116,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			}
 			
 
-			if(!empty($valueproj_project_code) && !empty($valueproj_project_name) && !empty($valueproj_project_manager) && !empty($valueproj_company_id) && !empty($valueproj_department_id))
+			if(!empty($valueproj_project_code) && !empty($valueproj_project_name) && !empty($valueproj_company_id) && !empty($valueproj_department_id))
 			{
 				$valueproj_active = hesk_input( hesk_POST('project_active'));
 				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` (
@@ -1063,15 +1124,17 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						`project_name`,
 						`project_manager`,
 						`company_id`,
-						`active`,
-						`department_id`
+						`department_id`,
+						`note`,
+						`active`
 						) VALUES (
 						'".hesk_dbEscape($valueproj_project_code)."',
 						'".hesk_dbEscape($valueproj_project_name)."',
 						'".hesk_dbEscape($valueproj_project_manager)."',
 						'".hesk_dbEscape($valueproj_company_id)."',
-						'".hesk_dbEscape($valueproj_active)."',
-						'".hesk_dbEscape($valueproj_department_id)."'
+						'".hesk_dbEscape($valueproj_department_id)."',
+						'".hesk_dbEscape($valueproj_note)."',
+						'".hesk_dbEscape($valueproj_active)."'
 						)" );
 			}
 		?>
@@ -1113,6 +1176,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<th style="text-align:left"><b><i><?php echo $hesklang['project_manager']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['company_name'] ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['department_name'] ?></i></b></th>
+					<th style="text-align:left"><b><i><?php echo $hesklang['notes'] ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
 				</tr>
@@ -1123,9 +1187,10 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					$valueproj_project_name = hesk_input( hesk_POST('project_name') );
 					$valueproj_project_manager = hesk_input( hesk_POST('project_manager') );
 					$valueproj_company_id = hesk_input( hesk_POST('company_id') );
+					$valueproj_department_id = hesk_input( hesk_POST('department_id') );
+					$valueproj_note = hesk_input( hesk_POST('note') );
 					$valueproj_active = hesk_input( hesk_POST('project_active') );
 					if(empty($valueproj_active)) { $valueproj_active = '0'; }
-					$valueproj_department_id = hesk_input( hesk_POST('department_id') );
 					$valueproj_id = hesk_input( hesk_POST('proj_id') );
 					
 					$query = hesk_dbQuery(
@@ -1133,8 +1198,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						`project_name`='".hesk_dbEscape($valueproj_project_name)."',
 						`project_manager`='".hesk_dbEscape($valueproj_project_manager)."',
 						`company_id`='".hesk_dbEscape($valueproj_company_id)."',
-						`active`='".hesk_dbEscape($valueproj_active)."',
-						`department_id`='".hesk_dbEscape($valueproj_department_id)."'
+						`department_id`='".hesk_dbEscape($valueproj_department_id)."',
+						`note`='".hesk_dbEscape($valueproj_note)."',
+						`active`='".hesk_dbEscape($valueproj_active)."'
 						WHERE `id`='".intval($valueproj_id)."' LIMIT 1"
 						);	
 					}
@@ -1180,6 +1246,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							<td>' .$row_proj['project_manager'] .'</td>
 							<td>' .$company_resultproj['company_name'] .'</td>
 							<td>' .$department_resultproj['department_name'] .'</td>
+							<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;">' .$row_proj['note'] .'</td>
 							<td>' .$row_proj['active'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
@@ -1205,12 +1272,12 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 					
 					<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>: <font class="important">*</font></label>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>:</label>
 						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_manager" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?></label>
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -1226,7 +1293,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 					
 					<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['department_name']; ?></label>
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['department_name']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="department_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -1240,10 +1307,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							?>		
 						</select>
 					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['addnote'] ?>:</label>
+						<textarea class="form-control" id="" name="note" rows="12" cols="60"></textarea>
+					</div>
+					
 				<!--shtojme fushen "Active" kur shtojme nje projekt -->
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>:</label>
 						<input class="form-control" type="checkbox" name="project_active" value="1" checked />
 					</div>
 				</div>
@@ -1265,6 +1338,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		$valueproj_project_manager = '';
 		$valueproj_company_id = '' ;
 		$valueproj_department_id = '' ;
+		$valueproj_note = '' ;
 		if(empty($valueproj_active)) { $valueproj_active = "0"; }
 
 		if(isset($_GET['id'])) {
@@ -1277,6 +1351,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			$valueproj_project_manager = $row_proj['project_manager'];
 			$valueproj_company_id = $row_proj['company_id'];		
 			$valueproj_department_id = $row_proj['department_id'];		
+			$valueproj_note = $row_proj['note'];		
 			$valueproj_active = $row_proj['active'];		
 		}		
 	}
@@ -1294,12 +1369,12 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 					
 					<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>: <font class="important">*</font></label>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>:</label>
 						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_manager" size="40" maxlength="50" value="<?php echo $valueproj_project_manager ?>" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?></label>
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -1314,7 +1389,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					</div>
 					
 					<div class="form-inline" id="project_row">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['department_name']; ?></label>
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['department_name']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="department_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -1327,10 +1402,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							?>		
 						</select>
 					</div>
+					
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['addnote'] ?>:</label>
+						<textarea class="form-control" id="" name="note" rows="12" cols="60"><?php echo $valueproj_note; ?></textarea>
+					</div>
+					
 				<!--shtojme fushen "Active" kur editojm nje projekt -->
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>:</label>
 						<input class="form-control" type="checkbox" name="project_active" value="1" <?php if($valueproj_active=='1') echo "checked"; ?>/>
 					</div>
 				</div>
@@ -1479,7 +1560,7 @@ function new_cat()
 	$cat_impro_id = hesk_input( hesk_POST('categ-impro-id') , $hesklang['enter_categ_impro_id'], 'manage_categories.php');
 	
 	/* Do we already have a categ_impro_id with this id? */
-	$res = hesk_dbQuery("SELECT `categ_impro_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `categ_impro_id` LIKE '".hesk_dbEscape( hesk_dbLike($cat_impro_id) )."' LIMIT 1");
+	$res = hesk_dbQuery("SELECT `categ_impro_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `categ_impro_id` ASC LIKE '".hesk_dbEscape( hesk_dbLike($cat_impro_id) )."' LIMIT 1");
     if (hesk_dbNumRows($res) != 0)
     {
 		$_SESSION['categ_impro_id'] = $cat_impro_id;
@@ -1495,7 +1576,7 @@ function new_cat()
     }
 
 	/* Get the latest cat_order */
-	$res = hesk_dbQuery("SELECT `cat_order` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` DESC LIMIT 1");
+	$res = hesk_dbQuery("SELECT `cat_order` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `categ_impro_id` ASC LIMIT 1");
 	$row = hesk_dbFetchRow($res);
 	$my_order = $row[0]+10;
 
@@ -1657,7 +1738,7 @@ function order_cat()
     }
 
 	/* Update all category fields with new order */
-	$res = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
+	$res = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `categ_impro_id` ASC ");
 
 	$i = 10;
 	while ($mycat=hesk_dbFetchAssoc($res))

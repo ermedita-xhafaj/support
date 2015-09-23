@@ -111,7 +111,14 @@ else {
 	$value_staff_id = '';
 }
 
-if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_starting_date) && !empty($value_ending_date)){
+if(isset($_POST['sla'])){
+	$value_sla = hesk_input( hesk_POST('sla') );
+}
+else {
+	$value_sla = '';
+}
+
+if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_project_id) && !empty($value_starting_date) && !empty($value_ending_date) && !empty($value_sla)){
 
 
 	if((date("Y-m-d") >= hesk_dbEscape($value_starting_date)) && (date("Y-m-d") <= hesk_dbEscape($value_ending_date)) )
@@ -119,20 +126,24 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 
 	 if(isset($_POST['action']) && $_POST['action'] == 'save') {
 		$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` (
+			`id`,
 			`contract_name`,
 			`company_id`,
 			`project_id`,
 			`starting_date`,
 			`ending_date`,
 			`created_by`,
+			`sla`,
 			`active`
 			) VALUES (
+			'".hesk_dbEscape($value_id)."',
 			'".hesk_dbEscape($value_contract_name)."',
 			'".hesk_dbEscape($value_company_id)."',
 			'".hesk_dbEscape($value_project_id)."',
 			'".hesk_dbEscape($value_starting_date)."',
 			'".hesk_dbEscape($value_ending_date)."',
 			'".hesk_dbEscape($_SESSION['id'])."',
+			'".hesk_dbEscape($value_sla)."',
 			'".hesk_dbEscape(1)."'
 			)" );
 			$id = hesk_dbInsertID();
@@ -149,20 +160,20 @@ if(!empty($value_contract_name) && !empty($value_company_id) && !empty($value_pr
 			`contract_name`,
 			`company_id`,
 			`project_id`,
-			`staff_id`,
 			`starting_date`,
 			`ending_date`,
 			`created_by`,
+			`sla`,
 			`active`
 			) VALUES (
 			'".hesk_dbEscape($value_id)."',
 			'".hesk_dbEscape($value_contract_name)."',
 			'".hesk_dbEscape($value_company_id)."',
 			'".hesk_dbEscape($value_project_id)."',
-			'".hesk_dbEscape($value_staff_id)."',
 			'".hesk_dbEscape($value_starting_date)."',
 			'".hesk_dbEscape($value_ending_date)."',
-			'".hesk_dbEscape($value_created_by)."',
+			'".hesk_dbEscape($_SESSION['id'])."',
+			'".hesk_dbEscape($value_sla)."',
 			'".hesk_dbEscape(0)."'
 			)" );
 			$id = hesk_dbInsertID();
@@ -186,7 +197,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 <?php $sql = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
 <?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
 <?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
-	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+	<div class="col-sm-7 col-sm-offset-5 filter_contract"> <!-- Krijojme nje div per filtrat -->
 		<form method="post">
 			<?php echo "<select class='form-control-1' name='search_by_contract_name' id='contract_name_list'>"; // list box select command
 				echo"<option value=''>Select contract</option>";
@@ -228,16 +239,14 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 			<th style="text-align:left"><b><i><?php echo $hesklang['company']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['project'] ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['staffname'] ?></i></b></th>
+			<th style="text-align:left"><b><i><?php echo $hesklang['email'] ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['starting_date']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['ending_date']; ?></i></b></th>
+			<th style="text-align:left"><b><i><?php echo 'Description Of SLA'; ?></i></b></th>
 			<th class="hidden endingdate_head" style="text-align:left"><b><i><?php echo $hesklang['last_modified']; ?></i></b></th>
 			<th class="hidden createdby_head" style="text-align:left"><b><i><?php echo $hesklang['created_by']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
-			<?php /*if(isset($_POST['update'])){
-			echo '<th style="text-align:left"><b><i>' .$hesklang['ending_date_info'] .'</i></b></th>';
-			}*/
-			?>
-			<th style="text-align:left"><b><i><?php echo $hesklang['opt']; ?></i></b></th>
+			<?php if($_SESSION['isadmin']){ echo '<th style="text-align:left"><b><i>' .$hesklang['opt'] .'</i></b></th>'; } ?>
 		</tr>
 <script language="Javascript" type="text/javascript"><!--
 function confirm_delete()
@@ -256,6 +265,7 @@ else {return false;}
 	$value_staff_id = hesk_input( hesk_POST('staff_id') );
 	$value_starting_date = hesk_input( hesk_POST('starting_date') );
 	$value_ending_date = hesk_input( hesk_POST('ending_date') );
+	$value_sla = hesk_input( hesk_POST('sla') );
 	$value['lastchange'] = hesk_date($value['lastchange'], true);
 	$query = hesk_dbQuery(
 		"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET
@@ -264,6 +274,7 @@ else {return false;}
 		`project_id`='".hesk_dbEscape($value_project_id)."',
 		`starting_date`='".hesk_dbEscape($value_starting_date)."',
 		`ending_date`='".hesk_dbEscape($value_ending_date)."',
+		`sla`='".hesk_dbEscape($value_sla)."',
 		`lastchange`=NOW()
 		WHERE `id`='".intval($value_id)."' LIMIT 1"
 		);
@@ -295,6 +306,7 @@ else {return false;}
 		S.name as staff_name,
 		C.starting_date,
 		C.ending_date,
+		C.sla,
 		C.lastchange,
 		CB.name AS created_by 
 		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
@@ -313,6 +325,7 @@ else {return false;}
 		S.name as staff_name,
 		C.starting_date,
 		C.ending_date,
+		C.sla,
 		C.lastchange,
 		CB.name AS created_by 
 		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
@@ -349,6 +362,7 @@ else {return false;}
 		S.name as staff_name,
 		C.starting_date,
 		C.ending_date,
+		C.sla,
 		C.lastchange,
 		CB.name AS created_by 
 		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` AS C
@@ -390,7 +404,7 @@ else {return false;}
 				$staff = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".$row['id']."'");
 				$staff_string= "";
 				while ($row1 = mysqli_fetch_array($staff)){
-					$staff_user = hesk_dbQuery('SELECT name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE `id` ="'.$row1["userId"].'"');
+					$staff_user = hesk_dbQuery('SELECT name, email FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE `id` ="'.$row1["userId"].'"');
 					$user = mysqli_fetch_array($staff_user);
 					$staff_string .= $user['name']."<br/>";
 				}
@@ -401,13 +415,15 @@ else {return false;}
 						<td>' .$row['company_name'] .'</td>
 						<td>' .$row['project_name'] .'</td>
 						<td>' .$staff_string .'</td>
+						<td>' .$user['email'] .'</td>
 						<td>' .$row['starting_date'] .'</td>
 						<td>' .$row['ending_date'] .'</td>
+						<td>' .$row['sla'] .'</td>
 						<td class="hidden last_modified">' .$row['lastchange'] .'</td>
 						<td class="hidden createdby_info">' .$row['created_by'] .'</td>						
-						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false" checked="checked" ></td>
-						<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
-						</tr>';
+						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false" checked="checked" ></td>';
+						if($_SESSION['isadmin']){ echo '<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>'; }
+						echo '</tr>';
 					}
 					else{
 						echo '<tr>
@@ -416,13 +432,15 @@ else {return false;}
 						<td>' .$row['company_name'] .'</td>
 						<td>' .$row['project_name'] .'</td>
 						<td>' .$staff_string .'</td>
+						<td>' .$user['email'] .'</td>
 						<td>' .$row['starting_date'] .'</td>
 						<td>' .$row['ending_date'] .'</td>
+						<td>' .$row['sla'] .'</td>
 						<td class="hidden last_modified">' .$row['ending_date'] .'</td>
 						<td class="hidden createdby_info">' .$row['created_by'] .'</td>	
-						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false"></td>
-						<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
-						</tr>';
+						<td> <input type="checkbox" name="expiry_date" value="' .$row['active'] .'" onclick="return false"></td>';
+						if($_SESSION['isadmin']){ echo '<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>'; }
+						echo '</tr>';
 					}
 				}
 			
@@ -437,6 +455,8 @@ else {return false;}
 }
 
 ?>
+
+<?php if ($_SESSION['isadmin']) {?>
 <div class="container tab-content manage-contract-tab">
 	<ul id="tabs" class="nav nav-tabs manage-contract" data-tabs="tabs">
 		<li class="new_class <?php if(!$is_edit){ ?>active<?php } ?>" id="create-contract-info"><a href="#create-cont" aria-controls="create-cont" role="tab" data-toggle="tab"><?php echo $hesklang['create_contract']; ?></a></li>
@@ -484,22 +504,38 @@ else {return false;}
 						</select>
 					</div>
 					
-					<div class="form-inline" id="contract_row">
+					<div class="form-inline" id="contract_staff">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
 								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE active=1');
 								$i=1;
-								while ($row_staff = mysqli_fetch_array($res_staff)) 
+								while ($row_staff = mysqli_fetch_array($res_staff))
 								{
-									echo 
+									echo
 									'<option value="' .$row_staff['id'] .'">' .$row_staff['name'] .'</option>';
 								}
-							?>		
-						</select> 
+							?>
+						</select>
 					</div>
 
+					<div class="form-inline" id="contract_email_contact">
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['email'] ?>:<font class="important">*</font></label>
+						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="email[]" style="width: 336px;">
+							<option></option>
+							<?php
+								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE active=1');
+								$i=1;
+								while ($row_staff = mysqli_fetch_array($res_staff))
+								{
+									echo
+									'<option value="' .$row_staff['id'] .'" style="display:none;">' .$row_staff['email'] .'</option>';
+								}
+										?>
+						</select>
+					</div>
+					
 					<div class="form-inline" id="contract_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['starting_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="starting_date" size="40" maxlength="50" value="" />
@@ -509,13 +545,18 @@ else {return false;}
 						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50" value="" />
 					</div>
+					
+					<div class="form-inline" id="contract_row">
+						<label class="col-sm-2 control-label"><?php echo 'Description Of SLA'; ?>: <font class="important">*</font></label>
+						<textarea class="form-control" required="required" title="Required field" id="" name="sla" rows="12" cols="60"></textarea>
+					</div>
 				</div>
 				
 				<!-- Submit -->
 				<div class="container">
 					<input type="hidden" name="action" value="save" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" id="new-contract-submit-btn" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
@@ -529,6 +570,7 @@ else {return false;}
 	$value_staff_id = '';
 	$value_starting_date = '';
 	$value_ending_date = '';
+	$value_sla = '';
 	$value_created_by = '';
 	$value['lastchange'] = '';
 	$value_active = '';
@@ -545,6 +587,7 @@ if(isset($_GET['id'])) {
 		$value_staff_id = $row['staff_id'];
 		$value_starting_date = $row['starting_date'];
 		$value_ending_date = $row['ending_date'];
+		$value_sla = $row['sla'];
 		$value['lastchange'] = hesk_date($value['lastchange'], true);		
 	}
 
@@ -555,7 +598,7 @@ if(isset($_GET['id'])) {
 	<!-- Edit Contract-->
 	<div role="tabpanel" class="tab-pane <?php if($is_edit){ ?>active<?php } ?>" id="edit-cont">
 		<div class="edit-contract">
-		<form method="post" action="contracts.php?a=edit#tab_edit-cont" name="form2">
+		<form method="post" action="contracts.php?a=edit#tab_edit-cont" name="form2" novalidate>
 				<div class="">
 					<input type="hidden" name="id" value="<?php echo $value_id; ?>"/>
 					<div class="form-inline contr-row1" id="contract_row">
@@ -608,14 +651,14 @@ if(isset($_GET['id'])) {
 						</select>
 					</div>
 					
-					<div class="form-inline" id="contract_row">
+					<div class="form-inline" id="edit_contract_staff">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_staff = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE active=1');
+								$res_staff = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE active=1");
 								if(isset($_GET['id'])){
-								$current_staff = hesk_dbQuery('SELECT userId FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE contractId='.$_GET['id']);
+								$current_staff = hesk_dbQuery("SELECT userId FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".$_GET['id']."'");
 								$staff1 = array();
 								
 								while ($row_staff = mysqli_fetch_array($current_staff)){
@@ -635,6 +678,34 @@ if(isset($_GET['id'])) {
 						</select>      				
 					</div>
 
+					<div class="form-inline" id="edit_contract_email_contact">
+						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['email'] ?>:<font class="important">*</font></label>
+						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="email[]" style="width: 336px;">
+							<option></option>
+							<?php
+								$res_staff = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE active=1");
+								if(isset($_GET['id'])){
+								$current_staff = hesk_dbQuery("SELECT userId FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`='".$_GET['id']."'");
+								$staff1 = array();
+								
+								while ($row_staff = mysqli_fetch_array($current_staff)){
+									$staff1[] = $row_staff['userId'];
+								}
+								$i=1;
+								while ($row_staff = mysqli_fetch_array($res_staff)) 
+								{
+									if(in_array($row_staff['id'], $staff1)){
+										echo '<option value="' .$row_staff['id'] .'" selected="selected">' .$row_staff['email'] .'</option>';}
+										else{
+										echo '<option value="' .$row_staff['id'] .'" >' .$row_staff['email'] .'</option>';} 
+										
+
+								}
+								}
+										?>
+						</select>
+					</div>
+					
 					<div class="form-inline" id="contract_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['starting_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="starting_date" size="40" maxlength="50" value="<?php echo $value_starting_date; ?>" />
@@ -644,20 +715,25 @@ if(isset($_GET['id'])) {
 						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50" value="<?php echo $value_ending_date; ?>" />
 					</div>
+					
+					<div class="form-inline" id="contract_row">
+						<label class="col-sm-2 control-label"><?php echo 'Description Of SLA'; ?>: <font class="important">*</font></label>
+						<textarea class="form-control" required="required" title="Required field" id="" name="sla" rows="12" cols="60"></textarea>
+					</div>
 				</div>
 				
 				<!-- Submit -->
 				<div class="container">
 					<input type="hidden" name="action" value="update" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" id="edit-contract-submit-btn" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 
 		</div>
 	</div>
 </div>
-
+<?php } ?>
 <?php
 
 /* Print footer */

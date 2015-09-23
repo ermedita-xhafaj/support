@@ -121,7 +121,7 @@ if (defined('WARN_PASSWORD'))
 
 <div class="container"><?php echo $hesklang['req_marked_with']; ?> <span class="important">*</span><br />&nbsp;</div>
 
-<form method="post" action="profile.php" name="form1">
+<form method="post" action="profile.php" name="form1" novalidate>
 
 <script language="Javascript" type="text/javascript"><!--
 var tabberOptions = {

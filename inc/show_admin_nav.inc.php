@@ -104,7 +104,7 @@ $num_mail = $num_mail ? '<b>'.$num_mail.'</b>' : 0;
 				echo '<li><a href="admin_settings.php">' .$hesklang['settings'] .'</a></li>';
 				}
 			?>
-						
+			<li><a href="profile.php"> <?php echo 'Hello,' .$_SESSION['user']; ?> </a></li>	
 			<li><a href="index.php?a=logout&amp;token=<?php echo hesk_token_echo(); ?>"><?php echo $hesklang['logout']; ?></a></li>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 		</ul>

@@ -53,9 +53,9 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 					if ($_SESSION['isadmin'])
 					{
 						?>
-						<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" <?php if ($_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
-						<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0"  <?php if (!$_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
-						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" <?php if(isset($_GET['a']) && $_GET['a']=="editc") echo "checked"; ?> /> <?php echo $hesklang['aclient'] ?></label>
+						<label><input class="te-drejtat" id="administratori" type="radio" name="admin" value="1" <?php if (isset($_GET['a']) && $_GET['a']=="edit") echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
+						<label><input class="te-drejtat" id="stafi" type="radio" name="admin" value="0"  <?php if (isset($_GET['a']) && $_GET['a']=="editb") echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
+						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" <?php if(isset($_GET['a']) && $_GET['a']=="editc") echo 'checked="checked"'; ?> /> <?php echo $hesklang['aclient'] ?></label>
 						<?php
 					}
 					else
@@ -74,9 +74,9 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<!--<li id="permissions-info"><a href="#permissions" aria-controls="permissions" role="tab" data-toggle="tab"><?php //echo $hesklang['permissions']; ?></a></li>-->
 			<?php } ?>
 			<li id="signature-info"><a href="#signature" aria-controls="signature" role="tab" data-toggle="tab"><?php echo $hesklang['sig']; ?></a></li>
-			<li class="hidden" id="project_users-info"><a href="#project_users" aria-controls="project_users" role="tab" data-toggle="tab"><?php echo $hesklang['project']; ?></a></li>
-			<li class="hidden" id="preferences-info"><a href="#preferences" aria-controls="preferences" role="tab" data-toggle="tab"><?php echo $hesklang['pref']; ?></a></li>
-			<li class="hidden" id="notifications-info"><a href="#notifications" aria-controls="notifications" role="tab" data-toggle="tab"><?php echo $hesklang['notn']; ?></a></li>
+			<li class="<?php if (isset($_GET['a']) && $_GET['a']!="editb") echo 'hidden'; if(!isset($_GET['a']) && ! $is_profile_page && $_SESSION['isadmin']) echo "hidden"; ?>" id="project_users-info"  ><a href="#project_users" aria-controls="project_users" role="tab" data-toggle="tab"><?php echo $hesklang['project']; ?></a></li>
+			<li class="<?php if (isset($_GET['a']) && $_GET['a']!="editb") echo 'hidden'; ?>" id="preferences-info"><a href="#preferences" aria-controls="preferences" role="tab" data-toggle="tab"><?php echo $hesklang['pref']; ?></a></li>
+			<li class="<?php if (isset($_GET['a']) && $_GET['a']!="editb") echo 'hidden'; ?>" id="notifications-info"><a href="#notifications" aria-controls="notifications" role="tab" data-toggle="tab"><?php echo $hesklang['notn']; ?></a></li>
 		</ul>
 			<!-- PROFILE INFO -->
 		<div role="tabpanel" class="tab-pane active" id="p-info">
@@ -152,30 +152,6 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				</label>
 			</div>
 			
-			<div class="form-inline hidden" id="show-hide-kompani">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
-						<select class="form-control" required="required" title="Required field" id="select_company_manage_users" name="company_id" style="width: 336px;">
-							<option></option>
-							<?php
-								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1 ');
-								$i=1;
-								while ($row_comp = mysqli_fetch_array($res_comp)) 
-								{
-									$temp_data = array();
-									$data_contract = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE active=1 AND company_id ='.$row_comp['id']);
-									while ($row_contract = mysqli_fetch_array($data_contract)) 
-										{
-											$temp_data[] = $row_contract['id'] ;
-										}
-								echo 
-									'<option value="' .$row_comp['id'] .'" contracts = "'.implode($temp_data, ",") . '">' .$row_comp['company_name'] .'</option>';
-								}
-							?>		
-						</select>
-			</div>
-				
-			<br/>
-			
 			<div class="form-inline hidden" id="show-hide-kontrata">
 				<label class="col-sm-2 control-label" for="select-kontrata"><?php echo $hesklang['contract']; ?></label>
 				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
@@ -185,7 +161,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 						$i=1;
 						while ($row_contract = mysqli_fetch_array($res_contract)) 
 						{
-							echo '<option value="' .$row_contract['id'] .'" >' .$row_contract['contract_name'] .'</option>';
+							echo '<option value="' .$row_contract['id'] .'">' .$row_contract['contract_name'] .'</option>';
 						}
 					?>		
 				</select>
@@ -195,11 +171,11 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 <div id="options" class="hidden">
 
 			<div class="permissions-category-features">
-				<!--<div class="form-inline">
-					<label class="col-sm-2 control-label"><?php //echo $hesklang['allowed_cat']; ?>: <font class="important">*</font></label>
-					<label>-->
+				<div class="form-inline">
+					<label class="col-sm-2 control-label"><?php echo $hesklang['allowed_cat']; ?>: <font class="important">*</font></label>
+					<label>
 					<?php
-					/*foreach ($hesk_settings['categories'] as $catid => $catname)
+					foreach ($hesk_settings['categories'] as $catid => $catname)
 					{
 						echo '<label><input type="checkbox" name="categories[]" value="' . $catid . '" ';
 						if ( in_array($catid,$_SESSION[$session_array]['categories']) )
@@ -207,10 +183,10 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 							echo ' checked="checked" ';
 						}
 						echo ' />' . $catname . '</label>';
-					}*/
+					}
 					?>
-					<!--</label>
-				</div>-->
+					</label>
+				</div>
 				
 				<div class="form-inline" id="permissions-features">
 				<label class="col-sm-2 control-label"><?php echo $hesklang['allow_feat']; ?>: <font class="important">*</font></label>
@@ -250,7 +226,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<!-- PROFILE INFO -->
 
 			<?php
-			if ( ! $is_profile_page)
+			if ( ! $is_profile_page )
 			{
 			?>
 			<!-- PERMISSIONS -->
@@ -297,8 +273,8 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<!-- SIGNATURE -->
 			
 	<?php
-	if ( !$is_profile_page)
-	{
+	/*if ( !$is_profile_page )
+	{*/
 	?>		
 			<!-- Projets for Users -->
 			
@@ -313,29 +289,16 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				</tr>
 
 				<?php
-				if(isset($_GET['a']) && $_GET['a']=="edit")
-				{
-					$t1 = "users";
-					$t2 = "userforcontract";
-					$t3 = "userId";
-					$t4 = "contractId";
-				}else{
-					$t1 = "clients";
-					$t2 = "contractforclient";
-					$t3 = "client_Id";
-					$t4 = "contract_Id";
-				}
-				
-				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).$t1.'` WHERE id='.intval( hesk_GET('id' ) ).' ORDER BY `id` ');
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `id` ASC');
 					$i=1;
 					while ($row = mysqli_fetch_array($result)) 
 					{
-						$staff = hesk_dbQuery('SELECT ' .$t3 .',' .$t4 .' FROM `' .hesk_dbEscape($hesk_settings['db_pfix']).$t2 .'` WHERE ' .$t3 .'=' .$row['id']);
+						$staff = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `userId`='".$row['id']."'");
 						$staff_string= "";
 						$project_string= "";
 						while ($row1 = mysqli_fetch_array($staff))
 						{
-							$contract_staff = hesk_dbQuery('SELECT contract_name, project_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row1[$t4].'"');
+							$contract_staff = hesk_dbQuery('SELECT contract_name, project_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row1["contractId"].'"');
 							$contract = mysqli_fetch_array($contract_staff);
 							$staff_string .= $contract['contract_name']."<br/>";
 							$project_id = isset($contract['project_id'])?$contract['project_id']:"";
@@ -358,7 +321,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 		</div>
 	</div>
 	<?php
-	}
+	/*}*/
 	?>
 			<!-- End Projets for Users -->
 

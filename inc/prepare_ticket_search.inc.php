@@ -47,7 +47,8 @@ foreach (array_keys($hesk_settings['possible_ticket_list']) as $key)
 {
 	$sort_possible[$key] = 1;
 }
-$sort_possible['priority'] = 1;
+$sort_possible['priority'] = 0;
+$sort_possible['id'] = 1;
 $sort_possible['dt'] = 0;
 $sort_possible['lastchange'] = 0;
 
@@ -79,6 +80,7 @@ $sort_collation = array(
 
 /* Acceptable $group values and default asc(1)/desc(0) setting */
 $group_possible = array(
+'id'			=> 1,
 'owner' 		=> 1,
 'priority' 		=> 1,
 'category' 		=> 1,
