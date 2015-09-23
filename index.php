@@ -166,9 +166,9 @@ require_once(HESK_PATH . 'inc/header.inc.php');
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
-			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
-			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
+			<li id="userMenu-submitTicket"><a href="index.php?a=add"><?php echo $hesklang['submit_tick']; ?></a></li>
+			<li id="client-username"><a href="client_profile.php"><?php echo $hesklang['hello']; ?><?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
+			<li id="userMenu-logout"><a href="logout.php"><?php echo $hesklang['logout']; ?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -279,7 +279,7 @@ hesk_handle_messages();
 			$is_table = 0;
 			// Get categories
 
-			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' ORDER BY `cat_order` ASC");
+			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' AND `active`='1' ORDER BY `cat_order` ASC");
 
 			/*if (hesk_dbNumRows($res) == 1)
 			{
@@ -960,9 +960,9 @@ function print_start()
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">		  	
 			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
-			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
-			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
+			<li id="userMenu-submitTicket"><a href="index.php?a=add"><?php echo $hesklang['submit_tick']; ?></a></li>
+			<li id="client-username"><a href="client_profile.php"><?php echo $hesklang['hello']; ?><?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
+			<li id="userMenu-logout"><a href="logout.php"><?php echo $hesklang['logout']; ?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -1012,8 +1012,7 @@ function print_start()
 							&nbsp;
 							<img src="img/newticket.jpg" alt="newticket"/>
 							<div class="form-group">
-								<span><b><?php echo $hesklang['sub_support']; ?></b></span><br />
-								<span id="op-ticket"><?php echo $hesklang['open_ticket']; ?></span>
+								<span><b><?php echo $hesklang['sub_support']; ?></b></span>
 							</div>
 							&nbsp;
 						</div>
@@ -1029,10 +1028,10 @@ function print_start()
 <?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
-	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+	<div class="col-sm-8 col-sm-offset-2 filter-ticket-client"> <!-- Krijojme nje div per filtrat -->
 		<form method="post" action="">
-			<?php echo "<select class='form-control-1' name='search_by_ID' id='ID_list'>"; // list box select command
-				echo"<option style='color:#ccc' value=''>Select by ID</option>";
+			<?php echo "<select class='form-control-1' name='search_by_ID' id='ID_list' >"; // list box select command
+				echo"<option value=''>Select by ID</option>";
 					while ($tmp = hesk_dbFetchAssoc($sql))
 					{
 						echo "<option value=$tmp[id]> $tmp[id] </option>"; 
@@ -1090,20 +1089,18 @@ function print_start()
 					<div class="form-signin-heading">Login</div>
 					<div class="form-group">
 						<div class="form-inline signin-username">
-							<label for="inputUser">User:</label><br/>
+							<label for="inputUser">{$hesklang['username']}:</label><br/>
 							<input name="user" required="required" title="Required field" type="text" id="inputUser" class="form-control" required autofocus style="width: 301px;">
 						</div>
 						<div class="form-inline signin-password">
-							<label for="inputPassword">Password:</label><br/>
+							<label for="inputPassword">{$hesklang['pass']}:</label><br/>
 							<input name="pass" type="password" id="inputPassword" class="form-control" required style="width: 301px;">
 						</div>
 						<div class="checkbox signin-remember">
-							<label>
-								<input type="checkbox" value="remember-me" /> Remember me
-							</label>
+							<label><input type="checkbox" value="remember-me" /> {$hesklang['remember_user']}</label>
 						</div>
 						<div>
-							<button class="btn btn-default login-user-btn" type="submit">Click here to login</button>
+							<button class="btn btn-default login-user-btn" type="submit">{$hesklang['click_login']}</button>
 						</div>
 					</div>
 				</form>

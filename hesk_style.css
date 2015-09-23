@@ -240,7 +240,7 @@ td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: 
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);}
 #select-cont {margin-left: -50px;}						
-						
+.filter-ticket-client {margin-left: 20.6%; margin-bottom: 10px;}						
 						
 
 /*start style for support/ticket.php*/
@@ -285,7 +285,6 @@ hr {border: 0; border-top: 1px dashed #BEBEBE; margin: 0px;}
 					background: linear-gradient(#008981, #00A79D);
 				}
 #message_client_ticket{margin-left: -15px;}
-
 
 
 /*start style for support/knowledgebase.php*/
@@ -486,24 +485,29 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 /* start style for support/admin/admin_main.php */
 .open-new-ticket {margin-bottom: 5px; margin-top: -27px;}
 #openTicket {font-size: 14pt; font-weight: bold; vertical-align: bottom; margin-left: 14px;}
-.new-ticket-btn {color: white;
+.new-ticket-btn, .filter-ticket-btn {color: white;
 					background: -webkit-linear-gradient(#00A79D, #008981);
 					background:-o-linear-gradient(#00A79D, #008981);
 					background: -moz-linear-gradient(#00A79D, #008981);
 					background: linear-gradient(#00A79D, #008981);
 				}
-.new-ticket-btn:hover  {color: white;
+.new-ticket-btn:hover, .filter-ticket-btn:hover  {color: white;
 						background: -webkit-linear-gradient(#008981, #00A79D);
 						background:-o-linear-gradient(#008981, #00A79D);
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);
 					}
+					
 .newTicket {padding-left: 71px;}
+.filter-ticket-admin {margin: 15px 0px 15px 20.5%;}
+.filter-ticket-btn {width: 103px;}
+
+
 
 
 /* start style for support/admin/manage_categories.php */
 .manage-categories-add-new-category /*.manage-categories-rename-category, .manage-categories-set-category-priority*/ {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 97.2%; margin-left: 15px; margin-bottom: 20px;}
-.add-cat-title, .ren-cat-title, .set-cat-pri-title {font-size: 15pt; font-weight: bold; margin-top: 10px;}
+.add-cat-title, .ren-cat-title, .set-cat-pri-title {font-size: 15pt; font-weight: bold; margin-top: 5px;}
 .manage-categories-title {font-size: 15pt; font-weight: bold; padding-top: 10px;}
 .manage-categories-table{background: white; width: 95.5%; margin-bottom: 15px;}
 #category-name, #new-name-category , #old-name-category, #set-category{width: 368px;}
@@ -757,7 +761,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 .tagged-ticket-list {margin-bottom: -10px;}
 .tagged-ticket-list, .ticket-list{padding: 0px 30px 0px 15px;}
 .ticket-list .table {margin-bottom: 10px;}
-.set-priorityTicket {float: right;}
+.set-priorityTicket {float: right; margin-bottom: 20px;}
 .execute-btn {color: white;
 					background: -webkit-linear-gradient(#00A79D, #008981);
 					background:-o-linear-gradient(#00A79D, #008981);
@@ -770,7 +774,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);
 					}
-
+.execute-btn {width: 103px;}
 
 
 /* start style for support/admin/manage_users.php */					
@@ -885,8 +889,11 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 						background:-o-linear-gradient(#008981, #00A79D);
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);}					
+#profile-information-username {background-color: white;}
+#profile-information-phonenumber {width: 336px;}	
 
-						
+
+	
 /* start style for support/admin/admin_ticket.php */						
 .adminTicket-settings, .replyTicket-form, .ticketHistory-admin, .edit-post-table {border: 1px solid #BEBEBE; border-radius: 5px; background-color: white; width: 68.8%; margin-left: 15.1%}
 .ticketHistory-admin {margin-bottom: 50px;}
@@ -985,7 +992,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 /* start style for support/inc/common.inc.php */
 #page-title-row1 {padding-left: 0px;}
 .showPageTitle-col {margin-top: 10px; padding: 0px 20px 0px 50px;}
-#page-title-row2 {margin-left: 43%;}
+#page-title-row2 {margin-left: 42%;}
 .heskTitle {border-radius: 5px; background-color: #EC790F; font-size: 12px; color: #fff; padding: 5px;}
 .error img, .success img, .notice img, .info img {vertical-align:text-bottom;}
 .form-control-1 {     display: inline; height: 34px; padding: 6px 12px; font-size: 14px;
@@ -1002,3 +1009,8 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
 
 #div-id-edit-department { padding-top:20px; }	
+
+
+
+/* start style for support/admin/contract.php */
+.filter_contract {margin-left: 37.333333%;}

@@ -57,12 +57,6 @@ if ( ! $s_my[$fid] && ! $s_ot[$fid] && ! $s_un[$fid])
 	}
 }
 
-/* If the user doesn't have permission to view assigned to others block those */
-if ( ! hesk_checkPermission('can_view_ass_others',0))
-{
-	$s_ot[$fid] = 0;
-}
-
 /* If the user doesn't have permission to view unassigned tickets block those */
 if ( ! hesk_checkPermission('can_view_unassigned',0))
 {

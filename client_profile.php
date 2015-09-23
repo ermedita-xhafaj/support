@@ -70,9 +70,9 @@ require_once(HESK_PATH . 'inc/header.inc.php');
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
-			<li id="userMenu-submitTicket"><a href="index.php?a=add">Submit Ticket</a></li>
-			<li id="client-username"><a href="client_profile.php">Hello, <?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?></a></li>
-			<li id="userMenu-logout"><a href="logout.php">Log Out</a></li>
+			<li id="userMenu-submitTicket"><a href="index.php?a=add"><?php echo $hesklang['submit_tick']; ?></a></li>
+			<li id="client-username"><a href="client_profile.php"><?php echo $hesklang['hello']; ?><?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
+			<li id="userMenu-logout"><a href="logout.php"><?php echo $hesklang['logout']; ?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -103,32 +103,32 @@ if (defined('WARN_PASSWORD'))
 		<div class="profile-information">
 			<div class="form-inline" style="margin-bottom: 5px;">
 				<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if (isset($_SESSION['id']['name'])){echo $_SESSION['id']['name']; }?>" />
+				<input class="form-control" required="required" title="Required field" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if (isset($_SESSION['id']['name'])){echo $_SESSION['id']['name']; }?>" />
 			
 			</div>
 			
 			<div class="form-inline" style="margin-bottom: 5px;">
 				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if (isset($_SESSION['id']['email'])) {echo $_SESSION['id']['email']; }?>" />
+				<input class="form-control" required="required" title="Required field" type="email" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if (isset($_SESSION['id']['email'])) {echo $_SESSION['id']['email']; }?>" />
 			</div>
 
 			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?>" />
+				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: </label>
+				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?>" readonly>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo 'Address'; ?>: <font class="important">*</font></label>
+				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo $hesklang['address']; ?>: </label>
 				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['address'])) {echo $_SESSION['id']['address']; } ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo 'Phone Number'; ?>: <font class="important">*</font></label>
+				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo $hesklang['telephone']; ?>: </label>
 				<input class="form-control" type="number" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['phonenumber'])) {echo $_SESSION['id']['phonenumber']; } ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo 'Pozicioni Detyres'; ?>: <font class="important">*</font></label>
+				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo $hesklang['work_position']; ?>: </label>
 				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['poz_detyres'])) {echo $_SESSION['id']['poz_detyres']; } ?>"/>
 			</div>
 
@@ -178,6 +178,9 @@ if (defined('WARN_PASSWORD'))
 				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
 				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['contract']; ?></i></b></th>
 				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['project']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['starting_date']; ?></i></b></th>
+				<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['ending_date']; ?></i></b></th>
+				<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 				</tr>
 
 				<?php
@@ -185,9 +188,11 @@ if (defined('WARN_PASSWORD'))
 					$i=1;
 					while ($row_cl = mysqli_fetch_array($result_cl)) 
 					{
-						$res_contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row_cl['contract_Id']."'");
 						$contract_string= "";
 						$project_cl_string= "";
+
+						$res_contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row_cl['contract_Id']."'");
+						
 						$res_cl = mysqli_fetch_array($res_contract);
 						$query2 = hesk_dbQuery('SELECT project_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`  WHERE `id` ="'.$res_cl['project_id'].'"');
 						$res_proj = mysqli_fetch_array($query2);
@@ -195,6 +200,9 @@ if (defined('WARN_PASSWORD'))
 						<td class="$color">' .$res_cl['id'] .'</td>
 						<td class="$color">' .$res_cl['contract_name'] .'</td>
 						<td class="$color">' .$res_proj['project_name'] .'</td>
+						<td class="$color">' .$res_cl['starting_date'] .'</td>
+						<td class="$color">' .$res_cl['ending_date'] .'</td>
+						<td class="$color">' .$res_cl['active'] .'</td>
 						</tr>';
 						}
 						

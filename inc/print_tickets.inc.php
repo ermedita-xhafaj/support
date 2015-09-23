@@ -126,14 +126,31 @@ $company = intval( hesk_GET('company_ticket_id', 0) );
 $category = intval( hesk_GET('category', 0) );
 
 // Make sure user has access to this category
-if ($category && hesk_okCategory($category, 0) )
+if ($category)
 {
 	$sql .= " `category`='{$category}' ";
 }
 // No category selected, show only allowed categories
 else
 {	if(empty($_POST)){
-		$sql .= hesk_myCategories();
+		$sql .= '1=1';
+	}
+}
+
+
+//check if admin
+if(!$_SESSION['isadmin']){
+
+$res = hesk_dbQuery('SELECT contractId FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE userId='.$_SESSION['id']);
+	if($res_user = mysqli_fetch_all($res)){
+		foreach($res_user as $user){
+			$ticket_staff[] = $user[0];
+		}
+		$ticket_staff1 = implode($ticket_staff,',');
+
+		$sql .= " AND contract_ticket_id IN(".$ticket_staff1.")";
+	} else {
+		$sql .= " AND contract_ticket_id IN(0)";
 	}
 }
 

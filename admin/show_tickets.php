@@ -78,7 +78,7 @@ hesk_handle_messages();
 
 <?php
 /* Print forms for listing and searching tickets */
-require_once(HESK_PATH . 'inc/show_search_form.inc.php');
+//require_once(HESK_PATH . 'inc/show_search_form.inc.php');
 ?>
 	
 	

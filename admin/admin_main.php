@@ -80,7 +80,7 @@ if (hesk_checkPermission('can_view_tickets',0))
 <?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
-	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+	<div class="col-sm-8 col-sm-offset-2 filter-ticket-admin"> <!-- Krijojme nje div per filtrat -->
 		<form method="post" action="">
 			<?php echo "<select class='form-control-1' name='search_by_ID' id='ID_list'>"; // list box select command
 				echo"<option style='color:#ccc' value=''>Select by ID</option>";
@@ -124,7 +124,7 @@ if (hesk_checkPermission('can_view_tickets',0))
 						echo "<option value='5'> ON HOLD </option>"; 
 				echo "</select>";
 				?>
-			<input name="submitbutton_tickets" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			<input name="submitbutton_tickets" type="submit" class="btn btn-default filter-ticket-btn" value="Search"/>
 		</form>
 	</div> <!--end div i filtrave -->	
 	<?php
@@ -155,9 +155,8 @@ if (hesk_checkPermission('can_view_tickets',0))
 	require(HESK_PATH . 'inc/print_tickets.inc.php');
 
 
-
     /* Print forms for listing and searching tickets */
-	require(HESK_PATH . 'inc/show_search_form.inc.php');
+	/*require(HESK_PATH . 'inc/show_search_form.inc.php');*/
 }
 else
 {

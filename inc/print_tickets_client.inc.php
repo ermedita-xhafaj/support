@@ -76,17 +76,26 @@ foreach ($hesk_settings['custom_fields'] as $k=>$v)
 
 $sql_final.= " FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE";
 
-					$result_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$_SESSION["id"]["id"]."' LIMIT 1" ); 
-					$row_client = mysqli_fetch_array($result_client);
-					$result_client = hesk_dbQuery('SELECT company_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row_client['contract_Id']."' LIMIT 1" ); 
+						$result_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$_SESSION["id"]["id"]."'" ); 
+						if($res_contractIds = mysqli_fetch_all($result_client)) {
+							foreach($res_contractIds as $res_contractId){
+								$contractId[] = $res_contractId[0];
+							}
+							$contractIds = implode($contractId,',');
+						
+							$result_client = hesk_dbQuery('SELECT company_id FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id` IN(".$contractIds.")" ); 
 					
-				if ($row_client = mysqli_fetch_array($result_client)) 
-				{
-					$result_company = hesk_dbQuery('SELECT id, company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE id='.$row_client['company_id']);
-					$company_result = mysqli_fetch_array($result_company);
+							if ($res_companyIds = mysqli_fetch_all($result_client)) {
+								foreach($res_companyIds as $res_companyId){
+									$companyId[] = $res_companyId[0];
+								}
+								$companyIds = implode($companyId,',');
 				
-					$sql_final .= " company_ticket_id= ".$company_result['id']." AND ";
-				}
+								$sql_final .= " company_ticket_id  IN(".$companyIds.") AND ";
+							}
+						} else {
+							$sql_final .= " company_ticket_id  IN(0) AND ";
+						}
 
 // This code will be used to count number of results
 $sql_count = "SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE ";

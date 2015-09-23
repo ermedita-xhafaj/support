@@ -92,6 +92,7 @@ $default_userdata = array(
 	'phonenumber' => '',	
 	'poz_detyres' => '',	
 	'user' => '',
+	'active' => 1,
 	'autoassign' => 'Y',
 	
 	// Clients (for test)
@@ -181,7 +182,7 @@ if ( $action = hesk_REQUEST('a') )
 		$_SESSION['edit_userdata'] = TRUE;
 		header('Location: ./manage_users.php');
 	}
-	elseif ($action == 'edit')       		{edit_user();}
+	elseif ($action == 'edit' || $action == 'editb')       		{edit_user();}
 	elseif ($action == 'editc')       		{edit_clients();}
 	elseif ( defined('HESK_DEMO') )  		{hesk_process_messages($hesklang['ddemo'], 'manage_users.php', 'NOTICE');}
 	elseif ($action == 'new')        		{new_user();}
@@ -216,13 +217,6 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 ?>
 
-<!--
-</td>
-</tr>-->
-
-<!-- start in this page end in line 513
-<tr>
-<td>-->
 
 <script language="Javascript" type="text/javascript"><!--
 function confirm_delete()
@@ -359,7 +353,12 @@ hesk_handle_messages();
 			}
 			else
 			{
-				$edit_code = '<a href="manage_users.php?a=edit&amp;id='.$myuser['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+				if ($myuser['isadmin']){
+					$edit_code = '<a class="" href="manage_users.php?a=edit&amp;id='.$myuser['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+				}
+				else{
+					$edit_code = '<a class="" href="manage_users.php?a=editb&amp;id='.$myuser['id'].'"><img src="../img/edit.png" width="16" height="16" alt="'.$hesklang['edit'].'" title="'.$hesklang['edit'].'" '.$style.' /></a>';
+				}
 			}
 
 			if ($myuser['isadmin'])
@@ -427,9 +426,6 @@ EOC;
 	</table>
 </div>
 
-<?php
-// testtest
-?>
 
 <div class="container manage-client-title">
 	<a data-toggle="collapse" data-parent="#accordion" href="#div-id-2" ><?php echo $hesklang['manage_clients']; ?></a>
@@ -616,7 +612,7 @@ var tabberOptions = {
 
 <script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-<form name="form1" method="post" action="manage_users.php">
+<form name="form1" method="post" action="manage_users.php" novalidate>
 	<?php hesk_profile_tab('userdata', false); ?>
 	<!-- Submit -->
 	<div class="container">
@@ -732,15 +728,6 @@ function edit_user()
 	require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	?>
 
-
-<!--	
-</td>
-</tr>-->
-	
-<!-- start in this page end somewhere..	
-<tr>
-<td>-->
-
 	<div class="container manage-users-title"><a href="manage_users.php" class="smaller"><?php echo '<b>' .$hesklang['manage_users'] .'</b>'; ?></a> &gt; <?php echo $hesklang['editing_user'].' '.$_SESSION['original_user']; ?></div>
 
 	<?php
@@ -780,7 +767,7 @@ function edit_user()
 
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-	<form name="form1" method="post" action="manage_users.php">
+	<form name="form1" method="post" action="manage_users.php" novalidate>
 	<?php hesk_profile_tab('userdata', false); ?>
 
 	<!-- Submit -->
@@ -840,15 +827,6 @@ function edit_clients(){
 	require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 	?>
 
-
-<!--	
-</td>
-</tr>-->
-	
-<!-- start in this page end somewhere..	
-<tr>
-<td>-->
-
 	<div class="container manage-users-title"><a href="manage_users.php" class="smaller"><?php echo '<b>' .$hesklang['manage_users'] .'</b>'; ?></a> &gt; <?php echo $hesklang['editing_user'].' '.$_SESSION['original_user']; ?></div>
 
 	<?php
@@ -888,7 +866,7 @@ function edit_clients(){
 
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-	<form name="form1" method="post" action="manage_users.php?a=update_client">
+	<form name="form1" method="post" action="manage_users.php?a=update_client" novalidate>
 	<?php hesk_profile_tab('userdata', false); ?>
 
 	<!-- Submit -->
@@ -1095,7 +1073,7 @@ function update_user()
 		$active = (isset($myuser['prof_active'])) ? $myuser['prof_active'] : "0";
 
     	/* Unassign tickets from categories that the user had access before but doesn't anymore */
-        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
+        //hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
     }
 
 	hesk_dbQuery(
@@ -1207,7 +1185,7 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 
     if ($myuser['isadmin']==0)
     {
-    	if (empty($_POST['categories']) || ! is_array($_POST['categories']) )
+    	/*if (empty($_POST['categories']) || ! is_array($_POST['categories']) )
         {
 			$hesk_error_buffer .= '<li>' . $hesklang['asign_one_cat'] . '</li>';
         }
@@ -1225,7 +1203,7 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 					$myuser['categories'][] = $tmp;
 				}
 			}
-        }
+        }*/
 
     	if (empty($_POST['features']) || ! is_array($_POST['features']) )
         {

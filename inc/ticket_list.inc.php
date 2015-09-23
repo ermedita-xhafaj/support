@@ -94,7 +94,7 @@ if ($total > 0)
 		$query .= '&amp;category='.$category;
 		$query .= '&amp;contract_ticket_id='.$contract;
 		$query .= '&amp;company_ticket_id='.$company;
-		$query .= '&amp;sort='.$sort;
+		$query .= '&amp;sort='.'id';
 		$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
 		$query .= '&amp;archive='.$archive[1];
@@ -115,7 +115,7 @@ if ($total > 0)
 		$query .= '&amp;contract_ticket_id='.$contract;
 		$query .= '&amp;company_ticket_id='.$company;
 		$query .= '&amp;dt='.urlencode($date_input);
-		$query .= '&amp;sort='.$sort;
+		$query .= '&amp;sort='.'id';
 		$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
 		$query .= '&amp;archive='.$archive[2];
@@ -160,7 +160,7 @@ if ($total > 0)
 		$query .= '&amp;s_ot='.$s_ot[1];
 		$query .= '&amp;s_un='.$s_un[1];
 		$query .= '&amp;page=1';
-		#$query .= '&amp;sort=';
+		$query .= '&amp;sort='.'id';
 
 		$query .= '&amp;cot='.$cot;
 		$query .= '&amp;g='.$group;
@@ -181,7 +181,7 @@ if ($total > 0)
 		$query .= '&amp;s_ot='.$s_ot[2];
 		$query .= '&amp;s_un='.$s_un[2];
 		$query .= '&amp;page=1';
-		#$query .= '&amp;sort=';
+		$query .= '&amp;sort='.'id';
 	}
 
     $query .= '&amp;asc=';
@@ -522,7 +522,7 @@ if ($total > 0)
 <div class="container form-inline tagged-ticket-list">
     <div class="form-group">
 	    <?php
-	    if (hesk_checkPermission('can_add_archive',0))
+	    /*if (hesk_checkPermission('can_add_archive',0))
 	    {
 		    ?>
 			<img src="../img/tag.png" width="16" height="16" alt="<?php echo $hesklang['archived']; ?>" title="<?php echo $hesklang['archived']; ?>"  border="0" /> <?php echo $hesklang['archived2']; ?><br />
@@ -538,9 +538,8 @@ if ($total > 0)
 		    ?>
 			<span class="assignedother">*</span> <?php echo $hesklang['taso2']; ?><br />
 		    <?php
-	    }
+	    }*/
 	    ?>
-        &nbsp;
     </div>
     <div class="form-inline set-priorityTicket">
 		<select class="form-control" name="a">
@@ -594,7 +593,7 @@ else
     }
     else
     {
-        echo '<p>&nbsp;<br />&nbsp;<b><i>'.$hesklang['no_tickets_open'].'</i></b><br />&nbsp;</p>';
+        echo '<div class="container">&nbsp;<br />&nbsp;<b><i>'.$hesklang['no_tickets_open'].'</i></b><br />&nbsp;</div>';
     }
 }
 
@@ -609,10 +608,15 @@ function hesk_print_list_head()
 	<?php
 	foreach ($hesk_settings['ticket_list'] as $field)
 	{
-		echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';
+		//echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';			<!-- komentuar per te mos bere sort sipas te gjitha fushave por vetem sipas id si nje line me posht-->
+	
+		echo '<th class="admin_white"><a href="' . $href . '?' . $query .  '&amp;sort=' . 'id' . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';
 	}
 	?>
-	<th class="admin_white"><a href="<?php echo $href . '?' . $query . $sort_possible['priority'] . '&amp;sort='; ?>priority"><img src="../img/sort_priority_<?php echo (($sort_possible['priority']) ? 'asc' : 'desc'); ?>.png" width="16" height="16" alt="<?php echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" title="<?php echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" border="0" /></a></th>
+	
+	<!--<th class="admin_white"><a href="<?php //echo $href . '?' . $query . $sort_possible['priority'] . '&amp;sort='; ?>priority"><img src="../img/sort_priority_<?php //echo (($sort_possible['priority']) ? 'asc' : 'desc'); ?>.png" width="16" height="16" alt="<?php //echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" title="<?php //echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" border="0" /></a></th> -->		<!-- komentuar per te mos bere sort by priority-->
+	
+	<th class="admin_white"><?php echo $hesklang['priority']; ?></th>
 	</tr>
 	<?php
 } // END hesk_print_list_head()
