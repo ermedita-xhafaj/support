@@ -250,9 +250,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				$options .= '>'.$mycat['name'].'</option>';
 				if($mycat['active']==1) $active="checked"; else $active="";
 				echo '
-				<tr class="'.$mycat['id'].'" >
+				<tr class="category-row-identification' .$mycat['id'].'" >
 				<td style="display: none" class="'.$color.'">'.$mycat['id'].'</td>
-				<td class="'.$color.'">'.$mycat['categ_impro_id'].'</td>
+				<td class="category-code-identification'.$color.'">'.$mycat['categ_impro_id'].'</td>
 				<td class="'.$color.'">'.$mycat['name'].'</td>
 				<td style="display: none" class="'.$color.'" width="1" style="white-space: nowrap;">'.$priorities[$mycat['priority']]['formatted'].'&nbsp;</td>
 				<td class="'.$color.'" style="text-align:center"><a href="show_tickets.php?category='.$mycat['id'].'&amp;s_all=1&amp;s_my=1&amp;s_ot=1&amp;s_un=1" alt="'.$hesklang['list_tickets_cat'].'" title="'.$hesklang['list_tickets_cat'].'">'.$all.'</a></td>
@@ -331,7 +331,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="container">
 					<input type="hidden" name="a" value="new" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['create_cat']; ?>" class="btn btn-default create-cat-btn" />
+					<input type="submit" value="<?php echo $hesklang['create_cat']; ?>"  id="category-button" class="btn btn-default create-cat-btn" />
 				</div>
 			</form>	
 		<!-- END CONTENT -->
@@ -497,7 +497,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		
 		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
 		<div class="table-responsive container">
-			<table class="table table-bordered manage-projects-table">
+			<table class="table table-bordered manage-department-table">
 				<tr>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_code']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['dep_name']; ?></i></b></th>
@@ -513,15 +513,16 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					$valuedep_department_name = hesk_input( hesk_POST('department_name') );
 					$valuedep_department_manager = hesk_input( hesk_POST('department_manager'));
 					$valuedep_note = hesk_input( hesk_POST('note'));
-					$valuedep_department_active = hesk_input( hesk_POST('dep_active'));
+					$departament_active = hesk_input( hesk_POST('dep_active'));
 					$valuedep_department_id = hesk_input( hesk_POST('dep_id'));
-
+					if(empty($departament_active)) { $departament_active = "0"; }
+					
 					$query = hesk_dbQuery(
 						"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."departments` SET
 						`department_name`='".hesk_dbEscape($valuedep_department_name)."',
 						`department_manager`='".hesk_dbEscape($valuedep_department_manager)."',
 						`note`='".hesk_dbEscape($valuedep_note)."',
-						`active`='".hesk_dbEscape($valuedep_department_active)."'
+						`active`='".hesk_dbEscape($departament_active)."'
 						WHERE `id`='".intval($valuedep_department_id)."' LIMIT 1"
 						);	
 					}
@@ -550,8 +551,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove_dep&amp;id='.$row_dep['id'] .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 						}
 					if($row_dep['active']==1) $active="checked"; else $active="";
-						echo '<tr>
-							<td>' .$row_dep['department_code'] .'</td>
+						echo '<tr class="department-row-identification">
+							<td class="department-code-identification">' .$row_dep['department_code'] .'</td>
 							<td>' .$row_dep['department_name'] .'</td>
 							<td>' .$row_dep['department_manager'] .'</td>
 							<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;">' .$row_dep['note'] .'</td>
@@ -572,7 +573,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_code'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="number" id="" name="department_code" size="40" maxlength="50" value=""/>
+						<input class="form-control" required="required" title="Required field" type="number" id="form-department-code" name="department_code" size="40" maxlength="50" value=""/>
 					</div>
 					
 					<div class="form-inline" id="project_row">
@@ -602,7 +603,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="container">
 					<input type="hidden" name="action" value="save" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" id="department-button" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
@@ -633,11 +634,11 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
  
 	?>
 		
-		<div class="container create-project-title">
+		<div class="container create-project-title<?php if(!isset($_GET['id'])) echo " hidden"; ?>">
 			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-department" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?> ><?php echo $hesklang['edit_department']; ?></a>
 		</div>
-		<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?>" id="div-id-edit-department" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
-			<form method="POST" action="manage_categories.php?a=edit#tab_dep-info" name="form_edit_dep">
+		<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?><?php if(!isset($_GET['id'])) echo " hidden"; ?>" id="div-id-edit-department" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
+			<form method="POST" action="manage_categories.php#tab_dep-info" name="form_edit_dep">
 				<div class="">
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['dep_name'] ?>: <font class="important">*</font></label>
@@ -761,7 +762,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						`city`, 
 						`zip_code`, 
 						`telephone`,
-						`note`
+						`note`,
 						`active`
 						) VALUES (
 						'".hesk_dbEscape($valuecomp_company_name)."',
@@ -803,7 +804,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-company-table">
 				<tr>
-					<th style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
+					
 					<th style="text-align:left"><b><i><?php echo $hesklang['company_name']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['email']; ?></i></b></th>
 					<th style="text-align:left"><b><i><?php echo $hesklang['web_page'] ?></i></b></th>
@@ -874,7 +875,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						}
 						
 						echo '<tr>
-							<td>' .$row_comp['id'] .'</td>
+							
 							<td>' .$row_comp['company_name'] .'</td>
 							<td>' .$row_comp['email'] .'</td>
 							<td>' .$row_comp['web_page'] .'</td>
@@ -900,7 +901,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['company_name'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="company_name" size="40" maxlength="50" value="" />
+						<input class="form-control" required="required" title="Required field" type="text" id="company-row-input" name="company_name" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
@@ -956,7 +957,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<div class="container">
 					<input type="hidden" name="action" value="save" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['save_changes'] ?>" id="company-button" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
@@ -995,12 +996,12 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 	<div class="container update-company-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-company" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?> ><?php echo $hesklang['edit_company']; ?></a>
 	</div>
-	<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?>" id="div-id-edit-company" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
-			<form method="POST" action="manage_categories.php?a=edit#tab_comp-info" name="form_edit_comp">
+	<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?><?php if(!isset($_GET['id'])) echo " hidden"; ?>" id="div-id-edit-company" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
+			<form method="POST" action="manage_categories.php#tab_comp-info" name="form_edit_comp">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['company_name'] ?>: <font class="important">*</font></label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="company_name" size="40" maxlength="50" value="<?php echo $valuecomp_company_name ?>" />
+						<input class="form-control" required="required" title="Required field" type="text" id="edit-company-row-input" name="company_name" size="40" maxlength="50" value="<?php echo $valuecomp_company_name ?>" readonly>
 					</div>
 					
 					<div class="form-inline" id="project_row">
@@ -1057,7 +1058,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<input type="hidden" name="action" value="update" />
 					<input type="hidden" name="comp_id" value="<?php echo $_GET['id'];?>" />
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" class="btn btn-default contract-submit-btn"/>
+					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" id="edit-company-button" class="btn btn-default contract-submit-btn"/>
 				</div>
 			</form>
 		</div>
@@ -1273,7 +1274,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>:</label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_manager" size="40" maxlength="50" value="" />
+						<input class="form-control" type="text" id="" name="project_manager" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
@@ -1360,8 +1361,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		<div class="container create-project-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-project" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>><?php echo $hesklang['edit_project']; ?></a>
 		</div>
-		<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?>" id="div-id-edit-project" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
-			<form method="post" action="manage_categories.php?a=edit#tab_proj-info" name="form_edit_project">
+		<div class="create-projects collapse <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "in"; ?><?php if(!isset($_GET['id'])) echo " hidden"; ?>" id="div-id-edit-project" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?>>
+			<form method="post" action="manage_categories.php#tab_proj-info" name="form_edit_project">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_name'] ?>: <font class="important">*</font></label>
@@ -1370,19 +1371,25 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_manager'] ?>:</label>
-						<input class="form-control" required="required" title="Required field" type="text" id="" name="project_manager" size="40" maxlength="50" value="<?php echo $valueproj_project_manager ?>" />
+						<input class="form-control" type="text" id="" name="project_manager" size="40" maxlength="50" value="<?php echo $valueproj_project_manager ?>" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
-							<option></option>
 							<?php
-								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1');
+								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`');
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
-									if($valueproj_company_id==$row_comp['id']) echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
-									else echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+									if($row_comp['active'] == 1)
+									{
+										if($valueproj_company_id==$row_comp['id']) echo '<option value="' .$row_comp['id'] .'" selected="selected">' .$row_comp['company_name'] .'</option>';
+										else echo '<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
+									}
+									else 
+									{
+										if($valueproj_company_id==$row_comp['id']) echo '<option selected="selected" disabled>' .$row_comp['company_name'] .'</option>';
+									}
 								}
 							?>		
 						</select>
@@ -1391,13 +1398,19 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['department_name']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="department_id" style="width: 336px;">
-							<option></option>
 							<?php
-								$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments` WHERE active=1');
+								$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`');
 								while ($row_dep = mysqli_fetch_array($res_dep)) 
 								{
-									if($valueproj_department_id==$row_dep['id']) echo '<option value="' .$row_dep['id'] .'" selected="selected">' .$row_dep['department_name'] .'</option>';
-									else echo '<option value="' .$row_dep['id'] .'">' .$row_dep['department_name'] .'</option>';
+									if($row_dep['active'] == 1)
+									{
+										if($valueproj_department_id==$row_dep['id']) echo '<option value="' .$row_dep['id'] .'" selected="selected">' .$row_dep['department_name'] .'</option>';
+										else echo '<option value="' .$row_dep['id'] .'">' .$row_dep['department_name'] .'</option>';
+									}
+									else
+									{
+										if($valueproj_department_id==$row_dep['id']) echo '<option selected="selected" disabled>' .$row_dep['department_name'] .'</option>';
+									}
 								}
 							?>		
 						</select>
@@ -1415,7 +1428,6 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						<input class="form-control" type="checkbox" name="project_active" value="1" <?php if($valueproj_active=='1') echo "checked"; ?>/>
 					</div>
 				</div>
-				</div>
 				
 				<!-- Submit -->
 				<div class="container">
@@ -1424,8 +1436,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
 					<input type="submit" value="<?php echo $hesklang['update_profile'] ?>" class="btn btn-default contract-submit-btn"/>
 				</div>
-			</form>
-		</div>		
+			</div>
+		</form>
+	</div>		<!-- end manage projects-->
 	</div>
 
 </div> <!-- manage-config-tab -->
@@ -1560,7 +1573,7 @@ function new_cat()
 	$cat_impro_id = hesk_input( hesk_POST('categ-impro-id') , $hesklang['enter_categ_impro_id'], 'manage_categories.php');
 	
 	/* Do we already have a categ_impro_id with this id? */
-	$res = hesk_dbQuery("SELECT `categ_impro_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `categ_impro_id` ASC LIKE '".hesk_dbEscape( hesk_dbLike($cat_impro_id) )."' LIMIT 1");
+	$res = hesk_dbQuery("SELECT `categ_impro_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `categ_impro_id` LIKE '".hesk_dbEscape( hesk_dbLike($cat_impro_id) )."' ORDER BY categ_impro_id LIMIT 1");
     if (hesk_dbNumRows($res) != 0)
     {
 		$_SESSION['categ_impro_id'] = $cat_impro_id;
