@@ -706,11 +706,11 @@ function check_contract_expiry()
 
 		while ($con = mysqli_fetch_array($contracts)) {
 			if((date("Y-m-d") >= $con[1]) && (date("Y-m-d") <= $con[2])){
-				echo "yes";
+				
 				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='1', `lastchange`=NOW() WHERE `id` = ".$con[0] );
 			}
 			else{
-				echo "no";
+				
 				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='0', `lastchange`=NOW() WHERE `id` = ".$con[0] );
 			}
 	}

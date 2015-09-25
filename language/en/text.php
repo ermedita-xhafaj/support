@@ -73,6 +73,8 @@ $hesklang['user_not_found']='User not found';
 $hesklang['enter_real_name']='Please enter user real name';
 $hesklang['enter_valid_email']='Please enter a valid email address';
 $hesklang['enter_username']='Please enter username (login)';
+$hesklang['enter_company']='Please select company!';
+$hesklang['enter_contract']='Please select at least one contract!';
 $hesklang['asign_one_cat']='Please assign user to at least one category!';
 $hesklang['confirm_user_pass']='Please confirm password';
 $hesklang['passwords_not_same']='The two passwords entered are not the same!';
@@ -1446,7 +1448,9 @@ $hesklang['comp_req']='Selected company cannot be deleted because it is linked w
 $hesklang['con_req']='Selected SLA cannot be deleted because it is linked with a client!';
 $hesklang['company_name']='Company Name';
 $hesklang['proj_req']='Selected project cannot be deleted because it is linked with a SLA!';
-
+$hesklang['desc_sla']='Description Of SLA';
+$hesklang['reply_time']='Reply Time';
+$hesklang['resolved_time']='Resolved Time';
 
 
 

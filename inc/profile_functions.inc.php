@@ -36,7 +36,7 @@
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 
-function hesk_profile_tab($session_array='new',$is_profile_page=true)
+function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
 {
 	global $hesk_settings, $hesklang, $can_reply_tickets, $can_view_tickets, $can_view_unassigned, $default_userdata;
 	?>
@@ -50,12 +50,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 
 					<?php
 					/* Only administrators can create new administrator accounts */
-					if ($_SESSION['isadmin'])
+					if ($_SESSION['isadmin'] )
 					{
 						?>
-						<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" <?php if ($_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
-						<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0"  <?php if (!$_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
-						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" <?php if(isset($_GET['a']) && $_GET['a']=="editc") echo "checked"; ?> /> <?php echo $hesklang['aclient'] ?></label>
+						<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" <?php if (isset($_GET['a']) && $_GET['a']=="edit") echo "checked" ; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
+						<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0"  <?php if (isset($_GET['a']) && $_GET['a']=="editb") echo "checked" ; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
+						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" <?php if(isset($_GET['a']) && $_GET['a']=="editc") echo "checked" ; ?> /> <?php echo $hesklang['aclient'] ?></label>
 						<?php
 					}
 					else
@@ -74,9 +74,9 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<!--<li id="permissions-info"><a href="#permissions" aria-controls="permissions" role="tab" data-toggle="tab"><?php //echo $hesklang['permissions']; ?></a></li>-->
 			<?php } ?>
 			<li id="signature-info"><a href="#signature" aria-controls="signature" role="tab" data-toggle="tab"><?php echo $hesklang['sig']; ?></a></li>
-			<li class="hidden" id="project_users-info"><a href="#project_users" aria-controls="project_users" role="tab" data-toggle="tab"><?php echo $hesklang['project']; ?></a></li>
-			<li class="hidden" id="preferences-info"><a href="#preferences" aria-controls="preferences" role="tab" data-toggle="tab"><?php echo $hesklang['pref']; ?></a></li>
-			<li class="hidden" id="notifications-info"><a href="#notifications" aria-controls="notifications" role="tab" data-toggle="tab"><?php echo $hesklang['notn']; ?></a></li>
+			<li class="<?php if(!isset($_GET['a'])) echo "hidden"; ?>" id="project_users-info"><a href="#project_users" aria-controls="project_users" role="tab" data-toggle="tab"><?php echo $hesklang['project']; ?></a></li>
+			<li class="<?php if(!isset($_GET['a']) || ($_GET['a']=="editc") ) echo "hidden"; ?>" id="preferences-info"><a href="#preferences" aria-controls="preferences" role="tab" data-toggle="tab"><?php echo $hesklang['pref']; ?></a></li>
+			<li class="<?php if(!isset($_GET['a']) || ($_GET['a']=="editc") ) echo "hidden"; ?>" id="notifications-info"><a href="#notifications" aria-controls="notifications" role="tab" data-toggle="tab"><?php echo $hesklang['notn']; ?></a></li>
 		</ul>
 			<!-- PROFILE INFO -->
 		<div role="tabpanel" class="tab-pane active" id="p-info">
@@ -86,12 +86,12 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			<div class="profile-information">
 			<div class="form-inline" id="profile-information-row">
 			<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-			<input class="form-control" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if(isset($_SESSION['new']['name'])) {echo $_SESSION['new']['name'];} unset($_SESSION['new']['name']); ?>"/>
+			<input class="form-control" required="required" title="Required field" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if(isset($_SESSION[$session_array]['name'])) {echo $_SESSION[$session_array]['name'];} ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['email'])) {echo $_SESSION['new']['email']; } unset($_SESSION['new']['email']); ?>"/>
+				<input class="form-control" required="required" title="Required field" type="email" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if(isset($_SESSION[$session_array]['email'])) {echo $_SESSION[$session_array]['email']; } ?>"/>
 			</div>
 			
 			<?php
@@ -100,37 +100,39 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION['new']['user'])) {echo $_SESSION['new']['user']; } unset($_SESSION['new']['user']);?>" />
+				<input class="form-control" required="required" title="Required field" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION[$session_array]['user'])) {echo $_SESSION[$session_array]['user']; } ?>" />
 			</div>
 			<?php
 			}else{?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION['new']['user'])) {echo $_SESSION['new']['user']; } unset($_SESSION['new']['user']);?>" readonly>
+				<input class="form-control" required="required" title="Required field" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if(isset($_SESSION[$session_array]['user'])) {echo $_SESSION[$session_array]['user']; } ?>" readonly>
 			</div>
 			<?php }
 			?>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo 'Address'; ?>:</label>
-				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['address'])) {echo $_SESSION['new']['address']; } unset($_SESSION['new']['address']);?>"/>
+				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION[$session_array]['address'])) {echo $_SESSION[$session_array]['address']; } ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo 'Phone Number'; ?>:</label>
-				<input class="form-control" type="number" min="0" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['phonenumber'])) {echo $_SESSION['new']['phonenumber']; } unset($_SESSION['new']['phonenumber']);?>"/>
+				<input class="form-control" type="number" min="0" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION[$session_array]['phonenumber'])) {echo $_SESSION[$session_array]['phonenumber']; } ?>"/>
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo 'Pozicioni Detyres'; ?></label>
-				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['new']['poz_detyres'])) {echo $_SESSION['new']['poz_detyres']; } unset($_SESSION['new']['poz_detyres']);?>"/>
+				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION[$session_array]['poz_detyres'])) {echo $_SESSION[$session_array]['poz_detyres']; } ?>"/>
 			</div>
 			
 			<!--shtohim fushen "Active" kur celim nje departament -->
 			<div class="clearfix"></div>
 			<div class="form-inline project-row1" id="profile-information-row">
 				<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
-				<input class="form-control" type="checkbox" name="prof_active" value="1" <?php if((isset($_SESSION['new']['active']) && $_SESSION['new']['active']=="1") || (!isset($_GET['a']))) {echo "checked"; } ?> />
+
+				<input class="form-control" type="checkbox" name="prof_active" value="1" <?php if(isset($_SESSION[$session_array]['active']) && $_SESSION[$session_array]['active']=="1") {echo "checked"; } ?> />
+
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
@@ -152,9 +154,9 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				</label>
 			</div>
 			
-			<div class="form-inline hidden" id="show-hide-kompani">
+			<div class="form-inline <?php if(!isset($_GET['a']) || $_GET['a'] !=="editc") echo "hidden"; ?>" id="show-hide-kompani">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
-						<select class="form-control" required="required" title="Required field" id="select_company_manage_users" name="company_id" style="width: 336px;">
+						<select class="form-control" id="select_company_manage_users" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
 								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1 ');
@@ -176,8 +178,8 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 				
 			<br/>
 			
-			<div class="form-inline hidden" id="show-hide-kontrata">
-				<label class="col-sm-2 control-label" for="select-kontrata"><?php echo $hesklang['contract']; ?></label>
+			<div class="form-inline <?php if(!isset($_GET['a']) || $_GET['a'] !=="editc") echo "hidden"; ?>" id="show-hide-kontrata">
+				<label class="col-sm-2 control-label" for="select-kontrata"><?php echo $hesklang['contract']; ?>:<font class="important">*</font></label>
 				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
 					<option></option>
 					<?php
@@ -192,7 +194,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 			</div>
 			
 			
-<div id="options" class="hidden">
+<div id="options" class="<?php if(!isset($_GET['a']) || $_GET['a'] !=="editb") echo "hidden"; ?>">
 
 			<div class="permissions-category-features">
 				<!--<div class="form-inline">
@@ -248,41 +250,6 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 
 			</div>
 			<!-- PROFILE INFO -->
-
-			<?php
-			if ( ! $is_profile_page)
-			{
-			?>
-			<!-- PERMISSIONS -->
-		<div role="tabpanel" class="tab-pane hidden" id="permissions">
-			<div class="permissions hidden">
-				<div class="form-inline">
-					<label class="col-sm-2 control-label"><?php echo $hesklang['atype']; ?>:</label>
-					<div class="form-group">
-
-					<?php
-					/* Only administrators can create new administrator accounts */
-					if ($_SESSION['isadmin'])
-					{
-						?>
-						<label><input type="radio" name="isadmin" value="1" onchange="Javascript:hesk_toggleLayerDisplay('options')" <?php if ($_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
-						<label><input type="radio" name="isadmin" value="0" onchange="Javascript:hesk_toggleLayerDisplay('options')" <?php if (!$_SESSION[$session_array]['isadmin']) echo 'checked="checked"'; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label>
-						<?php
-					}
-					else
-					{
-						echo '<b>'.$hesklang['astaff'].'</b> '.$hesklang['staff_can'];
-					}
-					?>
-
-					</div>
-				</div>
-			</div><!-- end permissions -->
-		</div>
-			<!-- PERMISSIONS -->
-			<?php
-			}
-			?>
 
 			<!-- SIGNATURE -->
 		<div role="tabpanel" class="tab-pane" id="signature">		
@@ -449,4 +416,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 	</script>
 
 	<?php
+	if(isset($_SESSION[$session_array])){
+		unset($_SESSION[$session_array]);
+	}
 } // END hesk_profile_tab()

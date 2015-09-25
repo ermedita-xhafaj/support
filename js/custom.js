@@ -210,7 +210,7 @@ $(document).ready(function() {
 		var exist = false;
 		$(".manage-projects-table tr.project-row-identification td.project-code-identification").each(function(){
 			if($("#form-project-code").val()==$(this).html()){
-				alert("Vendosni nje kod te ndryshem per projektin");
+				alert('Set another code for project!\n\nVendosni nje kod te ndryshem per projektin!');
 				exist = true;
 			}
 		});
@@ -227,7 +227,7 @@ $(document).ready(function() {
 		var exist = false;
 		$(".manage-department-table tr.department-row-identification td.department-code-identification").each(function(){
 			if($("#form-department-code").val()==$(this).html()){
-				alert("Vendosni nje kod te ndryshem per projektin");
+				alert('Set another code for department!\n\nVendosni nje kod te ndryshem per departamentin!');
 				exist = true;
 			}
 		});
@@ -239,4 +239,20 @@ $(document).ready(function() {
 	});
 });
 
+$(document).ready(function() {
+	$("#company-button").click(function(){
+		var exist = false;
+		$(".manage-company-table tr.company-row-identification td.company-code-identification").each(function(){
+			if($("#company-row-input").val().toLowerCase()==$(this).html().toLowerCase()){
+				alert('You already have a company with that NAME! Set another NAME for company!\n\nKompania me kete EMER ekziston. Vendosni nje EMER tjeter per te vazhduar!');
+				exist = true;
+			}
+		});
+		if(exist){
+			return false;
+		} else{
+			return true;
+		}
+	});	
+});
  

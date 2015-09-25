@@ -39,7 +39,9 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title><?php echo (isset($hesk_settings['tmp_title']) ? $hesk_settings['tmp_title'] : $hesk_settings['hesk_title']); ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo $hesklang['ENCODING']; ?>" />
+	<link href="<?php echo HESK_PATH; ?>bootstrap/css/bootstrap-responsive.css" type="text/css" rel="stylesheet" />
 	<link href="<?php echo HESK_PATH; ?>bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
 	<link href="<?php echo HESK_PATH; ?>hesk_style.css" type="text/css" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
