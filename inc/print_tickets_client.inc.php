@@ -106,8 +106,8 @@ $sql = "";
 //FILTRAT//////////////////////////////////////////////////////////////////////////////////////
 
 if (isset($_POST['submitbutton_tickets'])){
-			if (!empty($_POST['search_by_ID'])) {
-				$sql .= " `id`=".$_POST['search_by_ID'];
+			if (!empty($_POST['search_by_ID_ticket'])) {
+				$sql .= " `id`=".$_POST['search_by_ID_ticket'];
 			}
 			elseif (!empty($_POST['search_by_description_ticket'])) {
 				$sql .= " `subject`='".$_POST['search_by_description_ticket']."'";
@@ -120,6 +120,9 @@ if (isset($_POST['submitbutton_tickets'])){
 			}
 			elseif (!empty($_POST['search_by_client_open_ticket'])) {
 				$sql .= " `name`='".$_POST['search_by_client_open_ticket']."'";
+			}
+			else{
+				$sql .= "'1'='1'";
 			}
 		}
 

@@ -82,13 +82,9 @@ $sql_count = "SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."
 $sql = "";
 
 //FILTRAT//////////////////////////////////////////////////////////////////////////////////////
-
-//var_dump($_POST);
-//exit();
-
 if (isset($_POST['submitbutton_tickets'])){
-			if (!empty($_POST['search_by_ID'])) {
-				$sql .= " `id`=".$_POST['search_by_ID'];
+			if (!empty($_POST['search_by_ID_ticket'])) {
+				$sql .= " `id`=".$_POST['search_by_ID_ticket'];
 			}
 			elseif (!empty($_POST['search_by_description_ticket'])) {
 				$sql .= " `subject`='".$_POST['search_by_description_ticket']."'";
@@ -101,10 +97,10 @@ if (isset($_POST['submitbutton_tickets'])){
 			}
 			elseif (!empty($_POST['search_by_client_open_ticket'])) {
 				$sql .= " `name`='".$_POST['search_by_client_open_ticket']."'";
+			} else{
+				$sql .= "'1'='1'";
 			}
 		}
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -240,12 +236,18 @@ else
 	// A custom selection of priorities
 	$sql .= " AND `priority` IN ('" . implode("','", array_keys($priority) ) . "') ";
 }
-
-//if( empty($_POST['search_by_ticket_category'])){
+/*unset($_POST['submitbutton_tickets']);
+var_dump($_POST);
+if(empty($_POST)){*/
 // That's all the SQL we need for count
 $sql_count .= $sql;
 $sql = $sql_final . $sql;
-//}
+/*}
+else{
+	echo "No search results!";
+	echo "<br/>".$sql;
+	//exit();
+}*/
 // Prepare variables used in search and forms
 require(HESK_PATH . 'inc/prepare_ticket_search.inc.php');
 
