@@ -80,23 +80,22 @@ if (hesk_checkPermission('can_view_tickets',0))
 <?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
-	<div class="col-sm-8 col-sm-offset-2 filter-ticket-admin"> <!-- Krijojme nje div per filtrat -->
+	<div class="col-sm-8 col-sm-offset-2 filter-ticket-admin" id="filter-ticket-admin"> <!-- Krijojme nje div per filtrat -->
 		<form method="post" action="">
-			<?php echo "<select class='form-control-1' name='search_by_ID' id='ID_list'>"; // list box select command
-				echo"<option style='color:#ccc' value=''>Select by ID</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql))
-					{
-						echo "<option value=$tmp[id]> $tmp[id] </option>"; 
-					}
-						echo "</select>";
-				?>
+			<datalist id="ticket_id_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql)){
+					echo '<option value='.$tmp["id"].'>';
+				}
+					?>
+				</datalist>
+				<input placeholder="Search by ID" type="text" list="ticket_id_list" name="search_by_ID_ticket" <?php if(isset($_POST["search_by_ID_ticket"])) echo "value='".$_POST["search_by_ID_ticket"]."'" ?> class="form-control-1" />
 				<datalist id="ticket_desc_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_description)){
 					echo '<option value='.$tmp["subject"].'>';
 				}
 					?>
 				</datalist>
-				<input placeholder="Select by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" class="form-control-1" />
+				<input placeholder="Select by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" <?php if(isset($_POST["search_by_description_ticket"])) echo "value='".$_POST["search_by_description_ticket"]."'" ?>  class="form-control-1" />
 				
 				<datalist id="ticket_klient_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_client)){
@@ -104,27 +103,32 @@ if (hesk_checkPermission('can_view_tickets',0))
 				}
 					?>
 				</datalist>
-				<input placeholder="Select by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" class="form-control-1" />
+				<input placeholder="Select by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" <?php if(isset($_POST["search_by_client_open_ticket"])) echo "value='".$_POST["search_by_client_open_ticket"]."'" ?> class="form-control-1" />
 
 			<?php echo "<select class='form-control-1' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
 				echo"<option value=''>Select category</option>";
 					while ($tmp = hesk_dbFetchAssoc($sql_category))
 					{
-						echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+						if(isset($_POST["search_by_ticket_category"])&& $_POST["search_by_ticket_category"]==$tmp['id']){
+							echo "<option selected=selected value=$tmp[id]> $tmp[name] </option>"; 
+						} else {
+							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
+						}
 					}
 						echo "</select>";
 				?>
 			<?php echo "<select class='form-control-1' name='search_by_ticket_status' id='ticket_status_list'>"; // list box select command
 				echo"<option value=''>Select status</option>";
-						echo "<option value='0'> NEW </option>"; 
-						echo "<option value='1'> WAITING REPLY </option>"; 
-						echo "<option value='2'> REPLIED </option>"; 
-						echo "<option value='3'> RESOLVED </option>"; 
-						echo "<option value='4'> IN PROGRESS </option>"; 
-						echo "<option value='5'> ON HOLD </option>"; 
+						echo "<option value='0'"; if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='0') echo "selected=selected"; echo "> NEW </option>"; 
+						echo "<option value='1'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='1') echo "selected=selected"; echo "> WAITING REPLY </option>"; 
+						echo "<option value='2'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='2') echo "selected=selected"; echo "> REPLIED</option>"; 
+						echo "<option value='3'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='3') echo "selected=selected"; echo "> RESOLVED</option>"; 
+						echo "<option value='4'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='4') echo "selected=selected"; echo "> IN PROGRESS</option>"; 
+						echo "<option value='5'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='5') echo "selected=selected"; echo "> ON HOLD</option>";  
 				echo "</select>";
 				?>
 			<input name="submitbutton_tickets" type="submit" class="btn btn-default filter-ticket-btn" value="Search"/>
+			<button name="clearbutton_tickets" onclick="deleteticket_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 		</form>
 	</div> <!--end div i filtrave -->	
 	<?php

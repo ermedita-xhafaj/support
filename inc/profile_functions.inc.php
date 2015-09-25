@@ -130,7 +130,9 @@ function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
 			<div class="clearfix"></div>
 			<div class="form-inline project-row1" id="profile-information-row">
 				<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+
 				<input class="form-control" type="checkbox" name="prof_active" value="1" <?php if(isset($_SESSION[$session_array]['active']) && $_SESSION[$session_array]['active']=="1") {echo "checked"; } ?> />
+
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">

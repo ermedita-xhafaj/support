@@ -696,7 +696,25 @@ function hesk_limitBfAttempts($showError=1)
 
 } // END hesk_limitAttempts()
 
+//Ermedita - kontroll per skadencen e kontratave dhe update i fushes "active" ne rast skadencen
+function check_contract_expiry()
+{
+	global $hesk_settings, $hesklang;
 
+	$contracts = hesk_dbQuery("SELECT `id`, `starting_date`, `ending_date` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`");
+	//$contracts = mysqli_fetch_array($contracts);
+
+		while ($con = mysqli_fetch_array($contracts)) {
+			if((date("Y-m-d") >= $con[1]) && (date("Y-m-d") <= $con[2])){
+				
+				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='1', `lastchange`=NOW() WHERE `id` = ".$con[0] );
+			}
+			else{
+				
+				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='0', `lastchange`=NOW() WHERE `id` = ".$con[0] );
+			}
+	}
+}
 function hesk_getCategoryName($id)
 {
 	global $hesk_settings, $hesklang;

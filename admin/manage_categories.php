@@ -91,7 +91,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 <!-- start in this page end somewhere...
 <tr>
 <td>-->
-
+<?php hesk_handle_messages(); ?>
 <!--MANAGE CATEGORIES-->
 <div class="container tab-content manage-config-tab">
 	<ul id="tabs" class="nav nav-tabs manage-config" data-tabs="tabs">
@@ -115,30 +115,34 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 
 	<?php
 	/* This will handle error, success and notice messages */
-	hesk_handle_messages();
+	//if(!strpos($_SERVER["PHP_SELF"], "#") || substr($_SERVER["PHP_SELF"], ))
+		
+	
+//echo $url;
 	?>
 
 
 	<div class="container manage-categories-title"><?php echo $hesklang['categ_pri']; ?></div>
 
 	<?php $sql = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
-	<div style="float:right; padding:5px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+	<div style="float:right; padding:5px 17px 20px;" id="filter-categories"> <!-- Krijojme nje div per filtrat -->
 		<form method="post">
-			<?php echo "<select class='form-control-1' name='search_by_cat_name' id='cat_name_list'>"; // list box select command
-				echo"<option value=''>Select category name</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql))
-					{
-						echo "<option value=$tmp[id]> $tmp[name] </option>"; 
-					}
-						echo "</select>";
-				?>
+			<datalist id="cat_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
+					<option value="<?php echo $tmp["name"]; ?>" >
+				<?php }
+					?>
+				</datalist>
+			<input placeholder="Search by category" type="text" list="cat_name_list" name="search_by_cat_name" <?php if(isset($_POST["search_by_cat_name"])) echo "value='".$_POST["search_by_cat_name"]."'" ?> class="form-control-1" />
 			<select id="cat_status" name="search_by_cat_status" class="form-control-1">
 				<option value="">Select status</option>
-				<option value="1">Active</option>
-				<option value="0">Inactive</option>
+				<option value="1" <?php if(isset($_POST["search_by_cat_status"])&& $_POST["search_by_cat_status"]=='1') echo "selected=selected"; ?> >Active</option>
+				<option value="0"<?php if(isset($_POST["search_by_cat_status"])&& $_POST["search_by_cat_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
 			</select>
 			<input name="submitbutton" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			<button name="clearbutton_companies" onclick="deletecateg_admin(); return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 		</form>
+		
 	</div> <!--end div i filtrave -->
 
 	<div class="table-responsive container">
@@ -170,7 +174,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `categ_impro_id` ASC "); /* Get list of categories */
 			if (isset($_POST['submitbutton'])){
 			if (!empty($_POST['search_by_cat_name'])) {
-				$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories`WHERE id='.$_POST['search_by_cat_name']);
+				$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories`WHERE name="'.$_POST['search_by_cat_name'].'"');
 			}
 			elseif($_POST['search_by_cat_status'] === '0' || $_POST['search_by_cat_status'] === '1'){
 				$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories`WHERE active='.$_POST['search_by_cat_status']);
@@ -358,7 +362,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					<!--shtohim fushen "Active" kur celim nje category -->
 				<div class="form-inline category-row"><b><label class="col-sm-3"><?php echo $hesklang['def_act']; ?>:</label></b>
 					<div class="form-group options-category-row">
-						<input type="checkbox" name="cat_active" id="new-category-status" value="1"  />
+						<input type="checkbox" name="cat_active" id="new-category-status" value="1" checked />
 					</div>	
 				</div>
 				</div><!-- end old-new-name-category -->			
@@ -476,24 +480,27 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		?>
 		
 		<?php $sql = hesk_dbQuery("SELECT department_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."departments`"); ?>
-		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+		<div style="float:right; padding:20px 17px 20px;" id="filter-departments"> <!-- Krijojme nje div per filtrat -->
 			<form method="post" action="manage_categories.php?a=search#tab_dep-info">
-				<?php echo "<select class='form-control-1' name='search_by_dep_name' id='dep_name_list'>"; // list box select command
-					echo"<option value=''>Select department name</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql))
-						{
-							echo "<option value=$tmp[id]> $tmp[department_name] </option>"; 
-						}
-							echo "</select>";
+				<datalist id="dep_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
+					<option value="<?php echo $tmp["department_name"]; ?>" >
+				<?php }
 					?>
+				</datalist>
+			<input placeholder="Search by department" type="text" list="dep_name_list" name="search_by_dep_name" <?php if(isset($_POST["search_by_dep_name"])) echo "value='".$_POST["search_by_dep_name"]."'" ?> class="form-control-1" />
 				<select id="cat_status" name="search_by_dep_status" class="form-control-1">
 					<option value="">Select status</option>
-					<option value="1">Active</option>
-					<option value="0">Inactive</option>
+					<option value="1" <?php if(isset($_POST["search_by_dep_status"])&& $_POST["search_by_dep_status"]=='1') echo "selected=selected"; ?> >Active</option>
+					<option value="0"<?php if(isset($_POST["search_by_dep_status"])&& $_POST["search_by_dep_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
 				</select>
 				<input name="submitbutton1" type="submit" class="btn btn-default execute-btn" value="Search"/>
+				<button name="clearbutton_departments" onclick="deletedep_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 			</form>
 		</div> <!--end div i filtrave -->
+		
+			
+	<?php?>
 		
 		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
 		<div class="table-responsive container">
@@ -530,7 +537,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments` ORDER BY `department_code` ASC');
 					if (isset($_POST['submitbutton1'])){
 						if (!empty($_POST['search_by_dep_name'])) {
-							$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`WHERE id='.$_POST['search_by_dep_name']);
+							$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`WHERE department_name="'.$_POST['search_by_dep_name'].'"');
 						}
 						elseif($_POST['search_by_dep_status'] === '0' || $_POST['search_by_dep_status'] === '1'){
 							$res_dep = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'departments`WHERE active='.$_POST['search_by_dep_status']);
@@ -782,24 +789,25 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		
 	<!--FILTRAT TEK KOMPANITE -->
 		<?php $sql = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
-		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+		<div style="float:right; padding:20px 17px 20px;" id="filter-companies"> <!-- Krijojme nje div per filtrat -->
 			<form method="post" action="manage_categories.php?a=search#tab_comp-info">
-				<?php echo "<select class='form-control-1' name='search_by_comp_name' id='comp_name_list'>"; // list box select command
-					echo"<option value=''>Select company name</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql))
-						{
-							echo "<option value=$tmp[id]> $tmp[company_name] </option>"; 
-						}
-							echo "</select>";
+				<datalist id="comp_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
+					<option value="<?php echo $tmp["company_name"]; ?>" >
+				<?php }
 					?>
+				</datalist>
+			<input placeholder="Search by company" type="text" list="comp_name_list" name="search_by_comp_name" <?php if(isset($_POST["search_by_comp_name"])) echo "value='".$_POST["search_by_comp_name"]."'" ?> class="form-control-1" />
 				<select id="cat_status" name="search_by_comp_status" class="form-control-1">
 					<option value="">Select status</option>
-					<option value="1">Active</option>
-					<option value="0">Inactive</option>
+					<option value="1" <?php if(isset($_POST["search_by_comp_status"])&& $_POST["search_by_comp_status"]=='1') echo "selected=selected"; ?> >Active</option>
+					<option value="0"<?php if(isset($_POST["search_by_comp_status"])&& $_POST["search_by_comp_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
 				</select>
 				<input name="submitbutton2" type="submit" class="btn btn-default execute-btn" value="Search"/>
+				<button name="clearbutton_companies" onclick="deletecomp_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 			</form>
 		</div> <!--end div i filtrave -->
+		
 		<div class="container manage-compnay-title"><?php echo $hesklang['manage_company']; ?></div>
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-company-table">
@@ -853,7 +861,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` ORDER BY `id` ASC');
 				if (isset($_POST['submitbutton2'])){
 						if (!empty($_POST['search_by_comp_name'])) {
-							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE id='.$_POST['search_by_comp_name']);
+							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE company_name="'.$_POST['search_by_comp_name'].'"');
 						}
 						elseif($_POST['search_by_comp_status'] === '0' || $_POST['search_by_comp_status'] === '1'){
 							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE active='.$_POST['search_by_comp_status']);
@@ -1142,32 +1150,32 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		
 		<?php $sql = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 		<?php $sql1 = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
-		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
-			<form method="post">
-				<?php echo "<select class='form-control-1' name='search_by_compproj_name' id='compproj_name_list'>"; // list box select command
-					echo"<option value=''>Select company name</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql))
-						{
-							echo "<option value=$tmp[id]>($tmp[id]) $tmp[company_name] </option>"; 
-						}
-							echo "</select>";
+		<div style="float:right; padding:20px 17px 20px;" id="filter-projects"> <!-- Krijojme nje div per filtrat -->
+			<form method="post">	
+			<datalist id="compproj_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
+					<option value="<?php echo $tmp["company_name"]; ?>" >
+				<?php }
 					?>
-				<?php echo "<select class='form-control-1' name='search_by_proj_name' id='proj_name_list'>"; // list box select command
-					echo"<option value=''>Select project name</option>";
-						while ($tmp1 = hesk_dbFetchAssoc($sql1))
-						{
-							echo "<option value=$tmp1[id]>($tmp1[id]) $tmp1[project_name] </option>"; 
-						}
-							echo "</select>";
+			</datalist>
+			<input placeholder="Search by company" type="text" list="compproj_name_list" name="search_by_compproj_name" <?php if(isset($_POST["search_by_compproj_name"])) echo "value='".$_POST["search_by_compproj_name"]."'" ?> class="form-control-1" />
+			<datalist id="proj_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql1)){ ?>
+					<option value="<?php echo $tmp["project_name"]; ?>" >
+				<?php }
 					?>
+			</datalist>
+			<input placeholder="Search by project" type="text" list="proj_name_list" name="search_by_proj_name" <?php if(isset($_POST["search_by_proj_name"])) echo "value='".$_POST["search_by_proj_name"]."'" ?> class="form-control-1" />
 				<select id="cat_status" name="search_by_proj_status" class="form-control-1">
 					<option value="">Select status</option>
-					<option value="1">Active</option>
-					<option value="0">Inactive</option>
+					<option value="1" <?php if(isset($_POST["search_by_proj_status"])&& $_POST["search_by_proj_status"]=='1') echo "selected=selected"; ?> >Active</option>
+				<option value="0"<?php if(isset($_POST["search_by_proj_status"])&& $_POST["search_by_proj_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
 				</select>
-				<input name="submitbutton3" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			<input name="submitbutton3" type="submit" class="btn btn-default execute-btn" value="Search"/>
+				<button name="clearbutton_projects" onclick="deleteprojects_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 			</form>
 		</div> <!--end div i filtrave -->
+		
 		<div class="container manage-project-title"><?php echo $hesklang['manage_project']; ?></div>
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-projects-table">
@@ -1209,13 +1217,15 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` ORDER BY `project_code` ASC');
 				if (isset($_POST['submitbutton3'])){
 						if (!empty($_POST['search_by_compproj_name'])) {
-							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE company_id='.$_POST['search_by_compproj_name']);
+							$res_compname = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE company_name="'.$_POST['search_by_compproj_name'].'"');
+							$res_compname = mysqli_fetch_array($res_compname);
+							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE company_id='.$res_compname[0]);
 						}
 						elseif($_POST['search_by_proj_status'] === '0' || $_POST['search_by_proj_status'] === '1'){
 							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE active='.$_POST['search_by_proj_status']);
 						}
 						elseif (!empty($_POST['search_by_proj_name'])) {
-							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE id='.$_POST['search_by_proj_name']);
+							$res_proj = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects`WHERE project_name="'.$_POST['search_by_proj_name'].'"');
 						}
 				}
 
@@ -1622,7 +1632,8 @@ function rename_cat()
 	$_SESSION['selcat'] = $catid;
     $_SESSION['selcat2'] = $catid;
 
-	$catname = hesk_input( hesk_POST('name'), $hesklang['cat_ren_name'], $_SERVER['PHP_SELF']);
+	//$catname = hesk_input( hesk_POST('name'), $hesklang['cat_ren_name'], $_SERVER['PHP_SELF']);
+	$catname =  hesk_POST('name');
     $_SESSION['catname2'] = $catname;
 	
 	$catactive = hesk_input( hesk_POST('cat_active'));
@@ -1641,9 +1652,11 @@ function rename_cat()
     		hesk_process_messages($hesklang['cndupl'],$_SERVER['PHP_SELF']);
         }
     }
-
-	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` SET `name`='".hesk_dbEscape($catname)."', `active`='".intval($catactive)."' WHERE `id`='".intval($catid)."' LIMIT 1");
-
+if(	empty($catname)){
+		hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` SET `active`='".intval($catactive)."' WHERE `id`='".intval($catid)."' LIMIT 1");
+	}else{
+		hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` SET `name`='".hesk_dbEscape($catname)."', `active`='".intval($catactive)."' WHERE `id`='".intval($catid)."' LIMIT 1");
+}
     unset($_SESSION['selcat']);
     unset($_SESSION['catname2']);
 
@@ -1671,7 +1684,8 @@ function remove()
 	
 	if (hesk_dbAffectedRows() != 1)
     {
-    	hesk_error("$hesklang[cat_req].");
+    	//hesk_error("$hesklang[cat_req].");
+		hesk_process_messages($hesklang['cat_req'],$_SERVER['PHP_SELF'],'ERROR');
     }
 
 	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `category`=1 WHERE `category`='".intval($mycat)."'");
@@ -1691,7 +1705,8 @@ function remove_dep(){
 	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."projects` as `p` WHERE `p`.`department_id`='".intval($mydep)."') && `id`='".intval($mydep)."' LIMIT 1");
 	if (hesk_dbAffectedRows() != 1)
     {
-    	hesk_error("$hesklang[dep_req].");
+    	//hesk_error("$hesklang[dep_req].",$_SERVER['PHP_SELF']);
+		hesk_process_messages($hesklang['dep_req'],$_SERVER['PHP_SELF']."");
     }
 
     hesk_process_messages($hesklang['dep_removed_db'],$_SERVER['PHP_SELF'],'SUCCESS');
@@ -1709,7 +1724,8 @@ function remove_comp(){
 	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."projects` as `p` WHERE `p`.`company_id`='".intval($mycomp)."') && `id`='".intval($mycomp)."' LIMIT 1");
 	if (hesk_dbAffectedRows() != 1)
     {
-    	hesk_error("$hesklang[comp_req].");
+    	//hesk_error("$hesklang[comp_req].");
+		hesk_process_messages($hesklang['comp_req'],$_SERVER['PHP_SELF'],'ERROR');
     }
 
     hesk_process_messages($hesklang['dep_removed_db'],$_SERVER['PHP_SELF'],'SUCCESS');
@@ -1727,7 +1743,8 @@ function remove_proj(){
 	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` as `c` WHERE `c`.`project_id`='".intval($myproj)."') && `id`='".intval($myproj)."' LIMIT 1");
 	if (hesk_dbAffectedRows() != 1)
     {
-    	hesk_error("$hesklang[proj_req].");
+    	//hesk_error("$hesklang[proj_req].");
+		hesk_process_messages($hesklang['proj_req'],$_SERVER['PHP_SELF'],'ERROR');
     }
 
     hesk_process_messages($hesklang['dep_removed_db'],$_SERVER['PHP_SELF'],'SUCCESS');

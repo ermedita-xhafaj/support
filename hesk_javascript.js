@@ -444,3 +444,52 @@ function deleteCookie(name, path, domain)
 			"; expires=Thu, 01-Jan-70 00:00:01 GMT";
 	}
 }
+
+function deleteticket_client()
+{
+	$('#filter-ticket-client').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deleteticket_admin()
+{
+	$('#filter-ticket-admin').children().find('input,select').not("input.filter-ticket-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deletecontracts_admin()
+{
+	$('#filter-contracts').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deletecomp_admin()
+{
+	$('#filter-companies').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deletecateg_admin()
+{
+	$('#filter-categories').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deletedep_admin()
+{
+	$('#filter-departments').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deleteprojects_admin()
+{
+	$('#filter-projects').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
