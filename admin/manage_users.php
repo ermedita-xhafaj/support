@@ -475,10 +475,11 @@ EOC;
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['email']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['username']; ?></i></b></th>
-		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Address'; ?></i></b></th>
-		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Phone Number'; ?></i></b></th>
-		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Pozicioni Detyres'; ?></i></b></th>
-		<th class="admin_white" style="text-align:left"><b><i><?php echo 'Kontrata'; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['address']; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['telephone']; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['work_position']; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['company']; ?></i></b></th>
+		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['contract'];; ?></i></b></th>
 		<th style="text-align:left"><b><i><?php echo $hesklang['active']; ?></i></b></th>
 		<th class="admin_white" style="width:100px"><b><i>&nbsp;<?php echo $hesklang['opt']; ?>&nbsp;</i></b></th>
 		</tr>
@@ -534,13 +535,18 @@ EOC;
 			$i=1;
 			while ($row = mysqli_fetch_array($result)) 
 			{
-			$contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$row['id']."'");
+				$contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$row['id']."'");
 				$contract_string= "";
 				while ($row1 = mysqli_fetch_array($contract)){
 					$cont_cl = hesk_dbQuery('SELECT contract_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE `id` ="'.$row1["contract_Id"].'"');
 					$cont = mysqli_fetch_array($cont_cl);
 					$contract_string .= $cont['contract_name']."<br/>";
 				}
+			
+			$comp_string = "";
+			$company_cl = hesk_dbQuery('SELECT company_name FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE `id` ="'.$row["company_id"].'"');
+			$comp = mysqli_fetch_array($company_cl);
+			$comp_string .= $comp['company_name']."<br/>";
 			
 			/* To edit yourself go to "Profile" page, not here. */
 			if ($row['id'] == $_SESSION['id'])
@@ -562,8 +568,6 @@ EOC;
 				$remove_code = ' <a href="manage_users.php?a=removec&amp;id='.$row['id'].'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" '.$style.' /></a>';
 			}
 			
-				$result1 = hesk_dbQuery("SELECT contract_name FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id`='".$row['contract_id']."'");
-				$contract_result = mysqli_fetch_array($result1);
 				echo '<tr>
 				<td class="$color">' .$row['name'] .'</td>
 				<td class="$color"><a href="mailto:' .$row['email'] .'">' .$row['email'] .'</a></td>
@@ -571,6 +575,7 @@ EOC;
 				<td class="$color">' .$row['address'] .'</td>
 				<td class="$color">' .$row['phonenumber'] .'</td>
 				<td class="$color">' .$row['poz_detyres'] .'</td>
+				<td class="$color">' .$comp_string .'</td>
 				<td class="$color">' .$contract_string .'</td>
 				<td class="$color">'.$row['active'].'</td>
 				<td class="$color">' .$edit_code.'</td>';
@@ -808,16 +813,17 @@ function edit_clients(){
 
 		$row = mysqli_fetch_array($result);
 
-	$_SESSION['new']['name'] = $row['name'];
-	$_SESSION['new']['email'] = $row['email'];
-	$_SESSION['new']['user'] = $row['user'];
-	$_SESSION['new']['address'] = $row['address'];
-	$_SESSION['new']['phonenumber'] = $row['phonenumber'];
-	$_SESSION['new']['poz_detyres'] = $row['poz_detyres'];
-	$_SESSION['new']['active'] = $row['active'];
+	$_SESSION['userdata']['name'] = $row['name'];
+	$_SESSION['userdata']['email'] = $row['email'];
+	$_SESSION['userdata']['user'] = $row['user'];
+	$_SESSION['userdata']['address'] = $row['address'];
+	$_SESSION['userdata']['phonenumber'] = $row['phonenumber'];
+	$_SESSION['userdata']['poz_detyres'] = $row['poz_detyres'];
+	$_SESSION['userdata']['company_id'] = $row['company_id'];
+	$_SESSION['userdata']['active'] = $row['active'];
 	
         /* Store original username for display until changes are saved successfully */
-        $_SESSION['original_user'] = $_SESSION['new']['user'];
+        $_SESSION['original_user'] = $_SESSION['userdata']['user'];
     }
 
     /* Print header */
@@ -895,7 +901,7 @@ function new_user()
 	/* A security check */
 	hesk_token_check('POST');
 
-	$myuser = hesk_validateUserInfo();
+	$myuser = hesk_validateUserInfo(0,$_SERVER['HTTP_REFERER']);
 
     /* Categories and Features will be stored as a string */
     $myuser['categories'] = implode(',',$myuser['categories']);
@@ -905,10 +911,24 @@ function new_user()
 	if(empty($user_active)) { $user_active = "0"; }
 
     /* Check for duplicate usernames */
-	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
-	if (hesk_dbNumRows($result) != 0)
+	
+	if ($myuser['isclient']=="1")
 	{
-        hesk_process_messages($hesklang['duplicate_user'],'manage_users.php');
+		$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
+		if (hesk_dbNumRows($result) != 0)
+		{
+			hesk_process_messages($hesklang['duplicate_user'],'manage_users.php');
+		}
+	}
+	
+	
+	else
+	{
+		$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
+		if (hesk_dbNumRows($result) != 0)
+		{
+			hesk_process_messages($hesklang['duplicate_user'],'manage_users.php');
+		}
 	}
 
     /* Admins will have access to all features and categories */
@@ -931,6 +951,7 @@ function new_user()
 		`address`,
 		`phonenumber`,
 		`poz_detyres`,
+		`company_id`,
 		`active`,
 		`signature`
 		) VALUES (
@@ -942,6 +963,7 @@ function new_user()
 		'".hesk_dbEscape($myuser['address'])."',
 		'".hesk_dbEscape($myuser['phonenumber'])."',
 		'".hesk_dbEscape($myuser['poz_detyres'])."',
+		'".hesk_dbEscape($myuser['company_id'])."',
 		'".hesk_dbEscape($user_active)."',
 		'".hesk_dbEscape($myuser['signature'])."'
 		)" );
@@ -1033,7 +1055,7 @@ function update_user()
     }
 
     $_SERVER['PHP_SELF'] = './manage_users.php';
-	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
+	$myuser = hesk_validateUserInfo(0,$_SERVER['HTTP_REFERER']);
 	
 	
     $myuser['id'] = $tmp;
@@ -1048,7 +1070,7 @@ function update_user()
         /* Duplicate? */
         if ($tmp['id'] != $myuser['id'])
         {
-        	hesk_process_messages($hesklang['duplicate_user'],$_SERVER['PHP_SELF']);
+        	hesk_process_messages($hesklang['duplicate_user'],$_SERVER['HTTP_REFERER']);
         }
 
 		/* Do we have permission to edit this user? */
@@ -1127,10 +1149,27 @@ function update_client(){
     }
 
     $_SERVER['PHP_SELF'] = './manage_users.php';
-	$myuser = hesk_validateUserInfo(0,$_SERVER['PHP_SELF']);
+	$myuser = hesk_validateUserInfo(0,$_SERVER['HTTP_REFERER']);
     $myuser['id'] = $tmp;
 
 	$active = (isset($_POST['prof_active'])) ? $_POST['prof_active'] : "0";
+	
+		
+	/* Check for duplicate usernames */
+	if ($myuser['isclient']=="1"){
+		$res = hesk_dbQuery("SELECT `id`, `user`, `isclient` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
+		if (hesk_dbNumRows($res) == 1)
+		{
+			$tmp = hesk_dbFetchAssoc($res);
+
+			/* Duplicate? */
+			if ($tmp['id'] != $myuser['id'])
+			{
+				hesk_process_messages($hesklang['duplicate_user'],$_SERVER['HTTP_REFERER']);
+			}
+
+		}
+	}
 
 	$query = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."clients` SET
 	`user`='".hesk_dbEscape($myuser['user'])."',
@@ -1139,6 +1178,7 @@ function update_client(){
     `address`='".hesk_dbEscape($myuser['address'])."',
     `phonenumber`='".hesk_dbEscape($myuser['phonenumber'])."',
     `poz_detyres`='".hesk_dbEscape($myuser['poz_detyres'])."',
+    `company_id`='".hesk_dbEscape($myuser['company_id'])."',
     `active`='".hesk_dbEscape($active)."'
 	" . ( isset($myuser['pass']) ? ", `pass`='".hesk_dbEscape($myuser['pass'])."'" : '' ) . "
 	 WHERE `id`=".intval($myuser['id'])." LIMIT 1");
@@ -1166,7 +1206,7 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 	global $hesk_settings, $hesklang;
 
     $hesk_error_buffer = '';
-
+	
 	$myuser['name']		  = hesk_input( hesk_POST('name') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_real_name'] . '</li>';
 	$myuser['email']	  = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer .= '<li>' . $hesklang['enter_valid_email'] . '</li>';
 	$myuser['address']  = hesk_input( hesk_POST('address') );
@@ -1175,14 +1215,30 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 	$myuser['user']		  = hesk_input( hesk_POST('user') ) or $hesk_error_buffer .= '<li>' . $hesklang['enter_username'] . '</li>';
 	$myuser['isadmin']	  = empty($_POST['isadmin']) ? 0 : 1;
 	$myuser['isclient']	  = empty($_POST['isclient']) ? 0 : 1;
+	$myuser['company_id'] = empty($_POST['company_id']) ? NULL : $_POST['company_id'];
 	$myuser['contract_id'] = empty($_POST['contract_id']) ? NULL : $_POST['contract_id'];
 	$myuser['signature']  = hesk_input( hesk_POST('signature') );
     $myuser['autoassign'] = hesk_POST('autoassign') == 'Y' ? 1 : 0;
 
+	/* If it's not client at least one company and contract is required */	
+	if ($myuser['isclient']==1)
+    {
+		if (empty($_POST['company_id'])){
+			$hesk_error_buffer .= '<li>' . $hesklang['enter_company'] . '</li>';
+		}
+	}
+	
+	if ($myuser['isclient']==1)
+    {
+		if (empty($_POST['contract_id'])){
+			$hesk_error_buffer .= '<li>' . $hesklang['enter_contract'] . '</li>';
+		}
+	}
+	
     /* If it's not admin at least one category and fature is required */
     $myuser['categories']	= array();
     $myuser['features']		= array();
-
+	
     if ($myuser['isadmin']==0)
     {
     	/*if (empty($_POST['categories']) || ! is_array($_POST['categories']) )

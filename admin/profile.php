@@ -151,7 +151,7 @@ var tabberOptions = {
 
 <script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-<?php hesk_profile_tab(); ?>
+<?php hesk_profile_tab('new'); ?>
 
 <br/>
 

@@ -222,8 +222,8 @@ if ($total > 0)
         $first_line = '(' . $hesklang['unas'] . ')'." \n\n";
 		if ($ticket['owner'] == $_SESSION['id'])
 		{
-			$owner = '<span class="assignedyou" title="'.$hesklang['tasy2'].'">*</span> ';
-            $first_line = $hesklang['tasy2'] . " \n\n";
+			/*$owner = '<span class="assignedyou" title="'.$hesklang['tasy2'].'">*</span> ';
+            $first_line = $hesklang['tasy2'] . " \n\n";*/
 		}
 		elseif ($ticket['owner'])
 		{
@@ -231,8 +231,8 @@ if ($total > 0)
             {
             	$admins[$ticket['owner']] = $hesklang['e_udel'];
             }
-			$owner = '<span class="assignedother" title="'.$hesklang['taso3'] . ' ' . $admins[$ticket['owner']] .'">*</span> ';
-            $first_line = $hesklang['taso3'] . ' ' . $admins[$ticket['owner']] . " \n\n";
+			/*$owner = '<span class="assignedother" title="'.$hesklang['taso3'] . ' ' . $admins[$ticket['owner']] .'">*</span> ';
+            $first_line = $hesklang['taso3'] . ' ' . $admins[$ticket['owner']] . " \n\n";*/
 		}
 
 		// Prepare ticket priority
@@ -258,8 +258,13 @@ if ($total > 0)
 
 		
 		// Start ticket row
-		echo '
+		/*echo '
 		<tr title="'.$ticket['message'].'">
+		<td><input type="checkbox" name="id[]" value="'.$ticket['id'].'" />&nbsp;</td>
+		';*/
+		
+		// Start ticket row without message Assigned to: in flag priority
+		echo '
 		<td><input type="checkbox" name="id[]" value="'.$ticket['id'].'" />&nbsp;</td>
 		';
 
@@ -543,29 +548,24 @@ if ($total > 0)
     </div>
     <div class="form-inline set-priorityTicket">
 		<select class="form-control" name="a">
-		<option value="low" selected="selected"><?php echo $hesklang['set_pri_to'].' '.$hesklang['low']; ?></option>
+		<option><?php echo $hesklang['set_pri_to'];?></option>
+		<option value="low"><?php echo $hesklang['set_pri_to'].' '.$hesklang['low']; ?></option>
 		<option value="medium"><?php echo $hesklang['set_pri_to'].' '.$hesklang['medium']; ?></option>
 		<option value="high"><?php echo $hesklang['set_pri_to'].' '.$hesklang['high']; ?></option>
 		<option value="critical"><?php echo $hesklang['set_pri_to'].' '.$hesklang['critical']; ?></option>
 		<option value="close"><?php echo $hesklang['close_selected']; ?></option>
 		<?php
-		if ( hesk_checkPermission('can_add_archive', 0) )
+		/*if ( hesk_checkPermission('can_add_archive', 0) )
 		{
 			?>
 			<option value="tag"><?php echo $hesklang['add_archive_quick']; ?></option>
 			<option value="untag"><?php echo $hesklang['remove_archive_quick']; ?></option>
 			<?php
-		}
+		}*/
 
 		if ( ! defined('HESK_DEMO') )
 		{
 
-			if ( hesk_checkPermission('can_merge_tickets', 0) )
-			{
-				?>
-				<option value="merge"><?php echo $hesklang['mer_selected']; ?></option>
-				<?php
-			}
 			if ( hesk_checkPermission('can_del_tickets', 0) )
 			{
 				?>
@@ -608,9 +608,8 @@ function hesk_print_list_head()
 	<?php
 	foreach ($hesk_settings['ticket_list'] as $field)
 	{
-		//echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';			<!-- komentuar per te mos bere sort sipas te gjitha fushave por vetem sipas id si nje line me posht-->
-	
-		echo '<th class="admin_white"><a href="' . $href . '?' . $query .  '&amp;sort=' . 'id' . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';
+		//echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';
+		echo '<th class="admin_white">' . $hesk_settings['possible_ticket_list'][$field] . '</th>';
 	}
 	?>
 	

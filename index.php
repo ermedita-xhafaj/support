@@ -300,7 +300,7 @@ hesk_handle_messages();
 				<div class="form-group department-priority-support-request"> <!-- start table here end in line 304 -->
 					<div class="form-inline" style="margin-bottom: 5px;">
 						<label class="col-sm-2 control-label" for="category-department-priority-support-request"><?php echo $hesklang['category']; ?>: <font class="important">*</font></label>
-						<select class="form-control contact-support-request" id="category-department-priority-support-request" name="category" <?php if (in_array('category',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+						<select class="form-control contact-support-request" required="required" title="Required field" id="category-department-priority-support-request" name="category" <?php if (in_array('category',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
 						<option></option>
 						<?php
 						// Show the "Click to select"?
@@ -330,7 +330,7 @@ hesk_handle_messages();
 					?>
 					<div class="form-inline" style="margin-bottom: 5px;">
 						<label class="col-sm-2 control-label" for="priority-department-priority-support-request"><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
-						<select class="form-control contact-support-request" id="priority-department-priority-support-request" name="priority" <?php if (in_array('priority',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+						<select class="form-control contact-support-request" required="required" title="Required field" id="priority-department-priority-support-request" name="priority" <?php if (in_array('priority',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
 						<option></option>
 						<?php
 						// Show the "Click to select"?
@@ -542,12 +542,12 @@ hesk_handle_messages();
 			<div class="form-group">
 				<div  class="form-inline" style="padding-right: 0px; margin-bottom: 5px;">
 					<label class="col-sm-2 control-label" for="subject-ticket-info-support-request"><?php echo $hesklang['subject']; ?>: <font class="important">*</font></label>
-					<input class="form-control contact-support-request" type="text" id="subject-ticket-info-support-request" name="subject" size="40" maxlength="40" value="<?php if (isset($_SESSION['c_subject'])) {echo stripslashes(hesk_input($_SESSION['c_subject']));} ?>" <?php if (in_array('subject',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> />
+					<input class="form-control contact-support-request" required="required" title="Required field" type="text" id="subject-ticket-info-support-request" name="subject" size="40" maxlength="40" value="<?php if (isset($_SESSION['c_subject'])) {echo stripslashes(hesk_input($_SESSION['c_subject']));} ?>" <?php if (in_array('subject',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> />
 				</div>
 				<div class="form-inline" style="margin-bottom: 5px;">
 					<div>
 						<label class="col-sm-2 control-label" for="message-ticket-info-support-request" ><?php echo $hesklang['message']; ?>: <font class="important">*</font></label>
-						<textarea class="form-control contact-support-request" id="message-ticket-info-support-request" name="message" rows="12" cols="60" <?php if (in_array('message',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> ><?php if (isset($_SESSION['c_message'])) {echo stripslashes(hesk_input($_SESSION['c_message']));} ?></textarea>
+						<textarea class="form-control contact-support-request" required="required" title="Required field" id="message-ticket-info-support-request" name="message" rows="12" cols="60" <?php if (in_array('message',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> ><?php if (isset($_SESSION['c_message'])) {echo stripslashes(hesk_input($_SESSION['c_message']));} ?></textarea>
 					</div>
 				</div>
 			</div><!-- ticket-info-support-request -->
@@ -861,7 +861,7 @@ hesk_handle_messages();
 
 			<!-- Submit -->
 			<?php
-			if ($hesk_settings['submit_notice'])
+			/*if ($hesk_settings['submit_notice'])
 			{
 				?>
 
@@ -895,7 +895,7 @@ hesk_handle_messages();
 				<?php
 			} // End IF submit_notice
 			else
-			{
+			{*/
 				?>
 
 		</div>
@@ -910,7 +910,7 @@ hesk_handle_messages();
 					</div>
 				</div><!-- end else-submit-notice-support-request -->
 				<?php
-			} // End ELSE submit_notice
+			/*}*/ // End ELSE submit_notice
 			?>
 
 			<!-- Do not delete or modify the code below, it is used to detect simple SPAM bots -->
