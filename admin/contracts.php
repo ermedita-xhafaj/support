@@ -448,7 +448,7 @@ else {return false;}
 	</table>
 </div>
 
-<?php if($value_id) {
+<?php if(isset($_GET['id'])) {
 	$is_edit = true;
 } else {
 	$is_edit = false;
@@ -459,11 +459,11 @@ else {return false;}
 <?php if ($_SESSION['isadmin']) {?>
 <div class="container tab-content manage-contract-tab">
 	<ul id="tabs" class="nav nav-tabs manage-contract" data-tabs="tabs">
-		<li class="new_class <?php if(!$is_edit){ ?>active<?php } ?>" id="create-contract-info"><a href="#create-cont" aria-controls="create-cont" role="tab" data-toggle="tab"><?php echo $hesklang['create_contract']; ?></a></li>
-		<li class="new_class <?php if($is_edit){ ?>active<?php } ?>" id="edit-contract-info"><a href="#edit-cont" aria-controls="edit-cont" role="tab" data-toggle="tab"><?php echo $hesklang['edit_contract']; ?></a></li>
+		<li class="new_class active" id="create-contract-info"><a href="#create-cont" aria-controls="create-cont" role="tab" data-toggle="tab"><?php echo $hesklang['create_contract']; ?></a></li>
+		<li class="new_class <?php if(!isset($_GET['id'])) echo " hidden"; ?>" id="edit-contract-info"><a href="#edit-cont" aria-controls="edit-cont" role="tab" data-toggle="tab"><?php echo $hesklang['edit_contract']; ?></a></li>
 	</ul>
 	
-	<div role="tabpanel" class="tab-pane <?php if(!$is_edit){ ?>active<?php } ?>" id="create-cont">
+	<div role="tabpanel" class="tab-pane active" id="create-cont">
 		<div class="create-contract">
 			<form method="post" action="contracts.php#tab_create-cont" name="form">
 				<div class="">
@@ -596,9 +596,9 @@ if(isset($_GET['id'])) {
 ?>
 
 	<!-- Edit Contract-->
-	<div role="tabpanel" class="tab-pane <?php if($is_edit){ ?>active<?php } ?>" id="edit-cont">
+	<div role="tabpanel" class="tab-pane" id="edit-cont">
 		<div class="edit-contract">
-		<form method="post" action="contracts.php?a=edit#tab_edit-cont" name="form2" novalidate>
+		<form method="post" action="contracts.php" name="form2" novalidate>
 				<div class="">
 					<input type="hidden" name="id" value="<?php echo $value_id; ?>"/>
 					<div class="form-inline contr-row1" id="contract_row">
