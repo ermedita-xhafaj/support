@@ -43,10 +43,18 @@ require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/profile_functions.inc.php');
 hesk_load_database_functions();
-
 hesk_session_start();
 hesk_dbConnect();
 hesk_isLoggedIn();
+
+check_contract_expiry();
+
+/* What should we do? */
+if ( $action = hesk_REQUEST('a') )
+{
+	if ($action == 'remove')     {remove_contract();}
+}
+
 
 if(isset($_POST['id'])){
 	$value_id = hesk_input( hesk_POST('id') );
@@ -228,38 +236,38 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 <?php $sql = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
 <?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
 <?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
-	<div class="col-sm-7 col-sm-offset-5 filter_contract"> <!-- Krijojme nje div per filtrat -->
+	<div class="col-sm-7 col-sm-offset-5 filter_contracts" id="filter-contracts"> <!-- Krijojme nje div per filtrat -->
 		<form method="post">
-			<?php echo "<select class='form-control-1' name='search_by_contract_name' id='contract_name_list'>"; // list box select command
-				echo"<option value=''>Select contract</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql))
-					{
-						echo "<option value=$tmp[id]> $tmp[contract_name] </option>"; 
-					}
-						echo "</select>";
-				?>
-			<?php echo "<select class='form-control-1' name='search_by_project_name' id='project_name_list'>"; // list box select command
-				echo"<option value=''>Select project</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql_project))
-					{
-						echo "<option value=$tmp[id]> $tmp[project_name] </option>"; 
-					}
-						echo "</select>";
-				?>
-			<?php echo "<select class='form-control-1' name='search_by_company_name' id='company_name_list'>"; // list box select command
-				echo"<option value=''>Select company</option>";
-					while ($tmp = hesk_dbFetchAssoc($sql_company))
-					{
-						echo "<option value=$tmp[id]> $tmp[company_name] </option>"; 
-					}
-						echo "</select>";
-				?>
+				<datalist id="contract_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
+					<option value="<?php echo $tmp["contract_name"]; ?>" >
+				<?php }
+					?>
+				</datalist>
+			<input placeholder="Search by contract" type="text" list="contract_name_list" name="search_by_contract_name" <?php if(isset($_POST["search_by_contract_name"])) echo "value='".$_POST["search_by_contract_name"]."'" ?> class="form-control-1" />
+			
+			<datalist id="project_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_project)){ ?>
+					<option value="<?php echo $tmp["project_name"]; ?>" >
+				<?php }
+					?>
+				</datalist>
+			<input placeholder="Search by project" type="text" list="project_name_list" name="search_by_project_name" <?php if(isset($_POST["search_by_project_name"])) echo "value='".$_POST["search_by_project_name"]."'" ?> class="form-control-1" />
+			
+			<datalist id="company_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_company)){ ?>
+					<option value="<?php echo $tmp["company_name"]; ?>" >
+				<?php }
+					?>
+				</datalist>
+			<input placeholder="Search by company" type="text" list="company_name_list" name="search_by_company_name" <?php if(isset($_POST["search_by_company_name"])) echo "value='".$_POST["search_by_company_name"]."'" ?> class="form-control-1" />
 			<select id="cat_status" name="search_by_contract_status" class="form-control-1">
 				<option value="">Select status</option>
-				<option value="1">Active</option>
-				<option value="0">Inactive</option>
+				<option value="1" <?php if(isset($_POST["search_by_contract_status"])&& $_POST["search_by_contract_status"]=='1') echo "selected=selected"; ?> >Active</option>
+				<option value="0"<?php if(isset($_POST["search_by_contract_status"])&& $_POST["search_by_contract_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
 			</select>
 			<input name="submitbutton_contracts" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			<button name="clearbutton_contracts" onclick="deletecontracts_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 		</form>
 	</div> <!--end div i filtrave -->
 <div class="table-responsive container">
@@ -383,13 +391,13 @@ else {return false;}
 	//FILTRAT NGA ERMEDITA 
 		if (isset($_POST['submitbutton_contracts'])){
 			if (!empty($_POST['search_by_contract_name'])) {
-				$res = hesk_dbQuery($custom_filters.' WHERE C.id ='.$_POST['search_by_contract_name']);
+				$res = hesk_dbQuery($custom_filters.' WHERE C.contract_name ="'.$_POST['search_by_contract_name'].'"');
 			}
 			elseif (!empty($_POST['search_by_project_name'])) {
-				$res = hesk_dbQuery($custom_filters.' WHERE P.id ='.$_POST['search_by_project_name']);
+				$res = hesk_dbQuery($custom_filters.' WHERE P.project_name ="'.$_POST['search_by_project_name'].'"');
 			}
 			elseif (!empty($_POST['search_by_company_name'])) {
-				$res = hesk_dbQuery($custom_filters.' WHERE CO.id ='.$_POST['search_by_company_name']);
+				$res = hesk_dbQuery($custom_filters.' WHERE CO.company_name ="'.$_POST['search_by_company_name'].'"');
 			}
 			elseif($_POST['search_by_contract_status'] === '0' || $_POST['search_by_contract_status'] === '1'){
 				$res = hesk_dbQuery($custom_filters.' WHERE C.active ='.$_POST['search_by_contract_status']);
@@ -446,7 +454,7 @@ else {return false;}
 				}
 				else
 				{
-					$remove_code = '<span> <a href="http://localhost/support/admin/contracts.php?a=remove&amp;id='.$value_id .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
+					$remove_code = '<span> <a href="http://localhost/support/admin/contracts.php?a=remove&amp;id='.$row['id'] .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 				}
 				
 				if($row['priority'] == 1) $a="High"; 
@@ -516,6 +524,25 @@ else {return false;}
 
 ?>
 
+<?php
+function remove_contract(){
+	
+	global $hesk_settings, $hesklang;
+	hesk_token_check();
+	$_SERVER['PHP_SELF'] = 'contracts.php#tab_edit-cont';
+	
+	$con = intval( hesk_GET('id'));
+	
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE NOT EXISTS
+	(SELECT NULL FROM`".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` as `cc` WHERE `cc`.`contract_Id`='".intval($con)."') && `id`='".intval($con)."' LIMIT 1");
+	if (hesk_dbAffectedRows() != 1)
+    {
+    	hesk_error("$hesklang[con_req].");
+    }
+
+    hesk_process_messages($hesklang['con_removed_db'],$_SERVER['PHP_SELF'],'SUCCESS');
+}
+?>
 <?php if ($_SESSION['isadmin']) {?>
 <div class="container tab-content manage-contract-tab">
 	<ul id="tabs" class="nav nav-tabs manage-contract" data-tabs="tabs">
@@ -670,6 +697,7 @@ if(isset($_GET['id'])) {
 		$value_staff_id = $row['staff_id'];
 		$value_starting_date = $row['starting_date'];
 		$value_ending_date = $row['ending_date'];
+		$value_active = $row['active'];
 		$value_sla = $row['sla'];
 		$value_priority = $row['priority'];
 		$value_reply_time = $row['reply_time'];
@@ -809,6 +837,13 @@ if(isset($_GET['id'])) {
 					<div class="form-inline" id="contract_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50"  style="width: 336px;" value="<?php echo $value_ending_date; ?>" />
+					</div>
+					
+					<div class="clearfix"></div>
+					<div class="form-inline project-row1" id="project_row">
+						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<?php ?>
+						<input class="form-control" type="checkbox" name="con_active" value="1" <?php if($value_active=='1') echo "checked"; ?> />
 					</div>
 					
 					<div class="form-inline" id="contract_row">
