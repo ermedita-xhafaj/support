@@ -94,7 +94,7 @@ if ($total > 0)
 		$query .= '&amp;category='.$category;
 		$query .= '&amp;contract_ticket_id='.$contract;
 		$query .= '&amp;company_ticket_id='.$company;
-		$query .= '&amp;sort='.'id';
+		$query .= '&amp;sort=';
 		$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
 		$query .= '&amp;archive='.$archive[1];
@@ -115,7 +115,7 @@ if ($total > 0)
 		$query .= '&amp;contract_ticket_id='.$contract;
 		$query .= '&amp;company_ticket_id='.$company;
 		$query .= '&amp;dt='.urlencode($date_input);
-		$query .= '&amp;sort='.'id';
+		$query .= '&amp;sort=';
 		$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
 		$query .= '&amp;archive='.$archive[2];
@@ -138,53 +138,7 @@ if ($total > 0)
 	$sql .= " LIMIT ".hesk_dbEscape($limit_down)." , ".hesk_dbEscape($maxresults)." ";
 	$result = hesk_dbQuery($sql);
 
-    /* Uncomment for debugging */
-    # echo "SQL: $sql\n<br>";
 
-	/* This query string will be used to order and reverse display */
-	if ($href == 'show_tickets.php')
-	{
-		#$query  = 'status='.$status;
-
-        $query = '';
-        $query .= 's' . implode('=1&amp;s',array_keys($status)) . '=1';
-        $query .= '&amp;p' . implode('=1&amp;p',array_keys($priority)) . '=1';
-
-		$query .= '&amp;category='.$category;
-		$query .= '&amp;contract_ticket_id='.$contract;
-		$query .= '&amp;company_ticket_id='.$company;
-		#$query .= '&amp;asc='.(isset($is_default) ? 1 : $asc_rev);
-		$query .= '&amp;limit='.$maxresults;
-		$query .= '&amp;archive='.$archive[1];
-		$query .= '&amp;s_my='.$s_my[1];
-		$query .= '&amp;s_ot='.$s_ot[1];
-		$query .= '&amp;s_un='.$s_un[1];
-		$query .= '&amp;page=1';
-		$query .= '&amp;sort='.'id';
-
-		$query .= '&amp;cot='.$cot;
-		$query .= '&amp;g='.$group;
-
-	}
-	else
-	{
-		$query  = 'q='.$q;
-	    $query .= '&amp;what='.$what;
-		$query .= '&amp;category='.$category;
-		$query .= '&amp;contract_ticket_id='.$contract;
-		$query .= '&amp;company_ticket_id='.$company;
-		$query .= '&amp;dt='.urlencode($date_input);
-		#$query .= '&amp;asc='.$asc;
-		$query .= '&amp;limit='.$maxresults;
-		$query .= '&amp;archive='.$archive[2];
-		$query .= '&amp;s_my='.$s_my[2];
-		$query .= '&amp;s_ot='.$s_ot[2];
-		$query .= '&amp;s_un='.$s_un[2];
-		$query .= '&amp;page=1';
-		$query .= '&amp;sort='.'id';
-	}
-
-    $query .= '&amp;asc=';
 
 	/* Print the table with tickets */
 	$random=rand(10000,99999);
@@ -448,9 +402,9 @@ if ($total > 0)
 
 		
 		// End ticket row
-		echo '
-		<td>'.$ticket['priority'].'&nbsp;</td>
-		</tr>
+		/*echo '
+		<td>'.$ticket['priority'].'&nbsp;</td>*/
+		echo '</tr>
 		';
 
 	} // End while
@@ -548,11 +502,11 @@ if ($total > 0)
     </div>
     <div class="form-inline set-priorityTicket">
 		<select class="form-control" name="a">
-		<option><?php echo $hesklang['set_pri_to'];?></option>
-		<option value="low"><?php echo $hesklang['set_pri_to'].' '.$hesklang['low']; ?></option>
-		<option value="medium"><?php echo $hesklang['set_pri_to'].' '.$hesklang['medium']; ?></option>
-		<option value="high"><?php echo $hesklang['set_pri_to'].' '.$hesklang['high']; ?></option>
-		<option value="critical"><?php echo $hesklang['set_pri_to'].' '.$hesklang['critical']; ?></option>
+		<option placeholder="sjadhwui"><?//php echo $hesklang['manage_ticket'];?></option>
+		<!--<option value="low"><?php //echo $hesklang['set_pri_to'].' '.$hesklang['low']; ?></option>
+		<option value="medium"><?php //echo $hesklang['set_pri_to'].' '.$hesklang['medium']; ?></option>
+		<option value="high"><?php //echo $hesklang['set_pri_to'].' '.$hesklang['high']; ?></option>
+		<option value="critical"><?php //echo $hesklang['set_pri_to'].' '.$hesklang['critical']; ?></option>-->
 		<option value="close"><?php echo $hesklang['close_selected']; ?></option>
 		<?php
 		/*if ( hesk_checkPermission('can_add_archive', 0) )
@@ -608,14 +562,14 @@ function hesk_print_list_head()
 	<?php
 	foreach ($hesk_settings['ticket_list'] as $field)
 	{
-		//echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';
-		echo '<th class="admin_white">' . $hesk_settings['possible_ticket_list'][$field] . '</th>';
+		echo '<th class="admin_white"><a href="' . $href . '?' . $query . $sort_possible[$field] . '&amp;sort=' . $field . '">' . $hesk_settings['possible_ticket_list'][$field] . '</a></th>';
+		//echo '<th class="admin_white">' . $hesk_settings['possible_ticket_list'][$field] . '</th>';
 	}
 	?>
 	
 	<!--<th class="admin_white"><a href="<?php //echo $href . '?' . $query . $sort_possible['priority'] . '&amp;sort='; ?>priority"><img src="../img/sort_priority_<?php //echo (($sort_possible['priority']) ? 'asc' : 'desc'); ?>.png" width="16" height="16" alt="<?php //echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" title="<?php //echo $hesklang['sort_by'].' '.$hesklang['priority']; ?>" border="0" /></a></th> -->		<!-- komentuar per te mos bere sort by priority-->
 	
-	<th class="admin_white"><?php echo $hesklang['priority']; ?></th>
+	<!--<th class="admin_white"><?php //echo $hesklang['priority']; ?></th>-->
 	</tr>
 	<?php
 } // END hesk_print_list_head()

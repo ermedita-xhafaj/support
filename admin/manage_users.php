@@ -242,9 +242,9 @@ hesk_handle_messages();
 
 <?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users`"); ?>
 <?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
-		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+		<div id="filter-users"> <!-- Krijojme nje div per filtrat -->
 			<form method="post" action="manage_users.php?f=filter_users">
-				<?php echo "<select class='form-control-1' name='search_by_user_name' id='dep_user_list'>"; // list box select command
+				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_user_name' id='dep_user_list'>"; // list box select command
 					echo"<option value=''>Select staff</option>";
 						while ($tmp = hesk_dbFetchAssoc($sql_name))
 						{
@@ -253,7 +253,7 @@ hesk_handle_messages();
 							echo "</select>";
 					?>
 				
-				<?php echo "<select class='form-control-1' name='search_by_project' id='project_list'>"; // list box select command
+				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_project' id='project_list'>"; // list box select command
 					echo"<option value=''>Select project</option>";
 						while ($tmp = hesk_dbFetchAssoc($sql_project))
 						{
@@ -435,9 +435,9 @@ EOC;
 <?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 <?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 <?php $sql_contract = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
-		<div style="float:right; padding:20px 17px 20px;"> <!-- Krijojme nje div per filtrat -->
+		<div id="filter-clients"> <!-- Krijojme nje div per filtrat -->
 			<form method="post" action="manage_users.php?f=filter_clients">
-				<?php echo "<select class='form-control-1' name='search_by_user_name' id='dep_user_list'>"; // list box select command
+				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_user_name' id='dep_user_list'>"; // list box select command
 					echo"<option value=''>Select client</option>";
 						while ($tmp = hesk_dbFetchAssoc($sql_name))
 						{
@@ -446,7 +446,7 @@ EOC;
 							echo "</select>";
 					?>
 				
-				<?php echo "<select class='form-control-1' name='search_by_company' id='company_list'>"; // list box select command
+				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_company' id='company_list'>"; // list box select command
 					echo"<option value=''>Select company</option>";
 						while ($tmp = hesk_dbFetchAssoc($sql_company))
 						{
@@ -454,7 +454,7 @@ EOC;
 						}
 							echo "</select>";
 					?>
-				<?php echo "<select class='form-control-1' name='search_by_contract' id='contract_list'>"; // list box select command
+				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_contract' id='contract_list'>"; // list box select command
 					echo"<option value=''>Select contract</option>";
 						while ($tmp = hesk_dbFetchAssoc($sql_contract))
 						{
@@ -462,11 +462,11 @@ EOC;
 						}
 							echo "</select>";
 					?>
-				<select id="client_status" name="search_by_client_status" class="form-control-1">
-				<option value="">Select status</option>
-				<option value="1">Active</option>
-				<option value="0">Inactive</option>
-			</select>
+				<select id="client_status" name="search_by_client_status" class="form-control-1 dep_user_list_style">
+					<option value="">Select status</option>
+					<option value="1">Active</option>
+					<option value="0">Inactive</option>
+				</select>
 				<input name="submitbutton_client" type="submit" class="btn btn-default execute-btn" value="Search"/>
 			</form>
 		</div> <!--end div i filtrave -->
@@ -617,7 +617,7 @@ var tabberOptions = {
 
 <script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-<form name="form1" method="post" action="manage_users.php" novalidate>
+<form name="form1" method="post" action="manage_users.php">
 	<?php hesk_profile_tab('userdata', false); ?>
 	<!-- Submit -->
 	<div class="container">
@@ -772,7 +772,7 @@ function edit_user()
 
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-	<form name="form1" method="post" action="manage_users.php" novalidate>
+	<form name="form1" method="post" action="manage_users.php">
 	<?php hesk_profile_tab('userdata', false); ?>
 
 	<!-- Submit -->
@@ -872,7 +872,7 @@ function edit_clients(){
 
 	<script language="Javascript" type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tabs/tabber-minimized.js"></script>
 
-	<form name="form1" method="post" action="manage_users.php?a=update_client" novalidate>
+	<form name="form1" method="post" action="manage_users.php?a=update_client">
 	<?php hesk_profile_tab('userdata', false); ?>
 
 	<!-- Submit -->

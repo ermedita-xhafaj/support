@@ -125,7 +125,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 	<div class="container manage-categories-title"><?php echo $hesklang['categ_pri']; ?></div>
 
 	<?php $sql = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
-	<div style="float:right; padding:5px 17px 20px;" id="filter-categories"> <!-- Krijojme nje div per filtrat -->
+	<div class="container" id="filter-categories"> <!-- Krijojme nje div per filtrat -->
 		<form method="post">
 			<datalist id="cat_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
@@ -133,8 +133,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<?php }
 					?>
 				</datalist>
-			<input placeholder="Search by category" type="text" list="cat_name_list" name="search_by_cat_name" <?php if(isset($_POST["search_by_cat_name"])) echo "value='".$_POST["search_by_cat_name"]."'" ?> class="form-control-1" />
-			<select id="cat_status" name="search_by_cat_status" class="form-control-1">
+			<input placeholder="Search by category" type="text" list="cat_name_list" name="search_by_cat_name" <?php if(isset($_POST["search_by_cat_name"])) echo "value='".$_POST["search_by_cat_name"]."'" ?> class="form-control-1 cat_name_list_style" />
+			<select id="cat_status" name="search_by_cat_status" class="form-control-1 cat_name_list_style">
 				<option value="">Select status</option>
 				<option value="1" <?php if(isset($_POST["search_by_cat_status"])&& $_POST["search_by_cat_status"]=='1') echo "selected=selected"; ?> >Active</option>
 				<option value="0"<?php if(isset($_POST["search_by_cat_status"])&& $_POST["search_by_cat_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
@@ -479,8 +479,12 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			}
 		?>
 		
+		
+		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
+		
+		
 		<?php $sql = hesk_dbQuery("SELECT department_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."departments`"); ?>
-		<div style="float:right; padding:20px 17px 20px;" id="filter-departments"> <!-- Krijojme nje div per filtrat -->
+		<div class="container" id="filter-departments"> <!-- Krijojme nje div per filtrat -->
 			<form method="post" action="manage_categories.php?a=search#tab_dep-info">
 				<datalist id="dep_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
@@ -488,8 +492,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<?php }
 					?>
 				</datalist>
-			<input placeholder="Search by department" type="text" list="dep_name_list" name="search_by_dep_name" <?php if(isset($_POST["search_by_dep_name"])) echo "value='".$_POST["search_by_dep_name"]."'" ?> class="form-control-1" />
-				<select id="cat_status" name="search_by_dep_status" class="form-control-1">
+			<input placeholder="Search by department" type="text" list="dep_name_list" name="search_by_dep_name" <?php if(isset($_POST["search_by_dep_name"])) echo "value='".$_POST["search_by_dep_name"]."'" ?> class="form-control-1 dep_name_list_style" />
+				<select id="cat_status" name="search_by_dep_status" class="form-control-1 dep_name_list_style">
 					<option value="">Select status</option>
 					<option value="1" <?php if(isset($_POST["search_by_dep_status"])&& $_POST["search_by_dep_status"]=='1') echo "selected=selected"; ?> >Active</option>
 					<option value="0"<?php if(isset($_POST["search_by_dep_status"])&& $_POST["search_by_dep_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
@@ -501,8 +505,6 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		
 			
 	<?php?>
-		
-		<div class="container manage-project-title"><?php echo $hesklang['manage_department']; ?></div>
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-department-table">
 				<tr>
@@ -787,9 +789,12 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		}
 		?>
 		
+		
+	<div class="container manage-compnay-title"><?php echo $hesklang['manage_company']; ?></div>
+	
 	<!--FILTRAT TEK KOMPANITE -->
 		<?php $sql = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
-		<div style="float:right; padding:20px 17px 20px;" id="filter-companies"> <!-- Krijojme nje div per filtrat -->
+		<div class="container" id="filter-companies"> <!-- Krijojme nje div per filtrat -->
 			<form method="post" action="manage_categories.php?a=search#tab_comp-info">
 				<datalist id="comp_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
@@ -797,8 +802,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<?php }
 					?>
 				</datalist>
-			<input placeholder="Search by company" type="text" list="comp_name_list" name="search_by_comp_name" <?php if(isset($_POST["search_by_comp_name"])) echo "value='".$_POST["search_by_comp_name"]."'" ?> class="form-control-1" />
-				<select id="cat_status" name="search_by_comp_status" class="form-control-1">
+			<input placeholder="Search by company" type="text" list="comp_name_list" name="search_by_comp_name" <?php if(isset($_POST["search_by_comp_name"])) echo "value='".$_POST["search_by_comp_name"]."'" ?> class="form-control-1 comp_name_list_style" />
+				<select id="cat_status" name="search_by_comp_status" class="form-control-1 comp_name_list_style">
 					<option value="">Select status</option>
 					<option value="1" <?php if(isset($_POST["search_by_comp_status"])&& $_POST["search_by_comp_status"]=='1') echo "selected=selected"; ?> >Active</option>
 					<option value="0"<?php if(isset($_POST["search_by_comp_status"])&& $_POST["search_by_comp_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
@@ -808,7 +813,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			</form>
 		</div> <!--end div i filtrave -->
 		
-		<div class="container manage-compnay-title"><?php echo $hesklang['manage_company']; ?></div>
+
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-company-table">
 				<tr>
@@ -1148,9 +1153,12 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			}
 		?>
 		
+		
+		<div class="container manage-project-title"><?php echo $hesklang['manage_project']; ?></div>
+			
 		<?php $sql = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 		<?php $sql1 = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
-		<div style="float:right; padding:20px 17px 20px;" id="filter-projects"> <!-- Krijojme nje div per filtrat -->
+		<div class="container" id="filter-projects"> <!-- Krijojme nje div per filtrat -->
 			<form method="post">	
 			<datalist id="compproj_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
@@ -1158,15 +1166,15 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				<?php }
 					?>
 			</datalist>
-			<input placeholder="Search by company" type="text" list="compproj_name_list" name="search_by_compproj_name" <?php if(isset($_POST["search_by_compproj_name"])) echo "value='".$_POST["search_by_compproj_name"]."'" ?> class="form-control-1" />
+			<input placeholder="Search by company" type="text" list="compproj_name_list" name="search_by_compproj_name" <?php if(isset($_POST["search_by_compproj_name"])) echo "value='".$_POST["search_by_compproj_name"]."'" ?> class="form-control-1 compproj_name_list_style" />
 			<datalist id="proj_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql1)){ ?>
 					<option value="<?php echo $tmp["project_name"]; ?>" >
 				<?php }
 					?>
 			</datalist>
-			<input placeholder="Search by project" type="text" list="proj_name_list" name="search_by_proj_name" <?php if(isset($_POST["search_by_proj_name"])) echo "value='".$_POST["search_by_proj_name"]."'" ?> class="form-control-1" />
-				<select id="cat_status" name="search_by_proj_status" class="form-control-1">
+			<input placeholder="Search by project" type="text" list="proj_name_list" name="search_by_proj_name" <?php if(isset($_POST["search_by_proj_name"])) echo "value='".$_POST["search_by_proj_name"]."'" ?> class="form-control-1 compproj_name_list_style" />
+				<select id="cat_status" name="search_by_proj_status" class="form-control-1 compproj_name_list_style">
 					<option value="">Select status</option>
 					<option value="1" <?php if(isset($_POST["search_by_proj_status"])&& $_POST["search_by_proj_status"]=='1') echo "selected=selected"; ?> >Active</option>
 				<option value="0"<?php if(isset($_POST["search_by_proj_status"])&& $_POST["search_by_proj_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
@@ -1176,7 +1184,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			</form>
 		</div> <!--end div i filtrave -->
 		
-		<div class="container manage-project-title"><?php echo $hesklang['manage_project']; ?></div>
+
 		<div class="table-responsive container">
 			<table class="table table-bordered manage-projects-table">
 				<tr>

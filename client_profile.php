@@ -68,7 +68,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 	<nav class="row navbar userMenu">
       <div class="container">
         <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav responsive">
 			<li id="userMenu-home"><a href="index.php"><?php echo $hesklang['main_page']; ?></a></li>
 			<li id="userMenu-submitTicket"><a href="index.php?a=add"><?php echo $hesklang['submit_tick']; ?></a></li>
 			<li id="client-username"><a href="client_profile.php"><?php echo $hesklang['hello']; ?><?php if (isset($_SESSION['id']['user']) && $_SESSION['id']['user'] ) {echo $_SESSION['id']['user']; }?></a></li>
@@ -77,7 +77,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-	
+
 <?php	
 hesk_handle_messages();
 
@@ -88,8 +88,8 @@ if (defined('WARN_PASSWORD'))
 ?>
 
 <div class="container"><?php echo $hesklang['req_marked_with']; ?> <font class="important">*</font></div>
-<div class="container tab-content profile-functions-tab">
-	<ul id="tabs" class="nav nav-tabs profile-functions" data-tabs="tabs">
+<div class="container tab-content profile-functions-tab responsive">
+	<ul id="tabs" class="nav nav-tabs profile-functions responsive" data-tabs="tabs">
 		<li class="active" id="profile-info"><a href="#p-info" aria-controls="p-info" role="tab" data-toggle="tab"><?php echo $hesklang['pinfo']; ?></a></li>
 		<li id="signature-info"><a href="#signature" aria-controls="signature" role="tab" data-toggle="tab"><?php echo $hesklang['sig']; ?></a></li>
 		<li id="contract-client"><a href="#cont_client" aria-controls="cont_client" role="tab" data-toggle="tab"><?php echo $hesklang['contract'] .' & ' .$hesklang['project']; ?></a></li>
@@ -135,13 +135,13 @@ if (defined('WARN_PASSWORD'))
 			<input type="hidden" name="userid" value="<?php echo $_SESSION['id']['id']; ?>" />
 			
 			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="profile-information-newpass"><?php echo $hesklang['new_pass']; ?>:</label>
-				<input class="form-control" type="password" id="profile-information-newpass" name="newpass" autocomplete="off" size="40" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" onkeyup="javascript:hesk_checkPassword(this.value)" />
+				<label class="col-sm-2 control-label" for="newpass_cl"><?php echo $hesklang['new_pass']; ?>:</label>
+				<input class="form-control" type="password" required="required" title="Required field" id="newpass_cl" name="newpass_cl" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.newpass2_cl.pattern = this.value;" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" />
 			</div>
 			
 			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="profile-information-confirmpass"><?php echo $hesklang['confirm_pass']; ?>:</label>
-				<input class="form-control" type="password" id="profile-information-confirmpass" name="newpass2" autocomplete="off" size="40" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" />
+				<label class="col-sm-2 control-label" for="newpass2_cl"><?php echo $hesklang['confirm_pass']; ?>:</label>
+				<input class="form-control" required="required" title="Required field" type="password" id="newpass2_cl" name="newpass2_cl" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" autocomplete="off" size="40" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" />
 			</div>
 			
 			<div class="form-inline" style="margin-bottom: 5px;">
@@ -260,8 +260,8 @@ function update_profile() {
 	
 	
 	/* Change password? */
-    $newpass = hesk_input( hesk_POST('newpass') );
-    $passlen = strlen($newpass);
+    $newpass_cl = hesk_input( hesk_POST('newpass') );
+    $passlen = strlen($newpass_cl);
 	if ($passlen > 0)
 	{
         /* At least 5 chars? */
@@ -272,15 +272,15 @@ function update_profile() {
         /* Check password confirmation */
         else
         {
-        	$newpass2 = hesk_input( hesk_POST('newpass2') );
+        	$newpass2_cl = hesk_input( hesk_POST('newpass2') );
 
-			if ($newpass != $newpass2)
+			if ($newpass_cl != $newpass2_cl)
 			{
 				$hesk_error_buffer .= '<li>' . $hesklang['passwords_not_same'] . '</li>';
 			}
             else
             {
-				$v = hesk_Pass2Hash($newpass);
+				$v = hesk_Pass2Hash($newpass_cl);
 				if ($v == '499d74967b28a841c98bb4baaabaad699ff3c079')
 				{
 					define('WARN_PASSWORD',true);

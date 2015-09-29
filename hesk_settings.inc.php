@@ -12,9 +12,9 @@ $hesk_settings['noreply_name']='Help Desk';
 
 // --> Language settings
 $hesk_settings['can_sel_lang']=1;
-$hesk_settings['language']='English';
+$hesk_settings['language']='Shqip';
 $hesk_settings['languages']=array(
-'Shqip' => array('folder'=>'al','hr'=>'------ Pergjigju mbi kete vije ------'),
+'Shqip' => array('folder'=>'al','hr'=>'------ Reply above this line ------'),
 'English' => array('folder'=>'en','hr'=>'------ Reply above this line ------'),
 'Italiano' => array('folder'=>'it','hr'=>'------ Rispondi sopra questa linea ------'),
 );
@@ -35,11 +35,11 @@ $hesk_settings['hesk_title']='Online Support System';
 $hesk_settings['hesk_url']='http://localhost/support';
 $hesk_settings['admin_dir']='admin';
 $hesk_settings['attach_dir']='attachments';
-$hesk_settings['max_listings']=20;
+$hesk_settings['max_listings']=5;
 $hesk_settings['print_font_size']=12;
 $hesk_settings['autoclose']=7;
 $hesk_settings['max_open']=0;
-$hesk_settings['new_top']=0;
+$hesk_settings['new_top']=1;
 $hesk_settings['reply_top']=0;
 
 // --> Features
@@ -60,7 +60,7 @@ $hesk_settings['select_pri']=0;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=0;
-$hesk_settings['secimg_sum']='DXZXTU52E6';
+$hesk_settings['secimg_sum']='L3H99A6L7Y';
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
 $hesk_settings['recaptcha_private_key']='';
@@ -107,14 +107,14 @@ $hesk_settings['kb_related']=5;
 // ==> EMAIL
 
 // --> Email sending
-$hesk_settings['smtp']=1;
-$hesk_settings['smtp_host_name']='smtp.gmail.com';
-$hesk_settings['smtp_host_port']=587;
+$hesk_settings['smtp']=0;
+$hesk_settings['smtp_host_name']='mail.domain.com';
+$hesk_settings['smtp_host_port']=25;
 $hesk_settings['smtp_timeout']=20;
 $hesk_settings['smtp_ssl']=0;
-$hesk_settings['smtp_tls']=1;
-$hesk_settings['smtp_user']='erxhafaj@gmail.com';
-$hesk_settings['smtp_password']='breguthat&quot;%';
+$hesk_settings['smtp_tls']=0;
+$hesk_settings['smtp_user']='';
+$hesk_settings['smtp_password']='';
 
 // --> Email piping
 $hesk_settings['email_piping']=0;
@@ -147,7 +147,7 @@ $hesk_settings['notify_closed']=1;
 $hesk_settings['strip_quoted']=1;
 $hesk_settings['eml_req_msg']=0;
 $hesk_settings['save_embedded']=1;
-$hesk_settings['multi_eml']=1;
+$hesk_settings['multi_eml']=0;
 $hesk_settings['confirm_email']=0;
 $hesk_settings['open_only']=1;
 

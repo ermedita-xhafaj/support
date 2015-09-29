@@ -130,21 +130,32 @@ function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
 			<div class="clearfix"></div>
 			<div class="form-inline project-row1" id="profile-information-row">
 				<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
-
 				<input class="form-control" type="checkbox" name="prof_active" value="1" <?php if(isset($_SESSION[$session_array]['active']) && $_SESSION[$session_array]['active']=="1") {echo "checked"; } ?> />
 
 			</div>
 			
+			<?php if (!isset($_GET['a']))
+			{ ?>
+			<div class="form-inline" id="profile-information-row">
+				<label class="col-sm-2 control-label" for="newpass"><?php echo $is_profile_page ? $hesklang['new_pass'] : $hesklang['pass']; ?>:</label>
+				<input class="form-control" type="password" required="required" title="Required field" id="newpass" name="newpass" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.newpass2.pattern = this.value;" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" />
+			</div>
+			
+			<div class="form-inline" id="profile-information-row">
+				<label class="col-sm-2 control-label" for="newpass2"><?php echo $hesklang['confirm_pass']; ?>:</label>
+				<input class="form-control" required="required" title="Required field" type="password" id="newpass2" name="newpass2" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" autocomplete="off" size="40" />
+			</div>
+			<?php } else { ?>
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-newpass"><?php echo $is_profile_page ? $hesklang['new_pass'] : $hesklang['pass']; ?>:</label>
-				<input class="form-control" type="password" id="profile-information-newpass" name="newpass" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" />
+				<input class="form-control" type="password" id="newpass" name="newpass" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.newpass2.pattern = this.value;" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" />
 			</div>
 			
 			<div class="form-inline" id="profile-information-row">
 				<label class="col-sm-2 control-label" for="profile-information-confirmpass"><?php echo $hesklang['confirm_pass']; ?>:</label>
-				<input class="form-control" type="password" id="profile-information-confirmpass" name="newpass2" autocomplete="off" size="40" />
-			</div>
-			
+				<input class="form-control" type="password" id="newpass2" name="newpass2" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" autocomplete="off" size="40" />
+				</div>
+			<?php } ?>
 			<div class="form-inline" id="profile-information-pwdst-row">
 				<label class="col-sm-2 control-label"><?php echo $hesklang['pwdst']; ?>:</label>
 				<label style="vertical-align: top;">

@@ -58,13 +58,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 ?>
 
-<!--
-</td>
-</tr>-->
-
-<!-- start in this page end somewhere...
-<tr>
-<td>-->
+<div class="container filter-ticket-title"><?php echo $hesklang['filter_ticket']; ?></div>
 
 <?php
 
@@ -80,7 +74,7 @@ if (hesk_checkPermission('can_view_tickets',0))
 <?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
-	<div class="col-sm-8 col-sm-offset-2 filter-ticket-admin" id="filter-ticket-admin"> <!-- Krijojme nje div per filtrat -->
+	<div class="container filter-ticket-admin" id="filter-ticket-admin"> <!-- Krijojme nje div per filtrat -->
 		<form method="post" action="">
 			<datalist id="ticket_id_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){
@@ -88,14 +82,14 @@ if (hesk_checkPermission('can_view_tickets',0))
 				}
 					?>
 				</datalist>
-				<input placeholder="Search by ID" type="text" list="ticket_id_list" name="search_by_ID_ticket" <?php if(isset($_POST["search_by_ID_ticket"])) echo "value='".$_POST["search_by_ID_ticket"]."'" ?> class="form-control-1" />
+				<input placeholder="Search by ID" type="text" list="ticket_id_list" name="search_by_ID_ticket" <?php if(isset($_POST["search_by_ID_ticket"])) echo "value='".$_POST["search_by_ID_ticket"]."'" ?> class="form-control-1 ticket_id_list_style" />
 				<datalist id="ticket_desc_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_description)){
 					echo '<option value='.$tmp["subject"].'>';
 				}
 					?>
 				</datalist>
-				<input placeholder="Select by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" <?php if(isset($_POST["search_by_description_ticket"])) echo "value='".$_POST["search_by_description_ticket"]."'" ?>  class="form-control-1" />
+				<input placeholder="Select by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" <?php if(isset($_POST["search_by_description_ticket"])) echo "value='".$_POST["search_by_description_ticket"]."'" ?>  class="form-control-1 ticket_id_list_style" />
 				
 				<datalist id="ticket_klient_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_client)){
@@ -103,9 +97,9 @@ if (hesk_checkPermission('can_view_tickets',0))
 				}
 					?>
 				</datalist>
-				<input placeholder="Select by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" <?php if(isset($_POST["search_by_client_open_ticket"])) echo "value='".$_POST["search_by_client_open_ticket"]."'" ?> class="form-control-1" />
+				<input placeholder="Select by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" <?php if(isset($_POST["search_by_client_open_ticket"])) echo "value='".$_POST["search_by_client_open_ticket"]."'" ?> class="form-control-1 ticket_id_list_style" />
 
-			<?php echo "<select class='form-control-1' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
+			<?php echo "<select class='form-control-1 ticket_id_list_style' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
 				echo"<option value=''>Select category</option>";
 					while ($tmp = hesk_dbFetchAssoc($sql_category))
 					{
