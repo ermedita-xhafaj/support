@@ -225,7 +225,7 @@ td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: 
 #view-submitTicket  span{font-weight: bold; font-size: 15pt; vertical-align: bottom; margin-left: 5px;}
 #view-submitTicket{padding-left: 50px;}
 .form-submit-support-request form {margin-left: -10px;}
-.contact-support-request{margin-left: -50px;}
+.contact-support-request{margin-left: -70px;}
 #name-contact-info-support-request, #email-contact-info-support-request { width: 336px; background-color: white;}
 .submit-view-existing-ticket {margin-bottom: 50px;}
 .submit-ticket-btn {margin-bottom: 50px; width: 178px; margin-left: -24px;}
@@ -239,8 +239,8 @@ td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: 
 						background:-o-linear-gradient(#008981, #00A79D);
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);}
-#select-cont {margin-left: -50px;}						
-.filter-ticket-client {margin-left: 20.6%; margin-bottom: 10px;}						
+#select-cont {margin-left: -70px;}						
+.filter-ticket-client {margin-bottom: 10px;}						
 						
 
 /*start style for support/ticket.php*/
@@ -485,6 +485,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 /* start style for support/admin/admin_main.php */
 .open-new-ticket {margin-bottom: 5px; margin-top: -27px;}
 #openTicket {font-size: 14pt; font-weight: bold; vertical-align: bottom; margin-left: 14px;}
+.filter-ticket-title {font-size: 14pt; font-weight: bold; margin-top: 10px;}
 .new-ticket-btn, .filter-ticket-btn {color: white;
 					background: -webkit-linear-gradient(#00A79D, #008981);
 					background:-o-linear-gradient(#00A79D, #008981);
@@ -499,9 +500,10 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 					}
 					
 .newTicket {padding-left: 71px;}
-.filter-ticket-admin {margin: 15px 0px 15px 20.5%;}
-.filter-ticket-btn {width: 103px;}
-
+.filter-ticket-admin {margin-top: 15px; margin-bottom: 15px;}
+.ticket_id_list_style{width: 160px;}
+.filter-ticket-btn {width: 150px;}
+.contract_name_list_style, .cat_name_list_style, .dep_name_list_style, .comp_name_list_style, .compproj_name_list_style, .dep_user_list_style, .dep_user_list_style {width: 170px;}
 
 
 
@@ -530,6 +532,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 .old-new-name-category, .manage-category-priority {margin: 10px 0px 5px;}
 #hr_for_category {margin: 0px 5px;}
 #hr_for_ticket {margin-right: 50px;}
+#filter-categories, #filter-departments, #filter-companies, #filter-projects, #filter-contracts {margin-top: 10px; margin-bottom: 10px;}
 
 
 .manage-config-tab, .manage-contract-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
@@ -774,7 +777,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);
 					}
-.execute-btn {width: 103px;}
+.execute-btn {width: 150px;}
 
 
 /* start style for support/admin/manage_users.php */					
@@ -796,7 +799,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 						background: linear-gradient(#008981, #00A79D);}
 .ex-sm-table {width: 97%;}
 .report-table {background: white; width: 98.5%;}
-
+#filter-users, #filter-clients {margin-top: 10px; margin-bottom: 10px;}
 
 
 						

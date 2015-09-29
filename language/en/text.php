@@ -1451,6 +1451,18 @@ $hesklang['proj_req']='Selected project cannot be deleted because it is linked w
 $hesklang['desc_sla']='Description Of SLA';
 $hesklang['reply_time']='Reply Time';
 $hesklang['resolved_time']='Resolved Time';
+$hesklang['filter_ticket']='Search Tickets';
+$hesklang['clear']='Clear';
+$hesklang['manage_ticket']='Manage Tickets';
+$hesklang['search_id']='Search by ID';
+$hesklang['search_subject']='Search by subject';
+$hesklang['search_client']='Search by client';
+$hesklang['select_categ']='Select category';
+$hesklang['select_status']='Select status';
+$hesklang['account_deactivated']='Your account is currently deactivated. Please contact administrator!';
+$hesklang['wrong_pass_username']='Wrong Username or Password. Please try again!';
+$hesklang['helpdesk_by']='Help Desk Software by ';
+$hesklang['commprog']='Communication Progress';
 
 
 
