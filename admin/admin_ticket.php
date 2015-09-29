@@ -564,18 +564,6 @@ while ($row=hesk_dbFetchAssoc($result))
 	}
 }
 
-/* Get replies */
-if ($ticket['replies'])
-{
-	$reply = '';
-	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `replyto`='".intval($ticket['id'])."' ORDER BY `id` " . ($hesk_settings['new_top'] ? 'DESC' : 'ASC') );
-}
-else
-{
-	$reply = false;
-}
-
-
 /* List of companies */
 $result = hesk_dbQuery("SELECT `id`,`company_name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` ORDER BY `id` ASC");
 $company_options='';
@@ -593,6 +581,18 @@ while ($row=hesk_dbFetchAssoc($result))
     if ($row['id'] == $ticket['contract_ticket_id']) {continue;}
     $contract_options.='<option value="'.$row['id'].'">'.$row['contract_name'].'</option>';
 }
+
+/* Get replies */
+if ($ticket['replies'])
+{
+	$reply = '';
+	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `replyto`='".intval($ticket['id'])."' ORDER BY `id` " . ($hesk_settings['new_top'] ? 'DESC' : 'ASC') );
+}
+else
+{
+	$reply = false;
+}
+
 //var_dump($contract_options); // all contracts name
 
 // Demo mode

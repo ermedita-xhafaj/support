@@ -710,9 +710,10 @@ function check_contract_expiry()
 				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='1', `lastchange`=NOW() WHERE `id` = ".$con[0] );
 			}
 			else{
-				
-				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='0', `lastchange`=NOW() WHERE `id` = ".$con[0] );
+
+				hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` SET `active`='1', `lastchange`=NOW() WHERE `id` = ".$con[0] );
 			}
+
 	}
 }
 function hesk_getCategoryName($id)
@@ -1858,8 +1859,8 @@ global $hesk_settings, $hesklang;
 require_once(HESK_PATH . 'inc/header.inc.php');
 ?>
 
-<nav class="row navbar navbar-default" id="showTopBar-indexPhp">
-	<div class="menu-wrapper">
+<nav class="row navbar navbar-default responsive" id="showTopBar-indexPhp">
+	<div class="menu-wrapper responsive">
 		<div class="container showTopBar"><?php hesk_showTopBar($hesk_settings['hesk_title']); ?></div>
 	</div>
 </nav>

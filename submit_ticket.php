@@ -200,8 +200,8 @@ if ($hesk_settings['confirm_email'])
 $tmpvar['category'] = intval( hesk_POST('category') ) or $hesk_error_buffer['category']=$hesklang['sel_app_cat'];
 
 // Do we allow customer to select priority?
-//if ($hesk_settings['cust_urgency'])
-//{
+if ($hesk_settings['cust_urgency'])
+{
 	$tmpvar['priority'] = intval( hesk_POST('priority') );
 
 	// We don't allow customers select "Critical". If priority is not valid set it to "low".
@@ -218,9 +218,9 @@ $tmpvar['category'] = intval( hesk_POST('category') ) or $hesk_error_buffer['cat
 			$tmpvar['priority'] = 3;
 		}
 	}
-//}
+}
 // Priority will be selected based on the category selected
-/*else
+else
 {
 	$res = hesk_dbQuery("SELECT `priority` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `id`=".intval($tmpvar['category']));
 	if ( hesk_dbNumRows($res) == 1 )
@@ -231,17 +231,16 @@ $tmpvar['category'] = intval( hesk_POST('category') ) or $hesk_error_buffer['cat
 	{
 		$tmpvar['priority'] = 3;
 	}
-}*/
+}
 
 $tmpvar['subject']  = hesk_input( hesk_POST('subject') ) or $hesk_error_buffer['subject']=$hesklang['enter_ticket_subject'];
 $tmpvar['message']  = hesk_input( hesk_POST('message') ) or $hesk_error_buffer['message']=$hesklang['enter_message'];
 $tmpvar['contract_ticket_id']  = hesk_input( hesk_POST('contract_name') );
 $tmpvar['company_ticket_id']  = hesk_input( hesk_POST('company_name') );
-
 // Is category a valid choice?
 if ($tmpvar['category'])
 {
-	//hesk_verifyCategory();
+	hesk_verifyCategory();
 
 	// Is auto-assign of tickets disabled in this category?
 	if ( empty($hesk_settings['category_data'][$tmpvar['category']]['autoassign']) )
@@ -411,39 +410,28 @@ if ($hesk_settings['attachments']['use'] && ! empty($attachments) )
 
 // Insert ticket to database
 $ticket = hesk_newTicket($tmpvar);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-$categ = hesk_dbQuery("SELECT `categ_impro_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `id` LIKE '".hesk_POST('category')."' ORDER BY categ_impro_id LIMIT 1");
-$cat = mysqli_fetch_assoc($categ);
 
-// gjejme project_id te lidhur me kontraten e mesiperme
-$con_res = hesk_dbQuery("SELECT `project_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts` WHERE `id` LIKE '".hesk_POST('contract_name')."' ORDER BY project_id LIMIT 1");
-$con_project_id = mysqli_fetch_assoc($con_res);
-
-$proj_code = hesk_dbQuery("SELECT `project_code` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` WHERE `id` LIKE ".intval($con_project_id['project_id'])." ORDER BY project_code LIMIT 1");
-$proj = mysqli_fetch_assoc($proj_code);  // project_code i webit duhet e ekzistoje dhe ne erp i njejte
 
 //insert to ERP
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 include('oe_api.php');
-$valid_services = array("SCA" => "project.issue", "PCA"=>"project.project"); //klasat e ERP  me te cilat do te punojme
-$oeapi = new OpenerpApi();  //create object
-
-$data = $oeapi->search_projectID($valid_services["PCA"], $proj['project_code']);
-//var_dump($data);
-
+$valid_services = array("SCA" => "project.issue"); //klasat e ERP  me te cilat do te punojme
 $params = array();
 
 	$params['name'] =  hesk_POST('subject');
 	$params['description'] =  hesk_POST('message');
 	$params['email_from'] =  hesk_POST('email');
 	$params['priority'] =  hesk_POST('priority');
-	$params['categ_id'] =  $cat['categ_impro_id'];
+	$params['categ_id'] =  hesk_POST('category');
 	$params['cp_issue_type'] =  "helpdesk";
 	$params['helpdesk_id'] = $ticket['id'];
-	$params['project_id'] =  intval($data[0]); //?????????????
+	$params['project_id'] =  3;
 	
-	$data1 = $oeapi->create_record($params ,$valid_services["SCA"]); //krijimi dhe integrimi i ceshtjes ne IMPRO
+	$oeapi = new OpenerpApi();  //create object
+	$data = $oeapi->create_record($params ,$valid_services["SCA"]);
+	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+// Notify the customer
 if ($hesk_settings['notify_new'])
 {
 	//Ermedita -  send email to assigned staff depending on Contracts

@@ -46,8 +46,10 @@ header('Content-Type: text/html; charset=utf-8');
 // Most people will never see this text, so it is not included in text.php
 // (saves resources as we don't need to call common.inc.php and load language)
 $hesklang['1']='Page Redirection';
-$hesklang['2']='If you are not redirected automatically, follow <a href="%s">this link</a>'; // %s will be replaced with URL
+$hesklang['1']='Ridrejtohuni drejt faqes';
 
+$hesklang['2']='If you are not redirected automatically, follow <a href="%s">this link</a>'; // %s will be replaced with URL
+$hesklang['2']='Nëse nuk mund të ridrejtoheni automatikisht, ndiqni linkun <a href="%s">this link</a>'; // %s will be replaced with URL
 // Don't bother validating IP address format, just sure no invalid chars are sent
 if ( isset($_GET['ip']) && preg_match('/^[0-9A-Fa-f\:\.]+$/', $_GET['ip']) )
 {

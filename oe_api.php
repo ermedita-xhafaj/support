@@ -76,7 +76,37 @@ private $host = 'improdemo.commprog.com';
     }
 	
 	
-	/* Funksioni i leximit te nje sherbimi
+	/* Funksion per kerkimin e nje rekordi ne baze te ID , klasa/modeli ndryshon */
+	public function Search_by_ID($service = "project.issue", $uid = ''){
+		$this->client = new xmlrpc_client($this->server_url.'object');
+		
+		$ids_rpc = array();
+		$ids_rpc[0] = new xmlrpcval($uid, "string");
+		$fields = array();
+		$fields[0] = new xmlrpcval("name", "string");
+		$fields[1] = new xmlrpcval("", "string");
+		$fields[2] = new xmlrpcval("projdescritpionect_id", "string");
+		$fields[3] = new xmlrpcval("categ_id", "string");
+		$fields[4] = new xmlrpcval("user_id", "string"); ///id e issue
+		
+
+		$msg = new xmlrpcmsg('execute');
+		$msg->addParam(new xmlrpcval($this->db, "string"));
+		$msg->addParam(new xmlrpcval($this->uid, "int"));
+		$msg->addParam(new xmlrpcval($this->pass, "string"));
+		$msg->addParam(new xmlrpcval($service, "string"));
+		$msg->addParam(new xmlrpcval("read", "string"));
+		$msg->addParam(new xmlrpcval($ids_rpc, "array"));
+		$msg->addParam(new xmlrpcval($fields, "array"));
+
+		$resp = $this->client->send($msg);
+		$val = $resp->value();
+		$this->zhvish_rpc($val);
+		return $val;	
+	}
+	
+	
+	/* Funksioni i lexhimit te nje sherbimi
 	* @args: $service => servisi i deshiruar
 	* @args: $objectid => kodi i kerkimit
 	* @args: $uid => Numri Personal i Kerkuesit
@@ -100,36 +130,8 @@ private $host = 'improdemo.commprog.com';
 		$resp = $this->client->send($msg);
 		$ids = $resp->value();
 		if(empty($ids)){
-				return array(array("state" => "Nuk ekziston helpdesk_id!"));
+				return array(array("state" => "ja ke fut kot"));
 		} else {
-			$this->zhvish_rpc($ids);
-			
-		}
-		
-		return $ids;
-	}
-	//kerkojme per korrelance projektesh
-	public function search_projectID($service = "project.issue", $objectid = 0, $uid = '') {
-		$this->client = new xmlrpc_client($this->server_url.'object');
-		$keys = array(new xmlrpcval(array(new xmlrpcval("code" , "string"),
-						new xmlrpcval("=","string"),
-						new xmlrpcval($objectid,"string")),"array")
-						
-			);
-
-		$msg = new xmlrpcmsg('execute');
-		$msg->addParam(new xmlrpcval($this->db, "string"));
-		$msg->addParam(new xmlrpcval($this->uid, "int"));
-		$msg->addParam(new xmlrpcval($this->pass, "string"));
-		$msg->addParam(new xmlrpcval($service, "string"));
-		$msg->addParam(new xmlrpcval("search", "string"));
-		$msg->addParam(new xmlrpcval($keys, "array"));
-		$resp = $this->client->send($msg);
-		$ids = $resp->value();
-		if(empty($ids)){
-				return array(array("state" => "Error ne kerkimin e nje project code ne erp!"));
-		} else {
-			//return $ids;
 			$this->zhvish_rpc($ids);
 			
 		}
