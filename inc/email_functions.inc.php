@@ -68,6 +68,30 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
 
 } // END hesk_notifyCustomer()
 
+/*function hesk_notifyStaff($email_template = 'new_ticket')
+{
+	global $hesk_settings, $hesklang, $ticket;
+
+	// Demo mode
+	if ( defined('HESK_DEMO') )
+	{
+		return true;
+	}
+
+	// Format email subject and message
+	$subject = hesk_getEmailSubject($email_template,$ticket);
+	$message = hesk_getEmailMessage($email_template,$ticket);
+	
+	var_dump($ticket);
+	exit();
+
+	// Send e-mail
+	hesk_mail($ticket['email'], $subject, $message);
+
+    return true;
+
+} // END hesk_notifyStaff()*/
+
 
 function hesk_notifyAssignedStaff($autoassign_owner, $email_template, $type = 'notify_assigned')
 {
@@ -321,7 +345,7 @@ function hesk_mail($to,$subject,$message)
                 "Return-Path: $hesk_settings[webmaster_mail]",
 				"Subject: " . $subject,
 				"Date: " . date(DATE_RFC2822),
-                "Content-Type: text/plain; charset=" . $hesklang['ENCODING']
+                "Content-Type: text/html; charset=" . $hesklang['ENCODING']
 			), $message))
     {
 		// Suppress errors unless we are in debug mode

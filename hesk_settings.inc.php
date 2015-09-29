@@ -60,7 +60,7 @@ $hesk_settings['select_pri']=0;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=0;
-$hesk_settings['secimg_sum']='UR3XBG348N';
+$hesk_settings['secimg_sum']='DXZXTU52E6';
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
 $hesk_settings['recaptcha_private_key']='';
@@ -107,14 +107,14 @@ $hesk_settings['kb_related']=5;
 // ==> EMAIL
 
 // --> Email sending
-$hesk_settings['smtp']=0;
-$hesk_settings['smtp_host_name']='mail.domain.com';
-$hesk_settings['smtp_host_port']=25;
+$hesk_settings['smtp']=1;
+$hesk_settings['smtp_host_name']='smtp.gmail.com';
+$hesk_settings['smtp_host_port']=587;
 $hesk_settings['smtp_timeout']=20;
 $hesk_settings['smtp_ssl']=0;
-$hesk_settings['smtp_tls']=0;
-$hesk_settings['smtp_user']='';
-$hesk_settings['smtp_password']='';
+$hesk_settings['smtp_tls']=1;
+$hesk_settings['smtp_user']='erxhafaj@gmail.com';
+$hesk_settings['smtp_password']='breguthat&quot;%';
 
 // --> Email piping
 $hesk_settings['email_piping']=0;
@@ -147,14 +147,14 @@ $hesk_settings['notify_closed']=1;
 $hesk_settings['strip_quoted']=1;
 $hesk_settings['eml_req_msg']=0;
 $hesk_settings['save_embedded']=1;
-$hesk_settings['multi_eml']=0;
+$hesk_settings['multi_eml']=1;
 $hesk_settings['confirm_email']=0;
 $hesk_settings['open_only']=1;
 
 
 // ==> TICKET LIST
 
-$hesk_settings['ticket_list']=array('id','lastchange','category','name','company_ticket_id','contract_ticket_id','subject','status');
+$hesk_settings['ticket_list']=array('id','lastchange','category','company_ticket_id','contract_ticket_id','name','subject','status');
 
 // --> Other
 $hesk_settings['submittedformat']='2';

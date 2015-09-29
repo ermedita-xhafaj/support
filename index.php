@@ -245,7 +245,7 @@ hesk_handle_messages();
 				<select class="form-control" required="required" title="Required field" id="select-cont" name="contract_name" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.$_SESSION["id"]["id"] );
+						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE `client_Id`='.$_SESSION["id"]["id"] );
 						$i=1;
 						while ($row_client = mysqli_fetch_array($res_client)) 
 						{
@@ -279,7 +279,7 @@ hesk_handle_messages();
 			$is_table = 0;
 			// Get categories
 
-			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' AND `active`='1' ORDER BY `cat_order` ASC");
+			$res = hesk_dbQuery("SELECT `id`, `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' AND `active`='1' ORDER BY `cat_order` ASC");
 
 			/*if (hesk_dbNumRows($res) == 1)
 			{
@@ -311,7 +311,7 @@ hesk_handle_messages();
 						// List categories
 						while ($row = hesk_dbFetchAssoc($res))
 						{
-							echo '<option value="' . $row['categ_impro_id'] . '"' . (($_SESSION['c_category'] == $row['categ_impro_id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
+							echo '<option value="' . $row['id'] . '"' . (($_SESSION['c_category'] == $row['id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
 						}
 						?>
 						</select>

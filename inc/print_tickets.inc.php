@@ -199,7 +199,7 @@ if ( $tmp < count($possible_status) )
 	}
 	if(empty($_POST)){
 		// Add to the SQL
-		$sql .= " AND `status` IN ('" . implode("','", array_keys($status) ) . "') ";
+		$sql .= " AND `status` IN ('" . implode("','", array_keys($status) ) . "')";
 		}
 	
 }
@@ -236,18 +236,11 @@ else
 	// A custom selection of priorities
 	$sql .= " AND `priority` IN ('" . implode("','", array_keys($priority) ) . "') ";
 }
-/*unset($_POST['submitbutton_tickets']);
-var_dump($_POST);
-if(empty($_POST)){*/
 // That's all the SQL we need for count
 $sql_count .= $sql;
 $sql = $sql_final . $sql;
-/*}
-else{
-	echo "No search results!";
-	echo "<br/>".$sql;
-	//exit();
-}*/
+///var_dump($sql);
+
 // Prepare variables used in search and forms
 require(HESK_PATH . 'inc/prepare_ticket_search.inc.php');
 
