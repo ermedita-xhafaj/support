@@ -68,7 +68,8 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
 
 } // END hesk_notifyCustomer()
 
-/*function hesk_notifyStaff($email_template = 'new_ticket')
+
+function hesk_notifyCustomer_multiple($email_template = 'new_ticket', $user_emails)
 {
 	global $hesk_settings, $hesklang, $ticket;
 
@@ -81,17 +82,17 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
 	// Format email subject and message
 	$subject = hesk_getEmailSubject($email_template,$ticket);
 	$message = hesk_getEmailMessage($email_template,$ticket);
-	
-	var_dump($ticket);
-	exit();
 
-	// Send e-mail
-	hesk_mail($ticket['email'], $subject, $message);
-
+	$size = sizeOf($user_emails);
+	$i=0;
+	while( $i < $size){
+		// Send e-mail
+		hesk_mail($user_emails[$i], $subject, $message);
+		$i++;
+	}
     return true;
 
-} // END hesk_notifyStaff()*/
-
+} // END hesk_notifyCustomer_multiple()
 
 function hesk_notifyAssignedStaff($autoassign_owner, $email_template, $type = 'notify_assigned')
 {

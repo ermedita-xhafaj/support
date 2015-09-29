@@ -446,8 +446,6 @@ $params = array();
 
 if ($hesk_settings['notify_new'])
 {
-
-	
 	//Ermedita -  send email to assigned staff depending on Contracts
 	$users = hesk_dbQuery("SELECT `userId` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`=".hesk_POST('contract_name'));
 	$u = array();
