@@ -1859,8 +1859,8 @@ global $hesk_settings, $hesklang;
 require_once(HESK_PATH . 'inc/header.inc.php');
 ?>
 
-<nav class="row navbar navbar-default" id="showTopBar-indexPhp">
-	<div class="menu-wrapper">
+<nav class="row navbar navbar-default responsive" id="showTopBar-indexPhp">
+	<div class="menu-wrapper responsive">
 		<div class="container showTopBar"><?php hesk_showTopBar($hesk_settings['hesk_title']); ?></div>
 	</div>
 </nav>

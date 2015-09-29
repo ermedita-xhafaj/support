@@ -12,9 +12,9 @@ $hesk_settings['noreply_name']='Help Desk';
 
 // --> Language settings
 $hesk_settings['can_sel_lang']=1;
-$hesk_settings['language']='English';
+$hesk_settings['language']='Shqip';
 $hesk_settings['languages']=array(
-'Shqip' => array('folder'=>'al','hr'=>'------ Pergjigju mbi kete vije ------'),
+'Shqip' => array('folder'=>'al','hr'=>'------ Reply above this line ------'),
 'English' => array('folder'=>'en','hr'=>'------ Reply above this line ------'),
 'Italiano' => array('folder'=>'it','hr'=>'------ Rispondi sopra questa linea ------'),
 );
@@ -35,11 +35,11 @@ $hesk_settings['hesk_title']='Online Support System';
 $hesk_settings['hesk_url']='http://localhost/support';
 $hesk_settings['admin_dir']='admin';
 $hesk_settings['attach_dir']='attachments';
-$hesk_settings['max_listings']=20;
+$hesk_settings['max_listings']=5;
 $hesk_settings['print_font_size']=12;
 $hesk_settings['autoclose']=7;
 $hesk_settings['max_open']=0;
-$hesk_settings['new_top']=0;
+$hesk_settings['new_top']=1;
 $hesk_settings['reply_top']=0;
 
 // --> Features
@@ -60,7 +60,7 @@ $hesk_settings['select_pri']=0;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=0;
-$hesk_settings['secimg_sum']='UR3XBG348N';
+$hesk_settings['secimg_sum']='L3H99A6L7Y';
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
 $hesk_settings['recaptcha_private_key']='';
@@ -154,7 +154,7 @@ $hesk_settings['open_only']=1;
 
 // ==> TICKET LIST
 
-$hesk_settings['ticket_list']=array('id','lastchange','category','name','company_ticket_id','contract_ticket_id','subject','status');
+$hesk_settings['ticket_list']=array('id','lastchange','category','company_ticket_id','contract_ticket_id','name','subject','status');
 
 // --> Other
 $hesk_settings['submittedformat']='2';

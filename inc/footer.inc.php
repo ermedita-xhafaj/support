@@ -74,7 +74,7 @@ if (defined('SHOW_ONLINE'))
 }
 
 /*echo '<div style="text-align: center;">' .$hesk_settings['commprog_license'] .'</div>';*/	/*shtuar 6/4/2015*/
-echo '<div style="text-align: center;">' .'Help Desk Software by<a href="http://www.commprog.com/en/" target="_blank"> Communication Progress 2015</a>' .'</div>';
+echo '<div style="text-align: center;">' .$hesklang['helpdesk_by'] .'<a href="http://www.commprog.com/en/" target="_blank">' .$hesklang['commprog'] .'</a>' .'</div>';
 
 ?>
 

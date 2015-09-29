@@ -32,7 +32,7 @@ hesk_dbConnect();
 	 if($count==1)
 	 {
 			 if($id['active']=='0'){
-				 $msg = "Your account is currently deactivated. Please contact administrator!";
+				 $msg = $hesklang['account_deactivated'];
 				 $_SESSION['message'] = $msg;
 				 header("location:http://localhost/support/");
 			 }
@@ -46,13 +46,13 @@ hesk_dbConnect();
 	 }
 	 else{
 		 session_start();
-		 $msg = "Wrong Username or Password. Please try again!";
+		 $msg = $hesklang['wrong_pass_username'];
 		 $_SESSION['message'] = $msg;
 		 header("location:http://localhost/support/");
 	 }
  }
 	else {
-		 header("location:http://localhost/support/msg=Please enter some username and password");
+		 header("location:http://localhost/support/");
 	 }
  hesk_dbClose();
  ?>

@@ -236,7 +236,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 <?php $sql = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
 <?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
 <?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
-	<div class="col-sm-7 col-sm-offset-5 filter_contracts" id="filter-contracts"> <!-- Krijojme nje div per filtrat -->
+	<div class="container filter_contracts" id="filter-contracts"> <!-- Krijojme nje div per filtrat -->
 		<form method="post">
 				<datalist id="contract_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
@@ -244,7 +244,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				<?php }
 					?>
 				</datalist>
-			<input placeholder="Search by contract" type="text" list="contract_name_list" name="search_by_contract_name" <?php if(isset($_POST["search_by_contract_name"])) echo "value='".$_POST["search_by_contract_name"]."'" ?> class="form-control-1" />
+			<input placeholder="Search by contract" type="text" list="contract_name_list" name="search_by_contract_name" <?php if(isset($_POST["search_by_contract_name"])) echo "value='".$_POST["search_by_contract_name"]."'" ?> class="form-control-1 contract_name_list_style" />
 			
 			<datalist id="project_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_project)){ ?>
@@ -252,7 +252,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				<?php }
 					?>
 				</datalist>
-			<input placeholder="Search by project" type="text" list="project_name_list" name="search_by_project_name" <?php if(isset($_POST["search_by_project_name"])) echo "value='".$_POST["search_by_project_name"]."'" ?> class="form-control-1" />
+			<input placeholder="Search by project" type="text" list="project_name_list" name="search_by_project_name" <?php if(isset($_POST["search_by_project_name"])) echo "value='".$_POST["search_by_project_name"]."'" ?> class="form-control-1 contract_name_list_style" />
 			
 			<datalist id="company_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_company)){ ?>
@@ -260,8 +260,8 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 				<?php }
 					?>
 				</datalist>
-			<input placeholder="Search by company" type="text" list="company_name_list" name="search_by_company_name" <?php if(isset($_POST["search_by_company_name"])) echo "value='".$_POST["search_by_company_name"]."'" ?> class="form-control-1" />
-			<select id="cat_status" name="search_by_contract_status" class="form-control-1">
+			<input placeholder="Search by company" type="text" list="company_name_list" name="search_by_company_name" <?php if(isset($_POST["search_by_company_name"])) echo "value='".$_POST["search_by_company_name"]."'" ?> class="form-control-1 contract_name_list_style" />
+			<select id="cat_status" name="search_by_contract_status" class="form-control-1 contract_name_list_style">
 				<option value="">Select status</option>
 				<option value="1" <?php if(isset($_POST["search_by_contract_status"])&& $_POST["search_by_contract_status"]=='1') echo "selected=selected"; ?> >Active</option>
 				<option value="0"<?php if(isset($_POST["search_by_contract_status"])&& $_POST["search_by_contract_status"]=='0')  echo "selected=selected"; ?> >Inactive</option>
@@ -555,12 +555,12 @@ function remove_contract(){
 			<form method="post" action="contracts.php#tab_create-cont" name="form">
 				<div class="">
 					<div class="form-inline contr-row1" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['contract_name'] ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label"><?php echo $hesklang['contract_name'] ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="text" id="" name="contract_name" size="40" maxlength="50" value="" />
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -576,7 +576,7 @@ function remove_contract(){
 					</div>
 
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['project']; ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label" for=""><?php echo $hesklang['project']; ?>:<font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="project_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -592,7 +592,7 @@ function remove_contract(){
 					</div>
 					
 					<div class="form-inline" id="contract_staff" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]">
 							<option></option>
 							<?php
@@ -608,7 +608,7 @@ function remove_contract(){
 					</div>
 
 					<div class="form-inline" id="contract_email_contact" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['email'] ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label" for=""><?php echo $hesklang['email'] ?>:<font class="important">*</font></label>
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="email[]">
 							<option></option>
 							<?php
@@ -624,22 +624,22 @@ function remove_contract(){
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['starting_date']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label"><?php echo $hesklang['starting_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="starting_date" size="40" maxlength="50" style="width: 336px;" value="" />
 					</div>
 
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50" style="width: 336px;" value="" />
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['desc_sla']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label"><?php echo $hesklang['desc_sla']; ?>: <font class="important">*</font></label>
 						<textarea class="form-control" required="required" title="Required field" id="" name="sla" rows="12" cols="60"></textarea>
 					</div>
 					
 					<div class="form-inline" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label" for=""><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="priority" style="width: 336px;">
 						<option></option>
 						<option value="3"><?php echo $hesklang['low']; ?></option>
@@ -649,12 +649,12 @@ function remove_contract(){
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['reply_time']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label"><?php echo $hesklang['reply_time']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" id="" name="reply_time" type="date" size="40" maxlength="50" style="width: 336px;" value="" />
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['resolved_time']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3 control-label"><?php echo $hesklang['resolved_time']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" id="" name="resolved_time" type="date" size="40" maxlength="50" style="width: 336px;" value="" />
 					</div>
 				</div>
@@ -715,12 +715,12 @@ if(isset($_GET['id'])) {
 		<form method="post" action="contracts.php" name="form2">
 					<input type="hidden" name="id" value="<?php echo $value_id; ?>"/>
 					<div class="form-inline contr-row1" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['contract_name'] ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['contract_name'] ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="text" id="" name="contract_name" size="40" maxlength="50" value=" <?php echo $value_contract_name ?> " />
 					</div>
 					
 					<div class="form-inline" id="contract_row" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label" for=""><?php echo $hesklang['company']; ?>:<font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -748,7 +748,7 @@ if(isset($_GET['id'])) {
 					</div>
 
 					<div class="form-inline" id="contract_row" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['project']; ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label" for=""><?php echo $hesklang['project']; ?>:<font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="project_id" style="width: 336px;">
 							<option></option>
 							<?php
@@ -775,7 +775,7 @@ if(isset($_GET['id'])) {
 					</div>
 					
 					<div class="form-inline" id="edit_contract_staff" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label" for=""><?php echo $hesklang['staffname'] ?>:<font class="important">*</font></label>
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="staff_id[]" style="width: 336px;">
 							<option></option>
 							<?php
@@ -802,7 +802,7 @@ if(isset($_GET['id'])) {
 					</div>
 
 					<div class="form-inline" id="edit_contract_email_contact" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['email'] ?>:<font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label" for=""><?php echo $hesklang['email'] ?>:<font class="important">*</font></label>
 						<select class="multiple form-control" multiple="multiple" required="required" title="Required field" id="" name="email[]" style="width: 336px;">
 							<option></option>
 							<?php
@@ -830,29 +830,29 @@ if(isset($_GET['id'])) {
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['starting_date']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['starting_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="starting_date" size="40" maxlength="50"  style="width: 336px;" value="<?php echo $value_starting_date; ?>" />
 					</div>
 
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['ending_date']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" type="date" id="" name="ending_date" size="40" maxlength="50"  style="width: 336px;" value="<?php echo $value_ending_date; ?>" />
 					</div>
 					
 					<div class="clearfix"></div>
 					<div class="form-inline project-row1" id="project_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['def_act']; ?>: <font class="important">*</font></label>
 						<?php ?>
 						<input class="form-control" type="checkbox" name="con_active" value="1" <?php if($value_active=='1') echo "checked"; ?> />
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['desc_sla']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['desc_sla']; ?>: <font class="important">*</font></label>
 						<textarea class="form-control" required="required" title="Required field" id="" name="sla" rows="12" cols="60"></textarea>
 					</div>
 				
 					<div class="form-inline" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label" for=""><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
 						<select class="form-control" required="required" title="Required field" id="" name="priority" style="width: 336px;">
 						<option></option>
 						<option value="3" <?php if($value_priority == 3) {echo 'selected="selected"';} ?>><?php echo $hesklang['low']; ?></option>
@@ -862,12 +862,12 @@ if(isset($_GET['id'])) {
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['reply_time']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['reply_time']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" id="" name="reply_time" type="date" size="40" maxlength="50" style="width: 336px;" value="<?php echo $value_reply_time; ?>" />
 					</div>
 					
 					<div class="form-inline" id="contract_row">
-						<label class="col-sm-2 control-label"><?php echo $hesklang['resolved_time']; ?>: <font class="important">*</font></label>
+						<label class="col-xs-6 col-sm-3  control-label"><?php echo $hesklang['resolved_time']; ?>: <font class="important">*</font></label>
 						<input class="form-control" required="required" title="Required field" id="" name="resolved_time" type="date" size="40" maxlength="50" style="width: 336px;" value="<?php echo $value_resolved_time; ?>" />
 					</div>
 
