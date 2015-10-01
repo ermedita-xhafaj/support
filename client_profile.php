@@ -88,79 +88,85 @@ if (defined('WARN_PASSWORD'))
 ?>
 
 <div class="container"><?php echo $hesklang['req_marked_with']; ?> <font class="important">*</font></div>
-<div class="container tab-content profile-functions-tab responsive">
+<div class="container">
+	<div class="tab-content profile-functions-tab">
 	<ul id="tabs" class="nav nav-tabs profile-functions responsive" data-tabs="tabs">
 		<li class="active" id="profile-info"><a href="#p-info" aria-controls="p-info" role="tab" data-toggle="tab"><?php echo $hesklang['pinfo']; ?></a></li>
 		<li id="signature-info"><a href="#signature" aria-controls="signature" role="tab" data-toggle="tab"><?php echo $hesklang['sig']; ?></a></li>
 		<li id="contract-client"><a href="#cont_client" aria-controls="cont_client" role="tab" data-toggle="tab"><?php echo $hesklang['contract'] .' & ' .$hesklang['project']; ?></a></li>
 	</ul>
 			<!-- PROFILE INFO -->
-	<div role="tabpanel" class="tab-pane active" id="p-info">
+	<div role="tabpanel" class="container tab-pane active" id="p-info">
 
 			&nbsp;<br />
 			
-	<form method="post" action="client_profile.php" name="form1">
+	<form class="form-horizontal" method="post" action="client_profile.php" name="form1">
 		<div class="profile-information">
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
-				<input class="form-control" required="required" title="Required field" type="text" id="profile-information-name" name="name" size="40" maxlength="50" value="<?php if (isset($_SESSION['id']['name'])){echo $_SESSION['id']['name']; }?>" />
-			
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2" for="profile-information-name"><?php echo $hesklang['real_name']; ?>: <font class="important">*</font></label>
+				<div class="col-sm-4"><input class="form-control" required="required" title="Required field" type="text" id="profile-information-name" name="name" value="<?php if (isset($_SESSION['id']['name'])){echo $_SESSION['id']['name']; }?>" /></div>
 			</div>
 			
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-				<input class="form-control" required="required" title="Required field" type="email" id="profile-information-email" name="email" size="40" maxlength="255" value="<?php if (isset($_SESSION['id']['email'])) {echo $_SESSION['id']['email']; }?>" />
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2" for="profile-information-email"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
+				<div class="col-sm-4"><input class="form-control" required="required" title="Required field" type="email" id="profile-information-email" name="email" value="<?php if (isset($_SESSION['id']['email'])) {echo $_SESSION['id']['email']; }?>" /></div>
 			</div>
 
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label control-label" for="profile-information-username"><?php echo $hesklang['username']; ?>: </label>
-				<input class="form-control" type="text" id="profile-information-username" name="user" size="40" maxlength="20" value="<?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?>" readonly>
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2" for="profile-information-username"><?php echo $hesklang['username']; ?>: </label>
+				<div class="col-sm-4"><input class="form-control" type="text" id="profile-information-username" name="user"value="<?php if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user']; }?>" readonly></div>
 			</div>
 			
-			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-address"><?php echo $hesklang['address']; ?>: </label>
-				<input class="form-control" type="text" id="profile-information-adress" name="address" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['address'])) {echo $_SESSION['id']['address']; } ?>"/>
+			<div class="form-group" id="profile-information-row">
+				<label class="col-sm-2" for="profile-information-address"><?php echo $hesklang['address']; ?>: </label>
+				<div class="col-sm-4"><input class="form-control" type="text" id="profile-information-adress" name="address" value="<?php if(isset($_SESSION['id']['address'])) {echo $_SESSION['id']['address']; } ?>"/></div>
 			</div>
 			
-			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-phonenumber"><?php echo $hesklang['telephone']; ?>: </label>
-				<input class="form-control" type="number" id="profile-information-phonenumber" name="phonenumber" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['phonenumber'])) {echo $_SESSION['id']['phonenumber']; } ?>"/>
+			<div class="form-group" id="profile-information-row">
+				<label class="col-sm-2" for="profile-information-phonenumber"><?php echo $hesklang['telephone']; ?>: </label>
+				<div class="col-sm-4"><input class="form-control" type="number" id="profile-information-phonenumber" name="phonenumber" value="<?php if(isset($_SESSION['id']['phonenumber'])) {echo $_SESSION['id']['phonenumber']; } ?>"/></div>
 			</div>
 			
-			<div class="form-inline" id="profile-information-row">
-				<label class="col-sm-2 control-label" for="profile-information-poz_detyres"><?php echo $hesklang['work_position']; ?>: </label>
-				<input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" size="40" maxlength="255" value="<?php if(isset($_SESSION['id']['poz_detyres'])) {echo $_SESSION['id']['poz_detyres']; } ?>"/>
+			<div class="form-group" id="profile-information-row">
+				<label class="col-sm-2" for="profile-information-poz_detyres"><?php echo $hesklang['work_position']; ?>: </label>
+				<div class="col-sm-4"><input class="form-control" type="text" id="profile-information-poz_detyres" name="poz_detyres" value="<?php if(isset($_SESSION['id']['poz_detyres'])) {echo $_SESSION['id']['poz_detyres']; } ?>"/></div>
 			</div>
 
 			<input type="hidden" name="userid" value="<?php echo $_SESSION['id']['id']; ?>" />
 			
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="newpass_cl"><?php echo $hesklang['new_pass']; ?>:</label>
-				<input class="form-control" type="password" required="required" title="Required field" id="newpass_cl" name="newpass_cl" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.newpass2_cl.pattern = this.value;" autocomplete="off" size="40" onkeyup="javascript:hesk_checkPassword(this.value)" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" />
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2" for="newpass_cl"><?php echo $hesklang['new_pass']; ?>:</label>
+				<div class="col-sm-4"><input class="form-control" type="password" required="required" title="Required field" id="newpass_cl" name="newpass_cl" pattern="^\S{5,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 5 characters' : ''); if(this.checkValidity()) form.newpass2_cl.pattern = this.value;" autocomplete="off" onkeyup="javascript:hesk_checkPassword(this.value)" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" /></div>
 			</div>
 			
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="newpass2_cl"><?php echo $hesklang['confirm_pass']; ?>:</label>
-				<input class="form-control" required="required" title="Required field" type="password" id="newpass2_cl" name="newpass2_cl" pattern="^\S{6,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" autocomplete="off" size="40" value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" />
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2" for="newpass2_cl"><?php echo $hesklang['confirm_pass']; ?>:</label>
+				<div class="col-sm-4"><input class="form-control" required="required" title="Required field" type="password" id="newpass2_cl" name="newpass2_cl" pattern="^\S{5,}$" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" autocomplete="off"  value="<?php echo isset($_SESSION['cleanpass']) ? $_SESSION['cleanpass'] : ''; ?>" /></div>
 			</div>
 			
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label"><?php echo $hesklang['pwdst']; ?>:</label>
-				<label style="vertical-align: top;">
-					<div class="form-control" style="width: 336px;">
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2"><?php echo $hesklang['pwdst']; ?>:</label>
+				<div class="col-sm-4"><label style="vertical-align: top;">
+					<div class="form-control" id="progressBarWidth" >
 						<div id="progressBar" style="font-size: 1px; height: 20px; width: 0px; border: 1px solid white;"></div>
 					</div>
-				</label>
+				</label></div>
 			</div>
-			<br/>
 		</div><!-- end profile-information -->
+		<!-- Submit -->
+		<div class="col-sm-offset-2 col-sm-10">
+			<input type="hidden" name="action" value="update" />
+			<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
+			<input type="submit" value="<?php echo $hesklang['update_profile']; ?>" class="btn btn-default client-submit-btn"/>
+		</div>
+		<br/><br/>
 	</div>
 		
 	<!-- SIGNATURE -->
 	<div role="tabpanel" class="tab-pane" id="signature">
 		<br/>
 		<div class="form-inline signature-profile-func">
-			<label class="control-label col-sm-3"><?php echo $hesklang['signature_max']; ?>:</label>
+			<label class="col-sm-3"><?php echo $hesklang['signature_max']; ?>:</label>
 			<div class="form-group">
 				<textarea class="form-control" name="signature" rows="10" cols="60" value="<?php if (isset($_SESSION['id']['signature'])) {echo $_SESSION['id']['signature']; }?>"></textarea><br />
 				<?php echo $hesklang['sign_extra']; ?>
@@ -211,15 +217,9 @@ if (defined('WARN_PASSWORD'))
 		</div>
 	</div>
 	<!-- contract & project -->	
-</div>
-		<br/>
-		<!-- Submit -->
-	<div class="container col-sm-8 col-sm-offset-4">
-		<input type="hidden" name="action" value="update" />
-		<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
-		<input type="submit" value="<?php echo $hesklang['update_profile']; ?>" class="btn btn-default client-submit-btn"/>
-	</div>
 	</form>
+	</div>
+</div>
  <br/>
 <!-- Go back -->
 <div class="container"><a href="javascript:history.go(-1)"> <button type="submit" class="btn btn-default goback-btn"><?php echo $hesklang['back'] ?></button></a></div>
@@ -260,7 +260,7 @@ function update_profile() {
 	
 	
 	/* Change password? */
-    $newpass_cl = hesk_input( hesk_POST('newpass') );
+    $newpass_cl = hesk_input( hesk_POST('newpass_cl') );
     $passlen = strlen($newpass_cl);
 	if ($passlen > 0)
 	{
@@ -272,7 +272,7 @@ function update_profile() {
         /* Check password confirmation */
         else
         {
-        	$newpass2_cl = hesk_input( hesk_POST('newpass2') );
+        	$newpass2_cl = hesk_input( hesk_POST('newpass2_cl') );
 
 			if ($newpass_cl != $newpass2_cl)
 			{

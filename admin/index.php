@@ -482,21 +482,16 @@ function print_login()
 				<br/>
 			
 				<div class="radios" style="text-align: -webkit-auto; display: inline-block;">
-					<div class="radio">
-						<label>
-							<input type="radio" name="remember_user" id="optionsRadios1" value="AUTOLOGIN" <?php echo $is_1; ?> /> <?php echo $hesklang['autologin']; ?><br />
-						</label>
+					<div class="">
+						<span>
+							<input type="checkbox" name="remember_user" id="optionsRadios1" value="kot" <?php echo $is_1; ?> checked="checked" /> <?php echo $hesklang['remember_user']; ?><br />
+						</span>
 					</div>	
 					<div class="radio">
-						<label>
-							<input type="radio" name="remember_user" id="optionsRadios2" value="JUSTUSER" <?php echo $is_2; ?> /> <?php echo $hesklang['just_user']; ?><br />
-						</label>
-					</div>
-					<div class="radio">
-						<label>
-							<input type="radio" name="remember_user" id="optionsRadios3" value="NOTHANKS" <?php echo $is_3; ?> /> <?php echo $hesklang['nothx']; ?>
-						</label>
-					</div>								
+						<span>
+							<input type="hidden" name="remember_user" id="optionsRadios2" value="AUTOLOGIN" <?php echo $is_2; ?> checked="checked"  /><br />
+						</span>
+					</div>						
 				</div>
 
 				<?php

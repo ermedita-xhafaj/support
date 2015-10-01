@@ -193,6 +193,10 @@ $(document).ready(function() {
 			}
 			$("div#show-hide-kontrata ul.multiselect-container li").each(function(){
 				$(this).hide();
+				var input = $(this).find('input');
+				if (input.is(':checked')){
+					input.trigger('click');
+				}
 			});
 			for (index = 0; index < contract_ids.length; ++index) {
 				var el = $("div#show-hide-kontrata ul.multiselect-container li input[value='"+contract_ids[index]+"']");

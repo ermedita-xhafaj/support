@@ -36,7 +36,7 @@
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 
-function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
+function hesk_profile_tab($session_array='userdata',$is_profile_page=true, $action = "")
 {
 	global $hesk_settings, $hesklang, $can_reply_tickets, $can_view_tickets, $can_view_unassigned, $default_userdata;
 	?>
@@ -52,11 +52,33 @@ function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
 					/* Only administrators can create new administrator accounts */
 					if ($_SESSION['isadmin'] )
 					{
+						if(!isset($_SESSION['userdata']['checked'])){$_SESSION['userdata']['checked']="";}
+						
+						if ($_SESSION['userdata']['checked'] == 'admin') {
+						?>
+							<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" checked /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
+							<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0" /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
+							<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" /> <?php echo $hesklang['aclient'] ?></label>
+						<?php
+						}elseif ($_SESSION['userdata']['checked'] == 'staff') {
+						?>
+							<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
+							<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0"  checked /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
+							<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" /> <?php echo $hesklang['aclient'] ?></label>
+						<?php	
+						}elseif ($_SESSION['userdata']['checked'] == 'client') {
+						?>
+							<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
+							<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0" /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
+							<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" checked /> <?php echo $hesklang['aclient'] ?></label>
+						<?php
+						} else {
 						?>
 						<label><input class="te-drejtat" id="administratori" type="radio" name="isadmin" value="1" <?php if (isset($_GET['a']) && $_GET['a']=="edit") echo "checked" ; ?> /> <b><?php echo $hesklang['administrator'].'</b> '.$hesklang['admin_can']; ?></label><br />
 						<label><input class="te-drejtat" id="stafi" type="radio" name="isadmin" value="0"  <?php if (isset($_GET['a']) && $_GET['a']=="editb") echo "checked" ; ?> /> <b><?php echo $hesklang['astaff'].'</b> '.$hesklang['staff_can']; ?></label><br/>
 						<label><input class="te-drejtat" id="klient" type="radio" name="isclient" value="1" <?php if(isset($_GET['a']) && $_GET['a']=="editc") echo "checked" ; ?> /> <?php echo $hesklang['aclient'] ?></label>
 						<?php
+						}
 					}
 					else
 					{
@@ -170,18 +192,28 @@ function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
 						<select class="form-control" id="select_company_manage_users" name="company_id" style="width: 336px;">
 							<option></option>
 							<?php
-								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1 ');
-								$i=1;
+							
+								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` ');
 								while ($row_comp = mysqli_fetch_array($res_comp)) 
 								{
-									$temp_data = array();
-									$data_contract = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE active=1 AND company_id ='.$row_comp['id']);
-									while ($row_contract = mysqli_fetch_array($data_contract)) 
-										{
-											$temp_data[] = $row_contract['id'] ;
+									if($row_comp['active'] == 1){
+										$temp_data = array();
+										$data_contract = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE active=1 AND company_id ='.$row_comp['id']);
+										while ($row_contract = mysqli_fetch_array($data_contract)) 
+											{
+												$temp_data[] = $row_contract['id'] ;
+											}
+										if(isset($_SESSION[$session_array]['company_id']) && $_SESSION[$session_array]['company_id']==$row_comp['id']) {	
+										echo 
+											'<option value="' .$row_comp['id'] .'" contracts = "'.implode($temp_data, ",") . '" selected="selected">' .$row_comp['company_name'] .'</option>';
+										}else {echo 
+											'<option value="' .$row_comp['id'] .'" contracts = "'.implode($temp_data, ",") . '" >' .$row_comp['company_name'] .'</option>';}
+									}else {
+										if(isset($_SESSION[$session_array]['company_id']) && $_SESSION[$session_array]['company_id']==$row_comp['id']) {	
+										echo 
+											'<option  selected="selected" disabled>' .$row_comp['company_name'] .'</option>';
 										}
-								echo 
-									'<option value="' .$row_comp['id'] .'" contracts = "'.implode($temp_data, ",") . '">' .$row_comp['company_name'] .'</option>';
+									}
 								}
 							?>		
 						</select>
@@ -194,11 +226,27 @@ function hesk_profile_tab($session_array='userdata',$is_profile_page=true)
 				<select class="multiple form-control" multiple="multiple" id="select-kontrata" name="contract_id[]" style="width: 336px;">
 					<option></option>
 					<?php
-						$res_contract = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE active=1');
-						$i=1;
+						$res_contract = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` ');
+						$temp = array();
+						if(isset($_GET["id"])) {
+							$res_contract_client = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.hesk_dbEscape($_GET["id"]));
+							while ($row_contract_data = mysqli_fetch_array($res_contract_client)){
+								$temp[] = $row_contract_data['contract_Id'];
+							} 
+						}
 						while ($row_contract = mysqli_fetch_array($res_contract)) 
 						{
-							echo '<option value="' .$row_contract['id'] .'" >' .$row_contract['contract_name'] .'</option>';
+							if($row_contract['active'] == 1){
+								if(isset($_SESSION[$session_array]['contract_id']) && in_array($row_contract['id'], $temp)) {	
+									echo '<option value="' .$row_contract['id'] .'" selected="selected">' .$row_contract['contract_name'] .'</option>';
+								}else {
+									echo '<option value="' .$row_contract['id'] .'" >' .$row_contract['contract_name'] .'</option>';
+								}
+							}else{
+									if(isset($_SESSION[$session_array]['contract_id']) && in_array($row_contract['id'], $temp)) {	
+									echo '<option selected="selected" disabled>' .$row_contract['contract_name'] .'</option>';
+								}
+							}
 						}
 					?>		
 				</select>

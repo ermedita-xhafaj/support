@@ -175,7 +175,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
     </nav>
 	
 <div class="container siteUrl-title-indexPhp">
-<div class="form-inline">
+<div class="container form-inline">
 <span><a href="<?php echo $hesk_settings['site_url']; ?>" class="smaller" style="text-decoration: none;"><?php echo $hesk_settings['site_title']; ?></a> &gt;
 <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="smaller"><?php echo 'Help Desk'; ?></a>
 &gt; <?php echo $hesklang['submit_ticket']; ?></span>
@@ -197,52 +197,47 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 hesk_handle_messages();
 ?>
 
-<div class="container form-inline" id="view-submitTicket"> 
+<div class="container" id="view-submitTicket"> 
 <img src="img/existingticket.jpg" alt="existingticket"/><span><?php echo $hesklang['submit_ticket']; ?></span></div>
 
 <br/>
-<div class="conatiner col-sm-8 col-sm-offset-2 form-submit-support-request">
-	<div>
-		&nbsp;
-	<div>
-			<!-- START FORM -->
-
-			<p><?php echo $hesklang['use_form_below']; ?> <font class="important"> *</font></p><br/>
-
-			<form method="post" action="submit_ticket.php?submit=1" name="form1" enctype="multipart/form-data"  autocomplete="off">
+<div class="container form-submit-support-request">
+	<br/>
+	<div><?php echo $hesklang['use_form_below']; ?> <font class="important"> *</font></div><br/>
+	<!-- START FORM -->
+			<form class="form-horizontal" method="post" action="submit_ticket.php?submit=1" name="form1" enctype="multipart/form-data"  autocomplete="off">
 
 			<!-- Contact info -->
-			<div class="form-group contact-info-support-request">
-				<div class="form-inline" style="margin-bottom: 5px;">
-					<label class="col-sm-2 control-label" for="name-contact-info-support-request"><?php echo $hesklang['name']; ?>: <font class="important">*</font></label>
-					<input type="text" class="form-control contact-support-request" id="name-contact-info-support-request" name="name" size="40" maxlength="30" value="<?php  if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user'];} ?>" <?php if (in_array('name',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> readonly>
+				<div class="form-group" style="margin-bottom: 5px;">
+					<label class="col-sm-2" for="name-contact-info-support-request"><?php echo $hesklang['name']; ?>: <font class="important">*</font></label>
+					<div class="col-sm-4"><input type="text" class="form-control contact-support-request" id="name-contact-info-support-request" name="name"  value="<?php  if (isset($_SESSION['id']['user'])) {echo $_SESSION['id']['user'];} ?>" <?php if (in_array('name',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> readonly></div>
 				</div>
-
-				<div class="form-inline" style="margin-bottom: 5px;">
-					<label class="col-sm-2 control-label" for="email-contact-info-support-request"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
-					<input type="text" class="form-control contact-support-request" id="email-contact-info-support-request" name="email" size="40" maxlength="1000" value="<?php if (isset($_SESSION['id']['email'])) {echo $_SESSION['id']['email']; }?>" <?php if (in_array('email',$_SESSION['iserror'])) {echo ' class="isError" ';} elseif (in_array('email',$_SESSION['isnotice'])) {echo ' class="isNotice" ';} ?> <?php if($hesk_settings['detect_typos']) { echo ' onblur="Javascript:hesk_suggestEmail(0)"'; } ?> readonly>
+				<div class="form-group" style="margin-bottom: 5px;">
+					<label class="col-sm-2" for="email-contact-info-support-request"><?php echo $hesklang['email']; ?>: <font class="important">*</font></label>
+					<div class="col-sm-4"><input type="text" class="form-control contact-support-request" id="email-contact-info-support-request" name="email" value="<?php if (isset($_SESSION['id']['email'])) {echo $_SESSION['id']['email']; }?>" <?php if (in_array('email',$_SESSION['iserror'])) {echo ' class="isError" ';} elseif (in_array('email',$_SESSION['isnotice'])) {echo ' class="isNotice" ';} ?> <?php if($hesk_settings['detect_typos']) { echo ' onblur="Javascript:hesk_suggestEmail(0)"'; } ?> readonly></div>
 				</div>
 
 				<?php
 				if ($hesk_settings['confirm_email'])
 				{
 					?>
-					<div class="form-inline" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for="confemail-contact-info-support-request"><?php echo $hesklang['confemail']; ?>: <font class="important">*</font></label>
-						<input type="text" class="form-control contact-support-request" id="confemail-contact-info-support-request" name="email2" size="40" maxlength="1000" value="<?php if (isset($_SESSION['c_email2'])) {echo stripslashes(hesk_input($_SESSION['c_email2']));} ?>" <?php if (in_array('email2',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> />
+					<div class="form-group" style="margin-bottom: 5px;">
+						<label class="col-sm-2" for="confemail-contact-info-support-request"><?php echo $hesklang['confemail']; ?>: <font class="important">*</font></label>
+						<div class="col-sm-4"><input type="text" class="form-control contact-support-request" id="confemail-contact-info-support-request" name="email2"  value="<?php if (isset($_SESSION['c_email2'])) {echo stripslashes(hesk_input($_SESSION['c_email2']));} ?>" <?php if (in_array('email2',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> /></div>
 					</div>
 					<?php
 				} // End if $hesk_settings['confirm_email']
 				?>
-			</div><!-- end contact-info-support-request -->
+			
 
 			<?php hesk_load_database_functions();
 				hesk_dbConnect();
 			?>
 			
-			<div class="form-inline" style="margin-bottom: 5px;">
-				<label class="col-sm-2 control-label" for="select-cont"><?php echo $hesklang['contract'] ?>: <font class="important">*</font></label>
-				<select class="form-control" required="required" title="Required field" id="select-cont" name="contract_name" style="width: 336px;">
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label class="col-sm-2" for="select-cont"><?php echo $hesklang['contract'] ?>: <font class="important">*</font></label>
+				<div class="col-sm-4"><select class="form-control contact-support-request" required="required" title="Required field" id="select-cont" name="contract_name">
+
 					<option></option>
 					<?php
 						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE `client_Id`='.$_SESSION["id"]["id"] );
@@ -256,7 +251,7 @@ hesk_handle_messages();
 								}
 				
 					?>		
-				</select>
+				</select></div>
 				<?php  
 						
 				?>
@@ -297,10 +292,11 @@ hesk_handle_messages();
 				// List available categories
 				$is_table = 1;
 				?>
-				<div class="form-group department-priority-support-request"> <!-- start table here end in line 304 -->
-					<div class="form-inline" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for="category-department-priority-support-request"><?php echo $hesklang['category']; ?>: <font class="important">*</font></label>
-						<select class="form-control contact-support-request" required="required" title="Required field" id="category-department-priority-support-request" name="category" <?php if (in_array('category',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+
+				<!-- start table here end in line 304 -->
+					<div class="form-group" style="margin-bottom: 5px;">
+						<label class="col-sm-2" for="category-department-priority-support-request"><?php echo $hesklang['category']; ?>: <font class="important">*</font></label>
+						<div class="col-sm-4"><select class="form-control contact-support-request" required="required" title="Required field" id="category-department-priority-support-request" name="category" <?php if (in_array('category',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
 						<option></option>
 						<?php
 						// Show the "Click to select"?
@@ -314,7 +310,7 @@ hesk_handle_messages();
 							echo '<option value="' . $row['id'] . '"' . (($_SESSION['c_category'] == $row['id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
 						}
 						?>
-						</select>
+						</select></div>
 					</div>
 					<?php
 				/*}*/
@@ -328,9 +324,11 @@ hesk_handle_messages();
 						$is_table = 1;
 					}
 					?>
-					<div class="form-inline" style="margin-bottom: 5px;">
-						<label class="col-sm-2 control-label" for="priority-department-priority-support-request"><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
-						<select class="form-control contact-support-request" required="required" title="Required field" id="priority-department-priority-support-request" name="priority" <?php if (in_array('priority',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+
+					<div class="form-group" style="margin-bottom: 5px;">
+						<label class="col-sm-2" for="priority-department-priority-support-request"><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
+						<div class="col-sm-4"><select class="form-control contact-support-request" required="required" title="Required field" id="priority-department-priority-support-request" name="priority" <?php if (in_array('priority',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+
 						<option></option>
 						<?php
 						// Show the "Click to select"?
@@ -342,7 +340,7 @@ hesk_handle_messages();
 						<option value="3" <?php if(isset($_SESSION['c_priority']) && $_SESSION['c_priority']==3) {echo 'selected="selected"';} ?>><?php echo $hesklang['low']; ?></option>
 						<option value="2" <?php if(isset($_SESSION['c_priority']) && $_SESSION['c_priority']==2) {echo 'selected="selected"';} ?>><?php echo $hesklang['medium']; ?></option>
 						<option value="1" <?php if(isset($_SESSION['c_priority']) && $_SESSION['c_priority']==1) {echo 'selected="selected"';} ?>><?php echo $hesklang['high']; ?></option>
-						</select>
+						</select></div>
 					</div>
 					<?php
 				}
@@ -350,7 +348,7 @@ hesk_handle_messages();
 			/* Need to close the table? */
 			if ($is_table)
 			{
-				echo '</div> <br/><br/>';
+				echo '';
 			}
 			?>
 			<!-- START CUSTOM BEFORE -->
@@ -539,15 +537,19 @@ hesk_handle_messages();
 			<!-- END CUSTOM BEFORE -->
 
 			<!-- ticket info -->
-			<div class="form-group">
-				<div  class="form-inline" style="padding-right: 0px; margin-bottom: 5px;">
-					<label class="col-sm-2 control-label" for="subject-ticket-info-support-request"><?php echo $hesklang['subject']; ?>: <font class="important">*</font></label>
-					<input class="form-control contact-support-request" required="required" title="Required field" type="text" id="subject-ticket-info-support-request" name="subject" size="40" maxlength="40" value="<?php if (isset($_SESSION['c_subject'])) {echo stripslashes(hesk_input($_SESSION['c_subject']));} ?>" <?php if (in_array('subject',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> />
+
+			<div class="">
+				<div  class="form-group" style="padding-right: 0px; margin-bottom: 5px;">
+					<label class="col-sm-2" for="subject-ticket-info-support-request"><?php echo $hesklang['subject']; ?>: <font class="important">*</font></label>
+					<div class="col-sm-4"><input class="form-control contact-support-request" required="required" title="Required field" type="text" id="subject-ticket-info-support-request" name="subject" size="40" maxlength="40" value="<?php if (isset($_SESSION['c_subject'])) {echo stripslashes(hesk_input($_SESSION['c_subject']));} ?>" <?php if (in_array('subject',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> /></div>
+
 				</div>
-				<div class="form-inline" style="margin-bottom: 5px;">
+				<div class="form-group" style="margin-bottom: 5px;">
 					<div>
-						<label class="col-sm-2 control-label" for="message-ticket-info-support-request" ><?php echo $hesklang['message']; ?>: <font class="important">*</font></label>
-						<textarea class="form-control contact-support-request" required="required" title="Required field" id="message-ticket-info-support-request" name="message" rows="12" cols="60" <?php if (in_array('message',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> ><?php if (isset($_SESSION['c_message'])) {echo stripslashes(hesk_input($_SESSION['c_message']));} ?></textarea>
+
+						<label class="col-sm-2" for="message-ticket-info-support-request" ><?php echo $hesklang['message']; ?>: <font class="important">*</font></label>
+						<div class="col-sm-4"><textarea class="form-control contact-support-request" required="required" title="Required field" id="message-ticket-info-support-request" name="message" rows="12" cols="60" <?php if (in_array('message',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> ><?php if (isset($_SESSION['c_message'])) {echo stripslashes(hesk_input($_SESSION['c_message']));} ?></textarea></div>
+
 					</div>
 				</div>
 			</div><!-- ticket-info-support-request -->
@@ -746,10 +748,12 @@ hesk_handle_messages();
 			?>
 			<br/><br/>
 
-			<div class="form-group">
-				<div class="form-inline">
-					<label class="col-sm-2 control-label" style="vertical-align: top;"><?php echo $hesklang['attachments']; ?>:</label>
-					<div class="form-group contact-support-request">
+
+			<div class="">
+				<div class="form-group">
+					<label class="col-sm-2" style="vertical-align: top;"><?php echo $hesklang['attachments']; ?>:</label>
+					<div class="col-sm-4 contact-support-request">
+
 						<?php
 						for ($i=1;$i<=$hesk_settings['attachments']['max_number'];$i++)
 						{
@@ -776,7 +780,8 @@ hesk_handle_messages();
 				if ($hesk_settings['question_use'])
 				{
 					?>
-					<div class="form-inline">
+					<div class="form-group">
+
 						<label class="col-sm-2 control-label" style="text-align:right;vertical-align:top" width="150"><?php echo $hesklang['verify_q']; ?> <font class="important">*</font></label>
 
 						<?php
@@ -796,7 +801,9 @@ hesk_handle_messages();
 				if ($hesk_settings['secimg_use'])
 				{
 					?>
-					<div class="form-inline">
+
+					<div class="form-group">
+
 						<label class="col-sm-2 control-label" style="text-align:right;vertical-align:top" width="150"><?php echo $hesklang['verify_i']; ?> <font class="important">*</font></label>
 
 						<?php
@@ -897,14 +904,9 @@ hesk_handle_messages();
 			else
 			{*/
 				?>
-
-		</div>
-		&nbsp;
-	</div>
-
 				
-				<div class="else-submit-notice-support-request">
-					<div class="col-sm-7 col-sm-offset-5">
+				<div class="else-submit-notice-support-request form-group">
+					<div class="col-sm-offset-2 col-sm-3">
 					<input type="hidden" name="token" value="<?php hesk_token_echo(); ?>" />
 					<input type="submit" value="<?php echo $hesklang['sub_ticket']; ?>" class="btn btn-default submit-ticket-btn"  />
 					</div>
@@ -918,7 +920,6 @@ hesk_handle_messages();
 			<!-- >
 			<input type="text" name="phone" value="3" />
 			< -->
-
 			</form>
 		<!-- END FORM -->
 </div><!-- end form-submit-support-request -->	
@@ -1003,24 +1004,30 @@ function print_start()
 <!-- start session login -->	
 
 <?php if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']):?>
-	<div class="col-sm-12 form-group submit-view-existing-ticket">
-		<div class="col-sm-4 col-sm-offset-2 conatiner submit-ticket-col">
 				<!-- START SUBMIT -->
-				<div class="submit-ticket" id="gradient">
-					<a style="text-decoration: none" href="index.php?a=add">
-						<div class="form-inline">
-							&nbsp;
-							<img src="img/newticket.jpg" alt="newticket"/>
-							<div class="form-group">
-								<span><b><?php echo $hesklang['sub_support']; ?></b></span>
+				<div class="container">
+					<div class="col-md-4 padding-left-zero">
+						<a class="submit-ticket" id="submit-ticket-client-btn" style="text-decoration: none" href="index.php?a=add">
+							
+								<img src="img/newticket.jpg" alt="newticket"/>								
+								<span class="display-inline"><?php echo $hesklang['sub_support']; ?></span>
+								
+								&nbsp;
+							
+						</a>
+						<!--<a style="text-decoration: none" href="index.php?a=add">
+							<div class="form-inline">
+								<img src="img/newticket.jpg" alt="newticket"/>
+								<div class="form-group">
+									<span><b><?php //echo $hesklang['sub_support']; ?></b></span>
+								</div>
+								&nbsp;
 							</div>
-							&nbsp;
-						</div>
-					</a>
-				</div><!-- end submit-ticket -->
+						</a>-->
+					</div><!-- end submit-ticket -->
+				</div>
 				<!-- END SUBMIT -->
-		</div>
-	</div><!-- end submit-view-existing-ticket -->
+				<br/><br/><br/>
 <!-- start form login-->
 
 <?php $sql = hesk_dbQuery("SELECT  id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`"); ?>
@@ -1028,8 +1035,8 @@ function print_start()
 <?php $sql_category = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
-	<div class="col-sm-8 col-sm-offset-2 filter-ticket-client" id="filter-ticket-client"> <!-- Krijojme nje div per filtrat -->
-		<form method="post" action="">
+	<div class="container filter-ticket-client" id="filter-ticket-client"> <!-- Krijojme nje div per filtrat -->
+		<form method="post" action="" autocomplete="off">
 				<datalist id="ticket_id_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){
 					echo '<option value='.$tmp["id"].'>';
@@ -1075,9 +1082,12 @@ function print_start()
 						echo "<option value='5'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='5') echo "selected=selected"; echo "> ON HOLD</option>";  
 				echo "</select>";
 				?>
-			<input name="submitbutton_tickets" type="submit" class="btn btn-default execute-btn" value="Search"/>
-			<button name="clearbutton_tickets" onclick="deleteticket_client();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
+
+			<input name="submitbutton_tickets" type="submit" class="btn btn-default execute-btn" value="<?php echo $hesklang['search']; ?>"/>
+			<button name="clearbutton_tickets" onclick="deleteticket_client(); return false;" class="btn btn-default execute-btn" value=""><?php echo $hesklang['clear']; ?></button>
 		</form>
+		
+
 	</div> <!--end div i filtrave -->		
 <div class="print_ticket_for_client">
 <?php require(HESK_PATH . 'inc/print_tickets_client.inc.php'); ?>

@@ -1,4 +1,4 @@
- html, body {
+html, body {
     height: 100%;
 	background-color: #F1F1F2;
 }
@@ -175,6 +175,14 @@ form  .form-control .btn {background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
 				background: -moz-linear-gradient(#F5F5F6, #E6E7E8);
 				background: linear-gradient(#F5F5F6, #E6E7E8);}
 				
+				
+/*********** General *******************/
+.padding-zero{ padding:0px!important }
+.padding-left-zero{ padding-left:0px!important; }
+.padding-right-zero{ padding-right:0px!important; }
+.display-inline { display:inline; }
+
+				
 
 				
 /* start style for support/index.php */
@@ -188,6 +196,7 @@ form  .form-control .btn {background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
 .siteUrl-title-indexPhp span {font-weight: normal; font-size: 12pt;}
 .glyphicon-search {color: #37B992;}
 
+
 #kbformsearch {display: inline; margin: 0;}
 #buttonhelp {border-radius: 5px 0px 0px 5px; 
 			border-color: #BEBEBE; 
@@ -197,18 +206,23 @@ form  .form-control .btn {background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
 			background: linear-gradient(#F5F5F6, #E6E7E8);}
 #searchhelp {border-radius: 0px 5px 5px 0px; border-left: 0px;}
 
-.submit-ticket-col {padding-left: 0px; margin-left: 14.4%; width: 35%;}
-.view-ticket-col{padding-right: 0px; width: 35%}
-.submit-ticket, .view-ticket {border: 1px solid #BEBEBE; border-radius: 5px; padding: 10px 0px;}
-.submit-ticket span, .view-ticket span {font-weight: bold; font-size: 15pt; padding-left: 5px;}
-.submit-ticket #op-ticket, .view-ticket #vw-ticket {font-weight: normal; font-size: 12pt; padding-left: 5px;}
-.submit-ticket a:hover, .view-ticket a:hover {color : black; text-decoration : none;}
-.submit-ticket, .view-ticket{background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
+#submit-ticket-client-btn { padding:20px 10px; font-weight:bold; }
+#submit-ticket-client-btn span { vertical-align:middle; }
+#submit-ticket-client-btn:hover { color:#000; }
+.print_ticket_for_client { overflow-x:auto; }
+
+/*.submit-ticket-col {padding-left: 0px; margin-left: 14.4%; width: 35%;}*/
+/*.view-ticket-col{padding-right: 0px; width: 35%}*/
+.submit-ticket {border: 1px solid #BEBEBE; border-radius: 5px; padding: 10px 0px;}
+.submit-ticket span {font-weight: bold; font-size: 15pt; padding-left: 5px;}
+.submit-ticket #op-ticket {font-weight: normal; font-size: 12pt; padding-left: 5px;}
+.submit-ticket a:hover {color : black; text-decoration : none;}
+.submit-ticket {background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
 				background:-o-linear-gradient(#F5F5F6, #E6E7E8);
 				background: -moz-linear-gradient(#F5F5F6, #E6E7E8);
 				background: linear-gradient(#F5F5F6, #E6E7E8);
 				}
-.submit-ticket:hover, .view-ticket:hover {background: -webkit-linear-gradient(#E6E7E8, #F5F5F6);
+.submit-ticket:hover {background: -webkit-linear-gradient(#E6E7E8, #F5F5F6);
 				background:-o-linear-gradient(#E6E7E8, #F5F5F6);
 				background: -moz-linear-gradient(#E6E7E8, #F5F5F6);
 				background: linear-gradient(#E6E7E8, #F5F5F6);
@@ -218,17 +232,17 @@ form  .form-control .btn {background: -webkit-linear-gradient(#F5F5F6, #E6E7E8);
 .kb-top-latest-view-art {margin-left: -25px; margin-right: -7px; margin-bottom: 28px;}
 td > .top-kb-views1  a, td > .latest-kb-date-added1 a{font-weight: normal; font-size: 14pt;}
 td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: #6D6E70; font-size: 12pt;}
-.tab-content {margin-left: 25px; margin-right: 25px;}
+/*.tab-content {margin-left: 25px; margin-right: 25px;}*/
 
-.form-submit-support-request {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; width: 68.8%; margin-left: 15.1%; margin-bottom: 20px;}
+.form-submit-support-request {border: 1px solid #BEBEBE; border-radius: 5px; background-color: #F7F7F7; /*width: 68.8%; margin-left: 15.1%;*/ margin-bottom: 20px;}
 .form-submit-support-request p {text-align:center;}
 #view-submitTicket  span{font-weight: bold; font-size: 15pt; vertical-align: bottom; margin-left: 5px;}
-#view-submitTicket{padding-left: 50px;}
-.form-submit-support-request form {margin-left: -10px;}
-.contact-support-request{margin-left: -70px;}
-#name-contact-info-support-request, #email-contact-info-support-request { width: 336px; background-color: white;}
-.submit-view-existing-ticket {margin-bottom: 50px;}
-.submit-ticket-btn {margin-bottom: 50px; width: 178px; margin-left: -24px;}
+/*#view-submitTicket{padding-left: 50px;}*/
+.form-submit-support-request form {/*margin-left: -10px;*/}
+/*.contact-support-request{margin-left: -70px;}*/
+#name-contact-info-support-request, #email-contact-info-support-request { background-color: white;}
+/*.submit-view-existing-ticket {margin-bottom: 50px;}*/
+.submit-ticket-btn { width: 178px; }
 .submit-ticket-btn {color: white; 
 					background: -webkit-linear-gradient(#00A79D, #008981);
 					background:-o-linear-gradient(#00A79D, #008981);
@@ -239,7 +253,7 @@ td  > .top-kb-views2 , td > .latest-kb-date-added2 {font-weight: normal; color: 
 						background:-o-linear-gradient(#008981, #00A79D);
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);}
-#select-cont {margin-left: -70px;}						
+/*#select-cont {margin-left: -70px;}	*/					
 .filter-ticket-client {margin-bottom: 10px;}						
 						
 
@@ -535,7 +549,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 #filter-categories, #filter-departments, #filter-companies, #filter-projects, #filter-contracts {margin-top: 10px; margin-bottom: 10px;}
 
 
-.manage-config-tab, .manage-contract-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
+.manage-config-tab, .manage-contract-tab {/*margin-left: 14.2%; width: 70.6%;*/ margin-top: 5px;}
 .manage-config, .manage-contract {border-bottom: 1px solid #37B992;}
 .manage-config li a, .manage-contract li a { margin:0px; color:#fff; }
 .manage-config  li.active, .manage-contract  li.active {background-color:#fff!important; bottom:-1px;}
@@ -804,7 +818,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 
 						
 /* start style for support/inc/profile_functions.inc.php */						
-.profile-functions-tab {margin-left: 14.2%; width: 70.6%; margin-top: 5px;}
+.profile-functions-tab {/*margin-left: 14.2%; width: 70.6%;*/ margin-top: 5px;}
 .profile-functions {border-bottom: 1px solid #37B992;}
 #p-info, #permissions, #signature, #preferences, #notifications, #project_users, #cont_client {border: 1px solid #37B992; border-top:0px; background-color: white;}
 #profile-info, #permissions-info, #signature-info, #preferences-info, #notifications-info, #project_users-info, #contract-client {background-color: #37B992; border-radius: 5px 5px 0px 0px; border-right: 0px; margin-right: 5px;}
@@ -881,7 +895,7 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 
 
 /* start style for support/client_profile.php */
-.client-submit-btn {width: 128px; margin-left: 8%;}
+.client-submit-btn {width: 128px;}
 .client-submit-btn {color: white;
 					background: -webkit-linear-gradient(#00A79D, #008981);
 					background:-o-linear-gradient(#00A79D, #008981);
@@ -893,7 +907,12 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 						background: -moz-linear-gradient(#008981, #00A79D);
 						background: linear-gradient(#008981, #00A79D);}					
 #profile-information-username {background-color: white;}
-#profile-information-phonenumber {width: 336px;}	
+/*#profile-information-phonenumber {width: 336px;}	*/
+.project_contract_table{overflow-x: auto;}
+
+
+
+
 
 
 	
@@ -993,9 +1012,9 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 
 
 /* start style for support/inc/common.inc.php */
-#page-title-row1 {padding-left: 0px;}
+#page-title-row1 {/*padding-left: 0px;*/}
 .showPageTitle-col {margin-top: 10px; padding: 0px 20px 0px 50px;}
-#page-title-row2 {margin-left: 42%;}
+#page-title-row2 {/*margin-left: 42%;*/}
 .heskTitle {border-radius: 5px; background-color: #EC790F; font-size: 12px; color: #fff; padding: 5px;}
 .error img, .success img, .notice img, .info img {vertical-align:text-bottom;}
 .form-control-1 {     display: inline; height: 34px; padding: 6px 12px; font-size: 14px;
@@ -1017,3 +1036,34 @@ footer {border-top: 1px solid #BEBEBE; background-color: white; min-height: 60px
 
 /* start style for support/admin/contract.php */
 .filter_contract {margin-left: 37.333333%;}
+
+
+
+/************************ Media Queries *********************************/
+
+@media (min-width:1200px){
+.contact-support-request {  }
+#progressBarWidth{ width: 360px; }
+
+
+@media(min-width:989px) and (max-width: 1199px){
+#progressBarWidth{ width: 220px; }
+	
+}
+
+@media (min-width:767px) and (max-width: 990px){
+
+	
+	
+}
+
+
+@media (min-width:560px) and (max-width:767px){
+
+}
+
+
+@media (max-width:560px){
+	
+	
+}

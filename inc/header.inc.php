@@ -124,7 +124,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 	}
 	?>
 </head>
-<body onload="<?php echo $onload; unset($onload); ?>">
+<body class="padding-left-zero padding-right-zero" onload="<?php echo $onload; unset($onload); ?>">
 
 <?php
 include(HESK_PATH . 'header.txt');

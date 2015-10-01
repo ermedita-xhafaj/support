@@ -1384,6 +1384,14 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
     /* Save entered info in session so we don't loose it in case of errors */
 	$_SESSION['userdata'] = $myuser;
 
+	if( isset($_POST['isadmin']) && $_POST['isadmin'] == 1 ){
+		$_SESSION['userdata']['checked'] = 'admin';
+	} elseif( isset($_POST['isadmin']) && $_POST['isadmin'] == 0 ) {
+		$_SESSION['userdata']['checked'] = 'staff';
+	} elseif( isset($_POST['isclient'])) {
+		$_SESSION['userdata']['checked'] = 'client';
+	}
+	
     /* Any errors */
     if (strlen($hesk_error_buffer))
     {
