@@ -243,28 +243,28 @@ hesk_handle_messages();
 <?php $sql_name = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users`"); ?>
 <?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
 		<div id="filter-users"> <!-- Krijojme nje div per filtrat -->
-			<form method="post" action="manage_users.php?f=filter_users">
-				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_user_name' id='dep_user_list'>"; // list box select command
-					echo"<option value=''>Select staff</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql_name))
-						{
-							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
-						}
-							echo "</select>";
+			<form method="post" autocomplete="off" action="manage_users.php?f=filter_users">
+				<datalist id="dep_user_list">
+						<?php while ($tmp = hesk_dbFetchAssoc($sql_name)){ ?>
+							<option value="<?php echo $tmp["name"]; ?>" >
+						<?php }
 					?>
+				</datalist>
+			<input placeholder="Search by staff" type="text" list="dep_user_list" name="search_by_user_name" <?php if(isset($_POST["search_by_user_name"])) echo "value='".$_POST["search_by_user_name"]."'" ?> class="form-control-1 contract_name_list_style" />
 				
-				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_project' id='project_list'>"; // list box select command
-					echo"<option value=''>Select project</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql_project))
-						{
-							echo "<option value=$tmp[id]> $tmp[project_name] </option>"; 
-						}
-							echo "</select>";
+				<datalist id="project_name_list">
+						<?php while ($tmp = hesk_dbFetchAssoc($sql_project)){ ?>
+							<option value="<?php echo $tmp["project_name"]; ?>" >
+						<?php }
 					?>
-				<input name="submitbutton_user" type="submit" class="btn btn-default execute-btn" value="Search"/>
+				</datalist>
+			<input placeholder="Search by project" type="text" list="project_name_list" name="search_by_project_name" <?php if(isset($_POST["search_by_project_name"])) echo "value='".$_POST["search_by_project_name"]."'" ?> class="form-control-1 contract_name_list_style" />
+				
+			<input name="submitbutton_user" type="submit" class="btn btn-default execute-btn" value="Search"/>
+			<button name="clearbutton_contracts" onclick="deletestaff_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 			</form>
 		</div> <!--end div i filtrave -->
-	<table class="table table-bordered manage-users-table">
+	<table class="table table-bordered manage-users-table add-pagination">
 		<tr>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['email']; ?></i></b></th>
@@ -290,10 +290,12 @@ hesk_handle_messages();
 		$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `name` ASC');
 		if (isset($_POST['submitbutton_user'])){
 				if (!empty($_POST['search_by_user_name'])) {
-					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id='.$_POST['search_by_user_name']);
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE name="'.$_POST['search_by_user_name'].'"');
 				}
-				if (!empty($_POST['search_by_project'])) {
-					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE project_id='.$_POST['search_by_project']);
+				if (!empty($_POST['search_by_project_name'])) {
+					$res1 = hesk_dbQuery('SELECT `id` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'projects` WHERE project_name="'.$_POST['search_by_project_name'].'"');
+					$p_id = mysqli_fetch_array($res1);
+					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE project_id='.$p_id[0]);
 					$users = array();
 					while($con = hesk_dbFetchAssoc($res)){
 						$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'userforcontract` WHERE contractId='.$con['id']);
@@ -301,11 +303,15 @@ hesk_handle_messages();
 							$users[] = $query1['userId'];
 						};
 					}
-					//var_dump($users);
-					//exit();
+					
 					$usersStr = implode(',', $users);
-					$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id in ('.$usersStr.')');
+					if(!empty($usersStr)){
+						$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id in ('.$usersStr.')');
+					}else{
+						$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE id =0');
+					}
 				}
+
 			}
 		$i=1;
 		$cannot_manage = array();
@@ -424,8 +430,26 @@ EOC;
 		} // End while
 		?>
 	</table>
+	<?php $total1 = mysqli_num_rows($res); ?>
+<!-- Tabi navigimit te faqeve -->
+<nav class="text-center">
+  <ul class="pagination">
+    <li class="prev-pag-list">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+	<?php for($i=0; $i<ceil($total1/5); $i++): ?>
+		<li class="contract-list" data-item="<?php echo $i; ?>" ><a href="#"><?php echo $i+1; ?></a></li>
+	<?php endfor; ?>
+    <li class="next-pag-list">
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end-->
 </div>
-
 
 <div class="container manage-client-title">
 	<a data-toggle="collapse" data-parent="#accordion" href="#div-id-2" ><?php echo $hesklang['manage_clients']; ?></a>
@@ -436,41 +460,40 @@ EOC;
 <?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 <?php $sql_contract = hesk_dbQuery("SELECT contract_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contracts`"); ?>
 		<div id="filter-clients"> <!-- Krijojme nje div per filtrat -->
-			<form method="post" action="manage_users.php?f=filter_clients">
-				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_user_name' id='dep_user_list'>"; // list box select command
-					echo"<option value=''>Select client</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql_name))
-						{
-							echo "<option value=$tmp[id]> $tmp[name] </option>"; 
-						}
-							echo "</select>";
+			<form method="post" autocomplete="off" action="manage_users.php?f=filter_clients">
+				<datalist id="dep_client_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_name)){ ?>
+					<option value="<?php echo $tmp["name"]; ?>" >
+				<?php }
 					?>
+				</datalist>
+			<input placeholder="Search by name" type="text" list="dep_client_list" name="search_by_user_name" <?php if(isset($_POST["search_by_user_name"])) echo "value='".$_POST["search_by_user_name"]."'" ?> class="form-control-1 contract_name_list_style" />
 				
-				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_company' id='company_list'>"; // list box select command
-					echo"<option value=''>Select company</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql_company))
-						{
-							echo "<option value=$tmp[id]> $tmp[company_name] </option>"; 
-						}
-							echo "</select>";
+				<datalist id="company_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_company)){ ?>
+					<option value="<?php echo $tmp["company_name"]; ?>" >
+				<?php }
 					?>
-				<?php echo "<select class='form-control-1 dep_user_list_style' name='search_by_contract' id='contract_list'>"; // list box select command
-					echo"<option value=''>Select contract</option>";
-						while ($tmp = hesk_dbFetchAssoc($sql_contract))
-						{
-							echo "<option value=$tmp[id]> $tmp[contract_name] </option>"; 
-						}
-							echo "</select>";
+				</datalist>
+			<input placeholder="Search by company" type="text" list="company_name_list" name="search_by_company_name" <?php if(isset($_POST["search_by_company_name"])) echo "value='".$_POST["search_by_company_name"]."'" ?> class="form-control-1 contract_name_list_style" />
+				
+			<datalist id="contract_name_list">
+				<?php while ($tmp = hesk_dbFetchAssoc($sql_contract)){ ?>
+					<option value="<?php echo $tmp["contract_name"]; ?>" >
+				<?php }
 					?>
+			</datalist>
+			<input placeholder="Search by contract" type="text" list="contract_name_list" name="search_by_contract_name" <?php if(isset($_POST["search_by_contract_name"])) echo "value='".$_POST["search_by_contract_name"]."'" ?> class="form-control-1 contract_name_list_style" />
 				<select id="client_status" name="search_by_client_status" class="form-control-1 dep_user_list_style">
 					<option value="">Select status</option>
 					<option value="1">Active</option>
 					<option value="0">Inactive</option>
 				</select>
 				<input name="submitbutton_client" type="submit" class="btn btn-default execute-btn" value="Search"/>
+				<button name="clearbutton_contracts" onclick="deletesclients_admin();return false;" class="btn btn-default filter-ticket-btn" value="">Clear</button>
 			</form>
 		</div> <!--end div i filtrave -->
-	<table class="table table-bordered manage-clients-table">
+	<table class="table table-bordered manage-clients-table add-pagination-client">
 		<tr>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['name']; ?></i></b></th>
 		<th class="admin_white" style="text-align:left"><b><i><?php echo $hesklang['email']; ?></i></b></th>
@@ -489,11 +512,13 @@ EOC;
 		$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` ORDER BY `name` ASC');
 		if (isset($_POST['submitbutton_client'])){
 			if (!empty($_POST['search_by_user_name'])) {
-				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`WHERE id='.$_POST['search_by_user_name']);
+				$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients`WHERE name="'.$_POST['search_by_user_name'].'"');
 			}
-			elseif(!empty($_POST['search_by_company'])){
+			elseif(!empty($_POST['search_by_company_name'])){
 				$clients = array();
-				$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE company_id='.$_POST['search_by_company']);
+				$q1 = hesk_dbQuery('SELECT id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE company_name="'.$_POST['search_by_company_name'].'"');
+				$q = mysqli_fetch_array($q1);
+				$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE company_id='.$q[0]);
 				while($query1 = hesk_dbFetchAssoc($query)){
 					$query2 = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$query1['id']);
 					while($query3 = hesk_dbFetchAssoc($query2)){
@@ -512,9 +537,11 @@ EOC;
 					$result = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'clients` WHERE id =99999999'); 
 				}
 			}
-			elseif(!empty($_POST['search_by_contract'])){
+			elseif(!empty($_POST['search_by_contract_name'])){
 				$users = array();
-			$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$_POST['search_by_contract']);
+			$q1 = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contracts` WHERE contract_name="'.$_POST['search_by_contract_name'].'"');
+			$q = mysqli_fetch_array($q1);
+			$query = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE contract_Id='.$q[0]);
 					while($query1 = hesk_dbFetchAssoc($query)){
 						$users[] = $query1['client_Id'];
 					};
@@ -533,6 +560,7 @@ EOC;
 		}
 		
 			$i=1;
+			if(empty($style)){ $style=" "; }
 			while ($row = mysqli_fetch_array($result)) 
 			{
 				$contract = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."contractforclient` WHERE `client_Id`='".$row['id']."'");
@@ -583,6 +611,25 @@ EOC;
 		?>
 			
 	</table>
+	<?php $total2 = mysqli_num_rows($result); ?>
+<!-- Tabi navigimit te faqeve -->
+<nav class="text-center">
+  <ul class="pagination">
+    <li class="prev-pag-client">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+	<?php for($i=0; $i<ceil($total2/5); $i++): ?>
+		<li class="client-list" data-item="<?php echo $i; ?>" ><a href="#"><?php echo $i+1; ?></a></li>
+	<?php endfor; ?>
+    <li class="next-pag-client">
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end-->
 </div>
 
 <div class="container form-inline">

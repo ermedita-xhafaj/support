@@ -91,6 +91,7 @@ $mysql_time = hesk_dbTime();
 $result = hesk_dbQuery($sql_count);
 $total  = hesk_dbResult($result);
 
+//echo $total; exit();
 if ($total > 0)
 {
 	
@@ -98,7 +99,7 @@ if ($total > 0)
 	/* We have the full SQL query now, get tickets */
 	//$sql .= " LIMIT ".hesk_dbEscape($limit_down)." , ".hesk_dbEscape($maxresults)." ";
 	$result = hesk_dbQuery($sql_final);
-
+$total1 = mysqli_num_rows($result);
 	/* Print the table with tickets */
 	$random=rand(10000,99999);
 	?>
@@ -270,7 +271,28 @@ else
         echo '<p>&nbsp;<br />&nbsp;<b><i>'.$hesklang['no_tickets_open'].'</i></b><br />&nbsp;</p>';
     }
 }
+?>
 
+<!-- Tabi navigimit te faqeve -->
+<nav class="text-center">
+  <ul class="pagination">
+    <li class="prev-pag">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+	<?php for($i=0; $i<ceil($total1/10); $i++): ?>
+		<li class="number" data-item="<?php echo $i; ?>" ><a href="#"><?php echo $i+1; ?></a></li>
+	<?php endfor; ?>
+    <li class="next-pag">
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end-->
+
+<?php
 function hesk_print_list_head()
 {
 	global $hesk_settings, $href, $query, $sort_possible, $hesklang;

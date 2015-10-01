@@ -240,6 +240,7 @@ else
 var_dump($_POST);
 if(empty($_POST)){*/
 // That's all the SQL we need for count
+
 $sql_count .= $sql;
 $sql = $sql_final . $sql;
 /*}

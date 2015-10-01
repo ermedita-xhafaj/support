@@ -237,7 +237,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 <?php $sql_project = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
 <?php $sql_company = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 	<div class="container filter_contracts" id="filter-contracts"> <!-- Krijojme nje div per filtrat -->
-		<form method="post">
+		<form method="post" autocomplete="off">
 				<datalist id="contract_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
 					<option value="<?php echo $tmp["contract_name"]; ?>" >
@@ -271,7 +271,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 		</form>
 	</div> <!--end div i filtrave -->
 <div class="table-responsive container">
-	<table class="table table-bordered manage-contracts-table">
+	<table class="table table-bordered manage-contracts-table add-pagination">
 		<tr>
 			<th style="text-align:left"><b><i><?php echo $hesklang['id']; ?></i></b></th>
 			<th style="text-align:left"><b><i><?php echo $hesklang['contract_name']; ?></i></b></th>
@@ -516,6 +516,25 @@ else {return false;}
 	</table>
 </div>
 
+<?php $total1 = mysqli_num_rows($res); ?>
+<!-- Tabi navigimit te faqeve -->
+<nav class="text-center">
+  <ul class="pagination">
+    <li class="prev-pag-list">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+	<?php for($i=0; $i<ceil($total1/5); $i++): ?>
+		<li class="contract-list" data-item="<?php echo $i; ?>" ><a href="#"><?php echo $i+1; ?></a></li>
+	<?php endfor; ?>
+    <li class="next-pag-list">
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end-->
 <?php if(isset($_GET['id'])) {
 	$is_edit = true;
 } else {

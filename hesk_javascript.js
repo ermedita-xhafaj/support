@@ -493,3 +493,17 @@ function deleteprojects_admin()
    $(this).val('');
 });
 }
+
+function deletestaff_admin()
+{
+	$('#filter-users').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
+
+function deletesclients_admin()
+{
+	$('#filter-clients').children().find('input,select').not("input.execute-btn").each(function(){
+   $(this).val('');
+});
+}
