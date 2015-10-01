@@ -93,7 +93,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 <td>-->
 <?php hesk_handle_messages(); ?>
 <!--MANAGE CATEGORIES-->
-<div class="container tab-content manage-config-tab">
+<div class="container">
+<div class="tab-content manage-config-tab">
 	<ul id="tabs" class="nav nav-tabs manage-config" data-tabs="tabs">
 		<li class="active" id="configuration-info"><a href="#config-info" aria-controls="config-info" role="tab" data-toggle="tab"><?php echo $hesklang['categ_pri']; ?></a></li>
 		<li id="department-info"><a href="#dep-info" aria-controls="dep-info" role="tab" data-toggle="tab"><?php echo $hesklang['dep']; ?></a></li>
@@ -1457,7 +1458,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			</div>
 		</form>
 	</div>		<!-- end manage projects-->
-	</div>
+</div>
+
+</div>
 
 </div> <!-- manage-config-tab -->
 <?php

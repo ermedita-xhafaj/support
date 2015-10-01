@@ -45,8 +45,15 @@ $num_mail = $num_mail ? '<b>'.$num_mail.'</b>' : 0;
 	</div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse adminMenu">
-	<div class="container">
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		<span class="sr-only">Toggle navigation</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+	</button>
+    <div class="collapse navbar-collapse adminMenu" id="bs-example-navbar-collapse-1">		
+		<div class="container width-100">
+		
 		<ul class="nav nav-pills nav-justified" id="admin-nav-menu">
 			<li><a href="admin_main.php"><?php echo $hesklang['tickets']; ?><span class="sr-only">(current)</span></a></li>
 			
@@ -75,7 +82,7 @@ $num_mail = $num_mail ? '<b>'.$num_mail.'</b>' : 0;
 				echo '<li><a href="export.php">' .$hesklang['reports'] .'</a></li>';
 				}
 			?>
-			
+				<br class="visible-sm">
 				<li><a href="profile.php"><?php echo $hesklang['menu_profile']; ?></a></li>
 				
 				<li><a href="mail.php"><?php echo $hesklang['menu_msg']; ?>(<?php echo $num_mail; unset($num_mail); ?>)</a></li>

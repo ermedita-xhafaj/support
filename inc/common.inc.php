@@ -1069,10 +1069,10 @@ function hesk_showTopBar($page_title)
 		$str .= '</select>';
 
 	?>
-		<div class="container page-title">
-			<div class="row">
-				<label class="col-sm-9 showPageTitle" id="page-title-row1"><?php echo $page_title; ?></label>
-				<div class="col-sm-3 showPageTitle-col">
+		<div class="page-title">
+			<div class="form-inline">
+				<label class="showPageTitle col-xs-12 col-md-8" id="page-title-row1"><?php echo $page_title; ?></label>
+				<span class="showPageTitle-col col-xs-6 col-md-4">
 					<?php		
 						/*hesk_kbSearchLarge();*/
 					?>
@@ -1086,7 +1086,7 @@ function hesk_showTopBar($page_title)
 						?>
 						</noscript>
 					</label>
-				</div>
+				</span>
 			</div>
 		</div>
 	<?php
@@ -1859,8 +1859,8 @@ global $hesk_settings, $hesklang;
 require_once(HESK_PATH . 'inc/header.inc.php');
 ?>
 
-<nav class="row navbar navbar-default responsive" id="showTopBar-indexPhp">
-	<div class="menu-wrapper responsive">
+<nav class="row navbar navbar-default" id="showTopBar-indexPhp">
+	<div class="menu-wrapper">
 		<div class="container showTopBar"><?php hesk_showTopBar($hesk_settings['hesk_title']); ?></div>
 	</div>
 </nav>

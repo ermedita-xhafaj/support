@@ -1,0 +1,460 @@
+/*
+Theme Name: cpwpbs
+Theme URI: http://cpwpbs.commprog.com
+Description: A wordpress-bootstrap integration theme. This theme is based on and inspired by Zac Gordon's wpbootstrap theme. http://blog.teamtreehouse.com/responsive-wordpress-bootstrap-theme-tutorial
+Author: Mario Banushi
+Author URI: http://www.commprog.com
+Version: 1.0
+Tags: responsive, bootstrap
+
+License: Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+License URI: http://creativecommons.org/licenses/by-sa/3.0/
+
+*/
+
+@import url('bootstrap/css/bootstrap.min.css');
+
+html { height:100%; }
+body { height:100%; position:relative; color:#555; }
+#bot-zone {  bottom:0px; width:100%; border-top:4px solid rgba(0, 0, 0, 0.11); }
+
+/******************* Top Menu ************************************/
+#bs-example-navbar-collapse-2 ul { float:right; }
+#top-menu-container { background:#075489; margin-bottom:0px; }
+#bs-example-navbar-collapse-2 ul li { margin:5px 0px; }
+#bs-example-navbar-collapse-2 ul li a { padding:0px 8px; color:#fff; font-weight:normal; border-right:1px solid #FF9027; font-size: 12px; }
+#bs-example-navbar-collapse-2 ul li.active a { background: #132F66; }
+#bs-example-navbar-collapse-2 ul li.active a:hover { background: #132F66; }
+#bs-example-navbar-collapse-2 ul li a:hover { background: #075489; }
+
+
+
+/******************* Primary Menu ********************************/
+#primary-menu-logo-wrap { margin:10px 0px 10px 0px; }
+header .navbar-default { border:none; background:transparent; margin-bottom:0px; }
+#bs-example-navbar-collapse-1 ul li a {  padding:12px 19px; text-transform:uppercase; font-weight:bold; color:#fff; border-radius:5px; margin-left:5px; font-size:14px; }
+/*#bs-example-navbar-collapse-1 ul li.active a{ box-shadow:0 0 5px rgba(0, 0, 0, 0.53) inset; }*/
+#bs-example-navbar-collapse-1 ul li a:hover{ box-shadow:0 0 7px 1px rgba(0, 0, 0, 0.53) inset; }
+#bs-example-navbar-collapse-1 ul li:nth-child(1) a { background:#0C6BAE; transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55); transition: box-shadow 0.2s; }
+#bs-example-navbar-collapse-1 ul li:nth-child(1).active a{ box-shadow:0 0 7px 1px #00182f inset; }
+#bs-example-navbar-collapse-1 ul li:nth-child(2) a { background:#FF9027; transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55); transition: box-shadow 0.2s; }
+#bs-example-navbar-collapse-1 ul li:nth-child(2).active a{ box-shadow:0 0 7px 1px #853900 inset; }
+#bs-example-navbar-collapse-1 ul li:nth-child(3) a { background:#80B742; transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55); transition: box-shadow 0.2s; }
+#bs-example-navbar-collapse-1 ul li:nth-child(3).active a{ box-shadow:0 0 7px 1px #00410C inset; }
+#bs-example-navbar-collapse-1 ul li:nth-child(4) a { background:#8259A3; transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55); transition: box-shadow 0.2s; }
+#bs-example-navbar-collapse-1 ul li:nth-child(4).active a{ box-shadow:0 0 7px 1px #1A003A inset; }
+
+
+
+
+/******************* General *******************************/
+.padding-zero { padding:0px!important; }
+.padding-left-zero { padding-left:0px!important; }
+.padding-right-zero { padding-right:0px; }
+.margin-zero { margin:0px!important; }
+.margin-top-zero { margin-top:0px!important; }
+.margin-left-zero { margin-left:0px!important; }
+.border-zero { border-width:0px!important; }
+.text-justify { text-align:justify; }
+.font-size-12 { font-size:12px; }
+.position-relative { position:relative; }
+.high-z-index { z-index:999; }
+.baner-img { width:100%; height:auto; margin-botto }
+.main-banner-heading { text-shadow:2px 2px 3px #000; }
+
+.home-link-breadcrunbs { color:#999; }
+.home-link-breadcrunbs:hover { text-decoration:none; color:#999; }
+
+.featured_article_title:after { background: none repeat scroll 0 0 #CDCDCD; content: ""; height: 1px; margin-left: 20px; margin-top: 10px; float:right; width: 67%; }
+.featured_article_title { bottom: 0; font-size: 20px; font-weight: normal; position: relative; }
+#featured_article_title_shendet_student:after { width:63%!important; }
+#featured_article_title_shendet_nxenes:after { width:63%!important; }
+#feature_article_title_sig_prones_page:after { width:0%; }
+
+.tab-content-wrapper { padding:30px 0; }
+.tab-content-wrapper .tabbable ul li { background:#fff; border-radius:0px; }
+.tab-content-wrapper .tabbable ul li a { border-radius:0px; border:1px solid #DFDFE0; margin-right:0px; padding:8px 15px 8px 35px; color:#555; }
+.tab-content-wrapper .tabbable ul li.active a { border-radius:0; border-width:1px 5px 1px 1px;	border-right-color:#FF9027; margin-right:0; }
+.tab-content-wrapper .horisontal-line img { width:98%; }
+
+.breadcrumbs-wrap { padding:0px 0px 20px 20px; }
+.tab-read-more-btn { font-size:12px; color:#555; }
+.tab-read-more-btn:hover { text-decoration:none; color:#7B7B7B; }
+.tab-read-more-btn:focus { text-decoration:none; color:#7B7B7B; }
+
+.company-logo-sub-grey { padding:10px 15px; }
+.mobile-banner-btn { margin:15px 0; }
+.logo-row-main-pages { padding:15px; }
+
+option { padding:10px 8px 10px 8px; }
+option:nth-child(even) { background:#f6f6f6; }
+
+#vlera-perqindja-sig-kasko .list-group-item { padding:7px 10px; }
+
+.mjete-motorrike-baner-text { color:#fff; position:absolute; left:95px; top:220px; font-size:31px; font-weight:700; }
+.mjete-motorrike-baner-text span {  }
+
+.rreth-nesh-baner-text { color:#fff; position:absolute; left:95px; top:220px; }
+.rreth-nesh-baner-text span { font-size:31px; font-weight:700; }
+
+#sig-prone-zjarr-checkbox { cursor: no-drop; background: none repeat scroll 0 0 #eeeeee; }
+.popover-title { font-weight:bold; text-align:center; }
+
+#home-collapse-fields { min-height:75px; }
+#sig-shendeti-collapse-fields { min-height:75px; }
+
+.navbar { min-height:10px!important; border-radius:0px; border:none; }
+
+.colapse-div { margin-top:-10px; }
+
+/*Baner img min height*/
+	#mjete-motorrike-banner-wrap-id{ min-height:370px; }
+	#sig-prones-banner-wrap-id{ min-height:370px; }
+	#sig-shendet-banner-wrap-id{ min-height:370px; }
+	#rreth-nesh-banner-wrap-id{ min-height:370px; }
+	#faq-banner-wrap-id{ min-height:370px; }
+
+
+/*********************** Carousel ************************/
+#home-slider #imazhi-carousel { width:100%; height:auto; }
+
+/*Carousel Tabs*/
+ #carousel-tabs{ left:28%; margin: 0 auto; position: absolute; width: 48%; z-index: 999; top:11%; }
+ #carousel-tabs-ul { position:relative; top:-25px; left:-25px; border:none; }
+ #carousel-tabs-ul li a { background: #132F66; color:#fff; font-size:16px; border:1px solid; border-radius:5px; box-shadow: 3px 3px 5px  rgba(0, 0, 0, 0.7); margin-right:11px; padding:5px 20px; }
+ #carousel-tabs-ul li.active a { background: #49D0F6; color:#fff; }
+
+ .carousel-tab-content-well { padding:29px 23px 23px 23px; background:rgba(245, 245, 245, 0.83); box-shadow:0px 0px 6px 3px rgba(0, 0, 0, 0.26); border:none; }
+
+
+
+/******************* Home *********************/
+/*#homepage-wrapper { margin-top:-127px; }*/
+.forcefullwidth_wrapper_tp_banner { z-index:-1; }
+.grey-section { background:#F5F5F5; border-bottom:1px solid rgba(0, 0, 0, 0.11); }
+.insurance-company-logo-row { padding:0px 15px 5px 15px; }
+.insurance-company-logo { /*width:6.5%;*/ height:auto; margin-right:4.6%; display:inline; }
+.tab-title { padding-left:15px; }
+.home-logo-row { margin-top:25px; }
+.verifiko-sig-btn { background:#FF7622; box-shadow:2px 2px 2px rgba(0, 0, 0, 0.31); color:white; padding:6px 17px; }
+.verifiko-sig-btn:hover{ color:#fff; box-shadow:0 0 5px rgba(0, 0, 0, 0.53) inset; }
+
+/**** Tab Forms ****/
+#home-tab1 .home-form-submit-btn { margin-top:15px; }
+
+#home-tab3 .home-form-submit-btn { margin-top:15px; }
+
+
+.heading-sub-home-tabs { color:#132F66; margin-bottom:13px; }
+.home-tab-form-label { color:#132F66; font-weight:normal; font-size:15px; margin-bottom:0px; margin-left:10px; }
+.mjete-motorrike-first-row-fields { margin-bottom:15px; }
+.sig-shendeti-first-row-fields { margin-bottom:15px; }
+/*#carousel-tab-content .label-40 { min-height:40px; }*/
+
+.mjete-motorrike-main-tab ul li .mjete-motorrike-main-btn-tab { background:#fff; border:1px solid #49D0F6; color:#555; margin-right:6px; padding:10px 20px; }
+.mjete-motorrike-main-tab ul li.active .mjete-motorrike-main-btn-tab { background:#132F66; box-shadow:2px 2px 2px rgba(0, 0, 0, 0.31); color:#fff; border:none; }
+
+#makina-home-form-wrap { margin-top:15px; }
+#makina-home-form-wrap .col-sm-5-modified { width:38.667%; }
+#makina-home-form-wrap .col-sm-2-modified { width:22.667%; bottom:60px; position:absolute; right:0; }
+.mjete-motorrike-automjete-submit-btn { background:#FF7622; box-shadow:2px 2px 2px rgba(0, 0, 0, 0.31); color:white; padding:6px 17px; }
+
+#motorra-home-form-wrap { margin-top:15px; }
+#motorra-home-form-wrap .col-sm-5-modified { width:38.667%; }
+#motorra-home-form-wrap .col-sm-2-modified { width:22.667%; bottom:60px; position:absolute; right:0; }
+.home-form-submit-btn { background:#FF7622; box-shadow:2px 2px 2px rgba(0, 0, 0, 0.31); color:white; padding:6px 17px; font-size: 15px; font-weight: 700; }
+.home-form-submit-btn:hover{ color:#fff; }
+
+#home-tab-content { /*padding-top:5px;*/ }
+#home-tab-content .horisontal-line { padding-left:0px; }
+
+
+
+/*** Responsive Features Home ****/
+
+/* Kerko nje kosto collapse btn */
+#xs-kerko-kosto-btn-en a { padding:8px 19px; text-transform:uppercase; font-weight:bold; color:#fff; border-radius:5px; margin-left:5px; font-size:14px; }
+#xs-kerko-kosto-btn-en a:nth-child(1) { background:#0c6bae; }
+#xs-kerko-kosto-btn-en a:nth-child(2) { background:#ff9027; }
+#xs-kerko-kosto-btn-en a:nth-child(3) { background:#80b742; }
+
+
+#xs-kerko-kosto-btn a { padding:8px 19px; text-transform:uppercase; font-weight:bold; color:#fff; border-radius:5px; margin-left:5px; font-size:14px; }
+#xs-kerko-kosto-btn a:nth-child(1) { background:#0c6bae; }
+#xs-kerko-kosto-btn a:nth-child(2) { background:#ff9027; }
+#xs-kerko-kosto-btn a:nth-child(3) { background:#80b742; }
+
+
+/* md-front-page-form */
+.md-front-page-form { margin-top:30px; }
+.md-front-page-form .position-relative { top:-40px; }
+.md-front-page-form ul { border:none; }
+.md-front-page-form ul li a { background: #132F66; color:#fff; font-size:16px; border:1px solid; border-radius:5px; box-shadow: 3px 3px 5px  rgba(0, 0, 0, 0.7); margin-right:11px; padding:5px 20px; }
+.md-front-page-form ul li.active a { background: #49D0F6; color:#fff; }
+
+
+
+/***************** Mjete Motorrike Page **********************/
+#mjete-motorrike-banner-wrap-id { margin-bottom:-20px; }
+.banner-btn { left: 95px; position: absolute; top: 120px; background:center top , #ff8b3d 0px, #f60 100%; color:#fff; font-size:20px; border:1px solid #f60; box-shadow:0 0 1px 1px #ff9a57 inset; padding:15px 25px; }
+.banner-btn:hover { color:#fff; border-color:#f60; box-shadow: top,#E87F39 0,#E85F03 100%;  }
+.banner-btn-gradient { color:#fff;
+
+	background: -webkit-linear-gradient(center top , #ff8b3d 0px, #f60 100%); /* For Safari 5.1 to 6.0 */
+  	background: -o-linear-gradient(center top , #ff8b3d 0px, #f60 100%); /* For Opera 11.1 to 12.0 */
+  	background: -moz-linear-gradient(center top , #ff8b3d 0px, #f60 100%); /* For Firefox 3.6 to 15 */
+  	background: linear-gradient(center top , #ff8b3d 0px, #f60 100%); /* Standard syntax */
+  	background-image: -webkit-linear-gradient(top,#FF8B3D 0,#F60 100%);
+  	background-image: -ms-linear-gradient(top,#FF8B3D 0,#F60 100%);
+  	
+ }
+.banner-btn-gradient:hover { color:#fff;
+
+	background: -webkit-linear-gradient(top,#E87F39 0,#E85F03 100%); /* For Safari 5.1 to 6.0 */
+  	background: -o-linear-gradient(top,#E87F39 0,#E85F03 100%); /* For Opera 11.1 to 12.0 */
+  	background: -moz-linear-gradient(top,#E87F39 0,#E85F03 100%); /* For Firefox 3.6 to 15 */
+  	background: linear-gradient(top,#E87F39 0,#E85F03 100%); /* Standard syntax */
+  	background-image: -ms-linear-gradient(top,#E87F39 0,#E85F03 100%);
+ }
+ .banner-btn-gradient:focus { color:#fff; }
+
+.page-banner-wrap { margin-bottom:-40px; }
+
+.amf-section { margin-bottom:8px; }
+.amf-section-text {  letter-spacing: 1px; margin-top: -4px; color: rgb(7, 84, 137); font-style: italic; margin-bottom: 0px; }
+.amf-arrow { margin-top: 0px; font-size: 30px; margin-left: 22px; }
+.amf-btn { background:#075489;  }
+.amf-btn:focus { color:#fff; }
+.amf-btn  { font-size:18px; font-waight:bold; text-transform:uppercase; }
+
+
+/**************************** Full Form Templates *****************************/
+
+/* Mjete Motorrike Full Form Page */
+.mjete-motorrike-full-form-container { border:solid 1px #ccc; border-radius:4px; background:none repeat scroll 0 0 #E3EBF5; margin-top:40px; margin-bottom:40px; padding-top:15px; padding-bottom:15px; }
+.mjete-motorrike-full-form-container label { color:#075489; }
+.mjete-motorrike-full-form-container .list-group-item { color:inherit; }
+.mjete-motorrike-full-form-well { border:2px solid #fff; background:#fff; }
+#full-form-mjete-motorrike-form-wrap .home-form-submit-btn { margin-top:25px; }
+#vlera-mjetit-sig-kasko { margin-bottom:10px; }
+
+
+
+/* Sigurimi i shendetit Full Form */
+.sig-shendeti-full-form-container { border:solid 1px #ccc; border-radius:4px; background:#EEF7E5; margin-top:40px; margin-bottom:40px; padding-top:15px; padding-bottom:15px; }
+.sig-shendeti-full-form-container label { color:#5A8B23; }
+.sig-shendeti-full-form-container .list-group-item { color:inherit; }
+.sig-shendeti-full-form-well { border:2px solid #fff; background:#fff; }
+#full-form-sig-shendeti-form-wrap .home-form-submit-btn { margin-top:25px; }
+
+
+
+/* Sigurimi i prones Full Form */
+.sig-prones-full-form-container { border-radius:4px; border: 1px solid #ccc; background:none repeat scroll 0 0 #FFF8F2; margin-top:40px; margin-bottom:40px; padding-top:15px; padding-bottom:15px; }
+.sig-prones-full-form-container label { color:#DB6B00; }
+.sig-prones-full-form-container .list-group-item { color:inherit; }
+.sig-prones-full-form-well { border:2px solid #fff; background:#fff; }
+#full-form-sig-shendeti-form-wrap .home-form-submit-btn { margin-top:25px; }
+
+#lloji-baneses-prone { margin-bottom:10px; }
+/*#vlera-nderteses-prone { margin-bottom:10px; }*/
+
+
+/************** Rreth Nesh ************************/
+.rreth-nesh-grey-section { padding:35px 0; }
+.rreth-nesh-breadcrumbs-wrap { padding-top:20px; }
+.faq-breadcrumbs-wrap { padding-top:20px; }
+.rreth-nesh-featured_article_title:after { width:88.5% !important; }
+
+
+/****************** FAQ **************************/
+.faq-featured_article_title:after { width:70% !important; }
+
+
+/******************* Contact *******************/
+.contact-page-container { margin-top:20px; margin-bottom:50px; }
+#kontakt-submit-btn { background:none repeat scroll 0 0 #ff7622; color:#fff; font-weight:bold; }
+.contact-info-icon { font-size:13px; margin-top:3px; vertical-align:-10px; color:#F37121; }
+.contact-adress-heading { padding-left:45px; }
+#map-full-width-container{ border-bottom:4px solid rgba(0, 0, 0, 0.11); }
+
+
+/********************* Search Result *********************/
+#sidebar-search-result-form-container .sidebar-search-result-wrap { border-radius:0px; background:#fff; margin-bottom:0px; padding:0px 19px 19px 19px; }
+#sidebar-search-result-form-container .sidebar-search-result-wrap label { color:#555; }
+#sidebar-search-result-form-container #vlera-perqindja-sig-kasko .list-group-item { color:#555; border-radius:0px; }
+#sidebar-search-result-form-container .sidebar-search-result-wrap select { border-radius:0px; }
+.sidebar-search-result-wrap  { border-top-color:#075489; border-top-width:3px; min-height:535px; }
+
+#sidebar-sigurimi-prones-form { margin-top:-15px; }
+#sidebar-sigurimi-prones-form .input-group { margin-bottom:8px; }
+
+.sidebar-search-btn { margin-top:15px; }
+#sidebar-search-result-form-container .form-control { margin-bottom:8px; }
+#sidebar-mjete-motorrike-form .mjete-motorrike-first-row-fields { margin-bottom:0; }
+#sidebar-mjete-motorrike-form #vlera-perqindja-sig-kasko .list-group-item { margin-bottom:8px; }
+
+#search-resilt-info-row { background-image: url("bootstrap/img/support1-min.jpg"); padding:30px; color:#fff; margin-top:35px;}
+#search-result-info-box-btn { background: #FF7622; border-radius: 19px; font-weight:bold; color:#fff; position:relative; top:15px; }
+#search-result-info-box-btn:hover { color:#fff; }
+
+/*
+.bs-callout  { border-radius: 3px; border-style: solid; border-width: 1px 1px 1px 5px; margin-bottom:20px; padding: 20px; border-color: #eee; }
+.bs-callout-info { border-left-color: #1b809e; }
+.bs-callout-info-text { color:#1b809e; }
+*/
+
+#search-result-values-sig-kasko { margin:0 0px; }
+#search-result-values-sig-kasko .rreziqet-e-siguruara-list { font-size:13px; }
+#rrezuqet-e-siguruara-list { padding-left:10px; }
+#rrezuqet-e-siguruara-prone-list { padding-left:10px; font-size:13px; }
+.search-result-special-col { padding:0px 10px; }
+.search-result-values-row { padding:8px 0; border-bottom: 1px solid #dcdcdc; }
+.search-result-values-general-wrap { border-right:1px solid #DCDCDC;  border-left:1px solid #DCDCDC;  border-bottom:1px solid #DCDCDC; border-top:3px solid #075489; padding:23px 13px 23px 13px; min-height: 543px; }
+.search-result-medical-second-col { border-right:1px solid #DCDCDC;  border-left:1px solid #DCDCDC;  border-bottom:1px solid #DCDCDC; border-top:3px solid #075489;  min-height: 535px; }
+.sigurimi-motorrik-shembull-pdf { border:solid; border-top-color:#075489; border-right-color:rgba(0, 0, 0, 0.16); border-bottom-color:rgba(0, 0, 0, 0.16); border-left-color:rgba(0, 0, 0, 0.16); border-width:3px 1px 1px 1px; }
+
+.search-result-values-left { font-size:16px; color:#000; padding:0 5px 0 0 ; }
+.search-result-values-right { color: #1e4c85; font-size: 15px; font-weight: bold; padding:0 0 0 5px; }
+.search-result-values-price-area { background: none repeat scroll 0 0 #ff7622; border-radius: 4px; color: #fff; font-size: 15px; font-weight: 700; padding: 10px 19px 8px; width:60%; margin:0 auto; }
+.search-result-values-price-area {
+	width:-ms-fit-content;
+	width:-mso-fit-content;
+	width:-moz-fit-content;
+	width:-o-fit-content;
+	width:-atsc-fit-content;
+	width:-wap-fit-content;
+	width:-webkit-fit-content;
+	width:-khtml-fit-content;
+}
+.shendet-search-result-left-col { margin-top:-20px; }
+
+/* #siguracione-shendet-form-id { margin-top:-8px; }*/
+#sig-shendeti-student-collapse-fields { margin-top:-10px; }
+#sig-shendeti-nxenes-collapse-fields { margin-bottom:-10px; }
+
+ /* Check-up Col */
+.chech-up-list-item{ padding:2px 8px; border-top: 1px solid #ddd; }
+.chech-up-list-item:nth-child(odd) { background:#F9F9F9; }
+.chech-up-list { list-style:none; padding:0 23px; }
+.check-up-info-text { margin:30px 23px 0 23px; margin-bottom:0px; padding:0; border-bottom: 2px solid #ddd; font-size:14px; font-weight:bold; }
+
+.sidebar-search-result-shendeti-form { margin-top:-8px; }
+
+/* Sig Prone Search Result */
+#search-result-values-sig-prone { margin-top:-20px; }
+/*#sigurimi-prones-form-id{ margin-top:-12px; }*/
+.sigurimi-prones-shembull-pdf { border-top:3px solid #075489; }
+/*#sigurimi-prones-form-id .list-group-item { margin-bottom:8px; border-radius:0px;  }*/
+#vlera-perqindja-sig-prone .list-group-item { padding: 7px 10px; }
+
+#sidebar-sigurimi-prones-form .list-group-item { margin-bottom:8px; border-radius:0px; }
+.vlera-number-input-prone { margin-bottom:0px!important; }
+
+
+/**** top *********************************************************************/
+
+/**** bot *********************************************************************/
+#bot-zone { padding:30px 0; background:#5D5D5D; }
+.footer-heading { margin:0 0 25px 0; font-size:18px; color:#666666; }
+.footer-ul { list-style: outside none none; margin-top: 10px; padding-left: 0; }
+.footer-ul li { margin-bottom:10px; padding-bottom:10px;  }
+.footer-ul li a { color:#C6C6C6; }
+.footer-ul li a:hover { text-decoration:none; }
+
+.footer-col-1 { padding-right:0px; margin-right:-15px; }
+.footer-col-2 { border-left:1px solid #000; border-right:1px solid #000; padding-left:110px; max-height:155px; }
+.footer-col-3 { padding-left:50px; }
+
+#brands{
+    display: none;
+}
+._4s7c { background:#fff!important; }
+
+
+
+/**************************** Sidebar ************************************/
+
+
+
+/********************** Responsive *************************/
+#insurance-company-logo-row-sm img { margin:0; padding:0 8px; }
+
+
+
+
+/************************ Media Queries *********************************/
+
+@media (min-width:1200px){
+
+
+	
+}
+
+@media(min-width:989px) and (max-width: 1200px){
+
+	
+}
+
+@media (min-width:767px) and (max-width: 990px){
+
+	
+	
+}
+
+
+@media (min-width:560px) and (max-width:767px){
+
+}
+
+
+@media (max-width:560px){
+	
+	
+}
+
+
+
+
+
+
+
+
+
+/*==================================================
+ * Box shadow Bottom Effect 2
+ * ===============================================*/
+.box-shadow-bottom-effect2
+{
+  position: relative;
+}
+.box-shadow-bottom-effect2:before, .box-shadow-bottom-effect2:after
+{
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width:300px;
+  /*background: #777;*/
+  -webkit-box-shadow: 0 15px 10px #777;
+  -moz-box-shadow: 0 15px 10px #777;
+  box-shadow: 0 15px 10px #777;
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+}
+.box-shadow-bottom-effect2:after
+{
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
+  right: 10px;
+  left: auto;
+}
