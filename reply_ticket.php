@@ -241,7 +241,28 @@ $params = array();   // array me vlerat e reply_message
 	$params1[0] = $ticket['id'];
 	$data = $oeapi->search_helpdeskID($valid_services["PIS"], $ticket['id']);     // gjejme ceshtjen ky helpdesk_id = ticket_id
 
+//Ermedita -  lista e emaileve te staffit qe jan te lidhur me ceshtjen
 
+	$issue_id =  hesk_dbQuery("SELECT `contract_ticket_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`=".$ticket['id']);
+	$i_id =  mysqli_fetch_array($issue_id);
+	$users = hesk_dbQuery("SELECT `userId` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`=".$i_id[0]);
+	$u = array();
+	while($user = mysqli_fetch_array($users)){
+		$u[] = $user['userId'];
+		
+	}
+	$ulist = implode(',',$u);
+	$u_emails = hesk_dbQuery("SELECT `email` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id` IN (".$ulist.")");
+	$array_email = array();
+	while($e = mysqli_fetch_array($u_emails)){
+		$array_email[] = $e['email'];
+		
+	}
+	$ulist_emails = implode(',',$array_email);
+	
+	//var_dump($ulist_emails);
+	//exit();
+	
 	$params['subject'] =   $ticket['subject'];
 	$params['user_id'] =   11;    // Do krijohet nga ERP nje user default dhe do vendosim ID e tij
 	$params['body_text'] =   stripslashes($message);
@@ -249,6 +270,7 @@ $params = array();   // array me vlerat e reply_message
 	$params['res_id'] =  $data[0];
 	$params['model'] =  "project.issue";
 	$params['email_from'] =  $ticket['email'];
+	$params['email_to'] =  $ulist_emails;
 	$data = $oeapi->create_record($params ,$valid_services["SCA"]);   // dergojme te dhenat e reply_message tek ceshtje e duhur
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,12 +287,13 @@ $ticket = hesk_ticketToPlain($info, 1, 0);
 // --> If ticket is assigned just notify the owner
 if ($ticket['owner'])
 {
-	hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my');
+	//hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my');
+	hesk_notifyCustomer_multiple('new_reply_by_customer',$array_email);
 }
 // --> No owner assigned, find and notify appropriate staff
 else
 {
-	hesk_notifyStaff('new_reply_by_customer',"`notify_reply_unassigned`='1'");
+	hesk_notifyCustomer_multiple('new_reply_by_customer',$array_email);
 }
 
 /* Clear unneeded session variables */

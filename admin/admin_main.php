@@ -75,7 +75,7 @@ if (hesk_checkPermission('can_view_tickets',0))
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
 	<div class="container filter-ticket-admin" id="filter-ticket-admin"> <!-- Krijojme nje div per filtrat -->
-		<form method="post" action="">
+		<form method="post" autocomplete = "off" action="">
 			<datalist id="ticket_id_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){
 					echo '<option value='.$tmp["id"].'>';

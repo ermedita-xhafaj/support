@@ -126,7 +126,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 
 	<?php $sql = hesk_dbQuery("SELECT name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories`"); ?>
 	<div class="container" id="filter-categories"> <!-- Krijojme nje div per filtrat -->
-		<form method="post">
+		<form method="post" autocomplete="off">
 			<datalist id="cat_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
 					<option value="<?php echo $tmp["name"]; ?>" >
@@ -485,7 +485,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		
 		<?php $sql = hesk_dbQuery("SELECT department_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."departments`"); ?>
 		<div class="container" id="filter-departments"> <!-- Krijojme nje div per filtrat -->
-			<form method="post" action="manage_categories.php?a=search#tab_dep-info">
+			<form method="post" autocomplete="off" action="manage_categories.php?a=search#tab_dep-info">
 				<datalist id="dep_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
 					<option value="<?php echo $tmp["department_name"]; ?>" >
@@ -795,7 +795,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 	<!--FILTRAT TEK KOMPANITE -->
 		<?php $sql = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 		<div class="container" id="filter-companies"> <!-- Krijojme nje div per filtrat -->
-			<form method="post" action="manage_categories.php?a=search#tab_comp-info">
+			<form method="post" autocomplete="off" action="manage_categories.php?a=search#tab_comp-info">
 				<datalist id="comp_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
 					<option value="<?php echo $tmp["company_name"]; ?>" >
@@ -814,7 +814,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		</div> <!--end div i filtrave -->
 		
 
-		<div class="table-responsive container">
+		<div class="table-responsive add-pagination container">
 			<table class="table table-bordered manage-company-table">
 				<tr>
 					
@@ -868,11 +868,10 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						if (!empty($_POST['search_by_comp_name'])) {
 							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE company_name="'.$_POST['search_by_comp_name'].'"');
 						}
-						elseif($_POST['search_by_comp_status'] === '0' || $_POST['search_by_comp_status'] === '1'){
-							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE active='.$_POST['search_by_comp_status']);
+						elseif($_POST['search_by_comp_status'] === '1' || $_POST['search_by_comp_status'] === '0'){
+							$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies`WHERE `active`="'.$_POST['search_by_comp_status'].'"');
 						}
 				}
-
 					$i=1;
 					while ($row_comp = mysqli_fetch_array($res_comp)) 
 					{
@@ -887,9 +886,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							$remove_code = '<span> <a href="http://localhost/support/admin/manage_categories.php?a=remove_comp&amp;id='.$row_comp['id'] .'&amp;token='.hesk_token_echo(0).'" onclick="return confirm_delete();"><img src="../img/delete.png" width="16" height="16" alt="'.$hesklang['remove'].'" title="'.$hesklang['remove'].'" /></a></span>';
 						}
 						
-						echo '<tr>
+						echo '<tr class="company-row-identification">
 							
-							<td>' .$row_comp['company_name'] .'</td>
+							<td class="company-code-identification">' .$row_comp['company_name'] .'</td>
 							<td>' .$row_comp['email'] .'</td>
 							<td>' .$row_comp['web_page'] .'</td>
 							<td>' .$row_comp['address'] .'</td>
@@ -901,9 +900,30 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 							<td>' .$row_comp['active'] .'</td>
 							<td><div class="form-inline">' .$edit_code .$remove_code .'</div></td>
 							</tr>';
-						}
+
+					}
 				?>		
 			</table>
+<?php $total1 = mysqli_num_rows($res_comp); ?>
+
+	<!-- Tabi navigimit te faqeve -->
+<nav class="text-center">
+  <ul class="pagination">
+    <li class="prev-pag-list">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+	<?php for($i=0; $i<ceil($total1/5); $i++): ?>
+		<li class="contract-list" data-item="<?php echo $i; ?>" ><a href="#"><?php echo $i+1; ?></a></li>
+	<?php endfor; ?>
+    <li class="next-pag-list">
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end-->
 		</div>
 		<!-- CREATE COMPANY -->
 		<div class="container create-company-title">
@@ -974,7 +994,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 				</div>
 			</form>
 		</div>
-	<?php
+			<?php
 		$valuecomp_id = '';
 		$valuecomp_company_name = '';
 		$valuecomp_email = '';
@@ -1005,6 +1025,8 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		}		
 	}
 	?>
+
+
 	<!-- EDIT COMPANY -->
 	<div class="container update-company-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-edit-company" <?php if(isset($_GET['a']) && $_GET['a']=="edit") echo "aria-expanded='true'"; ?> ><?php echo $hesklang['edit_company']; ?></a>
@@ -1116,7 +1138,9 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			}
 			
 			if(isset($_POST['company_id'])){
-				$valueproj_company_id = hesk_input( hesk_POST('company_id') );
+				$s = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies` WHERE `company_name` ='".$_POST['company_id']."'");
+				$s = mysqli_fetch_array($s);
+				$valueproj_company_id =  $s[0];
 			}
 			else {
 				$valueproj_company_id = '';
@@ -1133,6 +1157,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 			if(!empty($valueproj_project_code) && !empty($valueproj_project_name) && !empty($valueproj_company_id) && !empty($valueproj_department_id))
 			{
 				$valueproj_active = hesk_input( hesk_POST('project_active'));
+				if(empty($valueproj_active)) { $valueproj_active="0"; }
 				$sql = hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."projects` (
 						`project_code`,
 						`project_name`,
@@ -1150,6 +1175,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						'".hesk_dbEscape($valueproj_note)."',
 						'".hesk_dbEscape($valueproj_active)."'
 						)" );
+						
 			}
 		?>
 		
@@ -1159,7 +1185,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		<?php $sql = hesk_dbQuery("SELECT company_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."companies`"); ?>
 		<?php $sql1 = hesk_dbQuery("SELECT project_name, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."projects`"); ?>
 		<div class="container" id="filter-projects"> <!-- Krijojme nje div per filtrat -->
-			<form method="post">	
+			<form method="post" autocomplete="off">	
 			<datalist id="compproj_name_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){ ?>
 					<option value="<?php echo $tmp["company_name"]; ?>" >
@@ -1185,7 +1211,7 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 		</div> <!--end div i filtrave -->
 		
 
-		<div class="table-responsive container">
+		<div class="table-responsive add-pagination-project container">
 			<table class="table table-bordered manage-projects-table">
 				<tr>
 					<th style="text-align:left"><b><i><?php echo $hesklang['project_code']; ?></i></b></th>
@@ -1272,13 +1298,32 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 						}
 				?>		
 			</table>
+<?php $total1 = mysqli_num_rows($res_proj); ?>
+<!-- Tabi navigimit te faqeve -->
+<nav class="text-center">
+  <ul class="pagination">
+    <li class="prev-pag-project">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+	<?php for($i=0; $i<ceil($total1/5); $i++): ?>
+		<li class="project-list" data-item="<?php echo $i; ?>" ><a href="#"><?php echo $i+1; ?></a></li>
+	<?php endfor; ?>
+    <li class="next-pag-project">
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end-->
 		</div>
 
 		<div class="container create-project-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#div-id-create-project" ><?php echo $hesklang['create_project']; ?></a>
 		</div>
 		<div class="create-projects collapse" id="div-id-create-project">
-			<form method="post" action="manage_categories.php#tab_proj-info" name="form1">
+			<form method="post" autocomplete="off" action="manage_categories.php#tab_proj-info" name="form1">
 				<div class="">
 					<div class="form-inline project-row1" id="project_row">
 						<label class="col-sm-2 control-label"><?php echo $hesklang['project_code'] ?>: <font class="important">*</font></label>
@@ -1297,18 +1342,15 @@ if(!isset($_GET['id'])){ //Hacking i id ne URL per te mos nxjerre errore ne Upda
 					
 					<div class="form-inline" id="project_row">
 						<label class="col-sm-2 control-label" for=""><?php echo $hesklang['company_name']; ?>: <font class="important">*</font></label>
-						<select class="form-control" required="required" title="Required field" id="" name="company_id" style="width: 336px;">
-							<option></option>
-							<?php
-								$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1');
-								$i=1;
-								while ($row_comp = mysqli_fetch_array($res_comp)) 
-								{
-									echo 
-									'<option value="' .$row_comp['id'] .'">' .$row_comp['company_name'] .'</option>';
-								}
-							?>		
-						</select>
+			<datalist id="company_list">
+				<?php
+				$res_comp = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'companies` WHERE active=1');
+				while ($tmp = hesk_dbFetchAssoc($res_comp)){ ?>
+					<option value="<?php echo $tmp["company_name"]; ?>" >
+				<?php }
+					?>
+			</datalist>
+			<input placeholder="Select company" type="text" list="company_list" name="company_id" class="form-control-1 compproj_name_list_style" />
 					</div>
 					
 					<div class="form-inline" id="project_row">
