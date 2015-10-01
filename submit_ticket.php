@@ -434,7 +434,42 @@ $params = array();
 // Notify the customer
 if ($hesk_settings['notify_new'])
 {
-	hesk_notifyCustomer();
+	//Ermedita -  send email to assigned staff depending on Contracts
+	$users = hesk_dbQuery("SELECT `userId` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."userforcontract` WHERE `contractId`=".hesk_POST('contract_name'));
+	$u = array();
+	while($user = mysqli_fetch_array($users)){
+		$u[] = $user['userId'];
+		
+	}
+	$ulist = implode(',',$u);
+	$u_emails = hesk_dbQuery("SELECT `email` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id` IN (".$ulist.")");
+	
+	//ndertojme template e emailit ne rastin kur SKA probleme
+	$email_body = "<p> Përshendetje,</p>"."<p> U Hap Ceshtja: ".hesk_POST('subject')." me ID: ".$ticket['id']."</p>";
+	$email_body.= "<div style='color:blue'>".hesk_POST('message')."</div>";
+	$email_body.="<p>Cështja u hap nga useri: ".hesk_POST('name')."</p>";
+	$email_body.="<p>Ju do te njoftoheni me nje email per zgjidhjen e ceshtjes.</p>";
+	$email_body.="<p>Faleminderit!</p>";
+	$email_body.="<p>Stafi Commprog!</p>";
+	
+	//ndertojme template e emailit ne rastin kur KA probleme
+	$email_body2 = "<p> Përshendetje,</p>"."<p> U Hap Ceshtja: ".hesk_POST('subject')." me ID: ".$ticket['id']."</p>";
+	$email_body2.= "<div style='color:blue'>".hesk_POST('message')."</div>";
+	$email_body2.="<p>Cështja u hap nga useri: ".hesk_POST('name')."</p>";
+	$email_body2.="<p>KUJDES! Cështja nuk eshte e lidhur me nje projekt ne Impro. Beni lidhjen!</p>";
+	$email_body2.="<p>Faleminderit!</p>";
+	while($u_email = hesk_dbFetchAssoc($u_emails)){
+		
+		if(!empty($data)){
+			// Notify the customer
+			hesk_notifyCustomer();
+			hesk_mail($u_email['email'], hesk_POST('subject'), $email_body);
+		}
+		else{
+		hesk_mail($u_email['email'], hesk_POST('subject'), $email_body2);
+
+		}
+	}
 }
 
 // Need to notify staff?

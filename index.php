@@ -237,9 +237,10 @@ hesk_handle_messages();
 			<div class="form-group" style="margin-bottom: 5px;">
 				<label class="col-sm-2" for="select-cont"><?php echo $hesklang['contract'] ?>: <font class="important">*</font></label>
 				<div class="col-sm-4"><select class="form-control contact-support-request" required="required" title="Required field" id="select-cont" name="contract_name">
+
 					<option></option>
 					<?php
-						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE client_Id='.$_SESSION["id"]["id"] );
+						$res_client = hesk_dbQuery('SELECT contract_Id FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'contractforclient` WHERE `client_Id`='.$_SESSION["id"]["id"] );
 						$i=1;
 						while ($row_client = mysqli_fetch_array($res_client)) 
 						{
@@ -273,7 +274,7 @@ hesk_handle_messages();
 			$is_table = 0;
 			// Get categories
 
-			$res = hesk_dbQuery("SELECT `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' AND `active`='1' ORDER BY `cat_order` ASC");
+			$res = hesk_dbQuery("SELECT `id`, `categ_impro_id`, `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `type`='0' AND `active`='1' ORDER BY `cat_order` ASC");
 
 			/*if (hesk_dbNumRows($res) == 1)
 			{
@@ -291,6 +292,7 @@ hesk_handle_messages();
 				// List available categories
 				$is_table = 1;
 				?>
+
 				<!-- start table here end in line 304 -->
 					<div class="form-group" style="margin-bottom: 5px;">
 						<label class="col-sm-2" for="category-department-priority-support-request"><?php echo $hesklang['category']; ?>: <font class="important">*</font></label>
@@ -305,7 +307,7 @@ hesk_handle_messages();
 						// List categories
 						while ($row = hesk_dbFetchAssoc($res))
 						{
-							echo '<option value="' . $row['categ_impro_id'] . '"' . (($_SESSION['c_category'] == $row['categ_impro_id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
+							echo '<option value="' . $row['id'] . '"' . (($_SESSION['c_category'] == $row['id']) ? ' selected="selected"' : '') . '>' . $row['name'] . '</option>';
 						}
 						?>
 						</select></div>
@@ -322,9 +324,11 @@ hesk_handle_messages();
 						$is_table = 1;
 					}
 					?>
+
 					<div class="form-group" style="margin-bottom: 5px;">
 						<label class="col-sm-2" for="priority-department-priority-support-request"><?php echo $hesklang['priority']; ?>: <font class="important">*</font></label>
 						<div class="col-sm-4"><select class="form-control contact-support-request" required="required" title="Required field" id="priority-department-priority-support-request" name="priority" <?php if (in_array('priority',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> >
+
 						<option></option>
 						<?php
 						// Show the "Click to select"?
@@ -533,15 +537,19 @@ hesk_handle_messages();
 			<!-- END CUSTOM BEFORE -->
 
 			<!-- ticket info -->
+
 			<div class="">
 				<div  class="form-group" style="padding-right: 0px; margin-bottom: 5px;">
 					<label class="col-sm-2" for="subject-ticket-info-support-request"><?php echo $hesklang['subject']; ?>: <font class="important">*</font></label>
 					<div class="col-sm-4"><input class="form-control contact-support-request" required="required" title="Required field" type="text" id="subject-ticket-info-support-request" name="subject" size="40" maxlength="40" value="<?php if (isset($_SESSION['c_subject'])) {echo stripslashes(hesk_input($_SESSION['c_subject']));} ?>" <?php if (in_array('subject',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> /></div>
+
 				</div>
 				<div class="form-group" style="margin-bottom: 5px;">
 					<div>
+
 						<label class="col-sm-2" for="message-ticket-info-support-request" ><?php echo $hesklang['message']; ?>: <font class="important">*</font></label>
 						<div class="col-sm-4"><textarea class="form-control contact-support-request" required="required" title="Required field" id="message-ticket-info-support-request" name="message" rows="12" cols="60" <?php if (in_array('message',$_SESSION['iserror'])) {echo ' class="isError" ';} ?> ><?php if (isset($_SESSION['c_message'])) {echo stripslashes(hesk_input($_SESSION['c_message']));} ?></textarea></div>
+
 					</div>
 				</div>
 			</div><!-- ticket-info-support-request -->
@@ -740,10 +748,12 @@ hesk_handle_messages();
 			?>
 			<br/><br/>
 
+
 			<div class="">
 				<div class="form-group">
 					<label class="col-sm-2" style="vertical-align: top;"><?php echo $hesklang['attachments']; ?>:</label>
 					<div class="col-sm-4 contact-support-request">
+
 						<?php
 						for ($i=1;$i<=$hesk_settings['attachments']['max_number'];$i++)
 						{
@@ -771,6 +781,7 @@ hesk_handle_messages();
 				{
 					?>
 					<div class="form-group">
+
 						<label class="col-sm-2 control-label" style="text-align:right;vertical-align:top" width="150"><?php echo $hesklang['verify_q']; ?> <font class="important">*</font></label>
 
 						<?php
@@ -790,7 +801,9 @@ hesk_handle_messages();
 				if ($hesk_settings['secimg_use'])
 				{
 					?>
+
 					<div class="form-group">
+
 						<label class="col-sm-2 control-label" style="text-align:right;vertical-align:top" width="150"><?php echo $hesklang['verify_i']; ?> <font class="important">*</font></label>
 
 						<?php
@@ -1023,21 +1036,21 @@ function print_start()
 <?php $sql_client = hesk_dbQuery("SELECT user, id FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."clients`"); ?>
 
 	<div class="container filter-ticket-client" id="filter-ticket-client"> <!-- Krijojme nje div per filtrat -->
-		<form method="post" action="">
+		<form method="post" action="" autocomplete="off">
 				<datalist id="ticket_id_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql)){
 					echo '<option value='.$tmp["id"].'>';
 				}
 					?>
 				</datalist>
-				<input placeholder="<?php echo $hesklang['search_id']; ?>" type="text" list="ticket_id_list" name="search_by_ID_ticket" <?php if(isset($_POST["search_by_ID_ticket"])) echo "value='".$_POST["search_by_ID_ticket"]."'" ?> class="form-control-1 ticket_id_list_style" />
+				<input placeholder="Search by ID" type="text" list="ticket_id_list" name="search_by_ID_ticket" <?php if(isset($_POST["search_by_ID_ticket"])) echo "value='".$_POST["search_by_ID_ticket"]."'" ?> class="form-control-1" />
 				<datalist id="ticket_desc_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_description)){
 					echo '<option value='.$tmp["subject"].'>';
 				}
 					?>
 				</datalist>
-				<input placeholder="<?php echo $hesklang['search_subject']; ?>" type="text" list="ticket_desc_list" name="search_by_description_ticket" <?php if(isset($_POST["search_by_description_ticket"])) echo "value='".$_POST["search_by_description_ticket"]."'" ?>  class="form-control-1 ticket_id_list_style" />
+				<input placeholder="Search by subject" type="text" list="ticket_desc_list" name="search_by_description_ticket" <?php if(isset($_POST["search_by_description_ticket"])) echo "value='".$_POST["search_by_description_ticket"]."'" ?>  class="form-control-1" />
 				
 				<datalist id="ticket_klient_list">
 				<?php while ($tmp = hesk_dbFetchAssoc($sql_client)){
@@ -1045,10 +1058,10 @@ function print_start()
 				}
 					?>
 				</datalist>
-				<input placeholder="<?php echo $hesklang['search_client']; ?>" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" <?php if(isset($_POST["search_by_client_open_ticket"])) echo "value='".$_POST["search_by_client_open_ticket"]."'" ?> class="form-control-1 ticket_id_list_style" />
+				<input placeholder="Search by client" type="text" list="ticket_klient_list" name="search_by_client_open_ticket" <?php if(isset($_POST["search_by_client_open_ticket"])) echo "value='".$_POST["search_by_client_open_ticket"]."'" ?> class="form-control-1" />
 
-			<?php echo "<select class='form-control-1 ticket_id_list_style' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
-				echo'<option value=" ">' .$hesklang['select_categ'] .'</option>';
+			<?php echo "<select class='form-control-1' name='search_by_ticket_category' id='ticket_cat_list'>"; // list box select command
+				echo"<option value=''>Select category</option>";
 					while ($tmp = hesk_dbFetchAssoc($sql_category))
 					{
 						if(isset($_POST["search_by_ticket_category"])&& $_POST["search_by_ticket_category"]==$tmp['id']){
@@ -1059,20 +1072,22 @@ function print_start()
 					}
 						echo "</select>";
 				?>
-			<?php echo "<select class='form-control-1 ticket_id_list_style' name='search_by_ticket_status' id='ticket_status_list'>"; // list box select command
-				echo"<option value=''>".$hesklang['select_status'] ."</option>";
-						echo "<option value='0'"; if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='0') echo "selected=selected"; echo ">" .$hesklang['open'] ."</option>"; 
-						echo "<option value='1'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='1') echo "selected=selected"; echo ">" .$hesklang['wait_reply'] ."</option>"; 
-						echo "<option value='2'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='2') echo "selected=selected"; echo ">" .$hesklang['replied'] ."</option>"; 
-						echo "<option value='3'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='3') echo "selected=selected"; echo ">" .$hesklang['closed'] ."</option>"; 
-						echo "<option value='4'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='4') echo "selected=selected"; echo ">" .$hesklang['in_progress'] ."</option>"; 
-						echo "<option value='5'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='5') echo "selected=selected"; echo ">" .$hesklang['on_hold'] ."</option>";  
+			<?php echo "<select class='form-control-1' name='search_by_ticket_status' id='ticket_status_list'>"; // list box select command
+				echo"<option value=''>Select status</option>";
+						echo "<option value='0'"; if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='0') echo "selected=selected"; echo "> NEW </option>"; 
+						echo "<option value='1'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='1') echo "selected=selected"; echo "> WAITING REPLY </option>"; 
+						echo "<option value='2'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='2') echo "selected=selected"; echo "> REPLIED</option>"; 
+						echo "<option value='3'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='3') echo "selected=selected"; echo "> RESOLVED</option>"; 
+						echo "<option value='4'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='4') echo "selected=selected"; echo "> IN PROGRESS</option>"; 
+						echo "<option value='5'";if(isset($_POST["search_by_ticket_status"])&& $_POST["search_by_ticket_status"]=='5') echo "selected=selected"; echo "> ON HOLD</option>";  
 				echo "</select>";
 				?>
+
 			<input name="submitbutton_tickets" type="submit" class="btn btn-default execute-btn" value="<?php echo $hesklang['search']; ?>"/>
-			<button name="clearbutton_tickets" onclick="deleteticket_client()" class="btn btn-default execute-btn" value=""><?php echo $hesklang['clear']; ?></button>
+			<button name="clearbutton_tickets" onclick="deleteticket_client(); return false;" class="btn btn-default execute-btn" value=""><?php echo $hesklang['clear']; ?></button>
 		</form>
 		
+
 	</div> <!--end div i filtrave -->		
 <div class="print_ticket_for_client">
 <?php require(HESK_PATH . 'inc/print_tickets_client.inc.php'); ?>

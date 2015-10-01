@@ -260,3 +260,160 @@ $(document).ready(function() {
 	});	
 });
  
+$(function(){
+	$("div.ticket-list tr:not(:first)").addClass("hidden");
+	$("div.ticket-list tr:lt(11):gt(0)").removeClass("hidden");
+	var index = 0;
+	$("ul.pagination li.number").click(function(){
+		$("tr:not(:first)").addClass("hidden");
+		index = $(this).attr("data-item");
+		var lt = index*10+11; 
+		var gt = index*10;
+		$("tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+		$("li.number a").css("background", "white");
+		$("li.number[data-item="+index+"] a").css("background", "#ccc");		
+	});
+	$("li.prev-pag").click(function(){
+		if(index==0) return false;
+		else {
+			$("tr:not(:first)").addClass("hidden");
+			index--;
+			var lt = index*10+11; 
+			var gt = index*10;
+			$("tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.number a").css("background", "white");
+			$("li.number[data-item="+index+"] a").css("background", "#ccc");
+			
+		}
+	});
+	$("li.next-pag").click(function(){
+		if(index==$("li.number").length) { return false; }
+		else {
+			$("tr:not(:first)").addClass("hidden");
+			index++;
+			var lt = index*10+11; 
+			var gt = index*10;
+			$("tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.number a").css("background", "white");
+			$("li.number[data-item="+index+"] a").css("background", "#ccc");
+		}
+	});
+	
+	//per faqet e tjera
+	$(".add-pagination tr:not(:first)").addClass("hidden");
+	$(".add-pagination tr:lt(6):gt(0)").removeClass("hidden");
+	var index = 0;
+	$("ul.pagination li.contract-list").click(function(){
+		$(".add-pagination tr:not(:first)").addClass("hidden");
+		index = $(this).attr("data-item");
+		var lt = index*5+6; 
+		var gt = index*5;
+		$(".add-pagination tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+		$("li.contract-list a").css("background", "white");
+		$("li.contract-list[data-item="+index+"] a").css("background", "#ccc");		
+	});
+	$("li.prev-pag-list").click(function(){
+		if(index==0) return false;
+		else {
+			$(".add-pagination tr:not(:first)").addClass("hidden");
+			index--;
+			var lt = index*5+6; 
+			var gt = index*5;
+			$(".add-pagination tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.contract-list a").css("background", "white");
+			$("li.contract-list[data-item="+index+"] a").css("background", "#ccc");
+			
+		}
+	});
+	$("li.next-pag-list").click(function(){
+		if(index==$("li.contract-list").length) { return false; }
+		else {
+			$(".add-pagination tr:not(:first)").addClass("hidden");
+			index++;
+			var lt = index*5+6; 
+			var gt = index*5;
+			$(".add-pagination tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.contract-list a").css("background", "white");
+			$("li.contract-list[data-item="+index+"] a").css("background", "#ccc");
+		}
+	});	
+	
+	
+	//per klientet
+	$(".add-pagination-client tr:not(:first)").addClass("hidden");
+	$(".add-pagination-client tr:lt(6):gt(0)").removeClass("hidden");
+	var index = 0;
+	$("ul.pagination li.client-list").click(function(){
+		$(".add-pagination-client tr:not(:first)").addClass("hidden");
+		index = $(this).attr("data-item");
+		var lt = index*5+6; 
+		var gt = index*5;
+		$(".add-pagination-client tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+		$("li.client-list a").css("background", "white");
+		$("li.client-list[data-item="+index+"] a").css("background", "#ccc");		
+	});
+	$("li.prev-pag-client").click(function(){
+		if(index==0) return false;
+		else {
+			$(".add-pagination-client tr:not(:first)").addClass("hidden");
+			index--;
+			var lt = index*5+6; 
+			var gt = index*5;
+			$(".add-pagination-client tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.client-list a").css("background", "white");
+			$("li.client-list[data-item="+index+"] a").css("background", "#ccc");
+			
+		}
+	});
+	$("li.next-pag-client").click(function(){
+		if(index==$("li.client-list").length) { return false; }
+		else {
+			$(".add-pagination-client tr:not(:first)").addClass("hidden");
+			index++;
+			var lt = index*5+6; 
+			var gt = index*5;
+			$(".add-pagination-client tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.client-list a").css("background", "white");
+			$("li.client-list[data-item="+index+"] a").css("background", "#ccc");
+		}
+	});	
+	
+	//per projektet
+	$(".add-pagination-project tr:not(:first)").addClass("hidden");
+	$(".add-pagination-project tr:lt(6):gt(0)").removeClass("hidden");
+	var index = 0;
+	$("ul.pagination li.project-list").click(function(){
+		$(".add-pagination-project tr:not(:first)").addClass("hidden");
+		index = $(this).attr("data-item");
+		var lt = index*5+6; 
+		var gt = index*5;
+		$(".add-pagination-project tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+		$("li.project-list a").css("background", "white");
+		$("li.project-list[data-item="+index+"] a").css("background", "#ccc");		
+	});
+	$("li.prev-pag-project").click(function(){
+		if(index==0) return false;
+		else {
+			$(".add-pagination-project tr:not(:first)").addClass("hidden");
+			index--;
+			var lt = index*5+6; 
+			var gt = index*5;
+			$(".add-pagination-project tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.project-list a").css("background", "white");
+			$("li.project-list[data-item="+index+"] a").css("background", "#ccc");
+			
+		}
+	});
+	$("li.next-pag-project").click(function(){
+		if(index==$("li.project-list").length) { return false; }
+		else {
+			$(".add-pagination-project tr:not(:first)").addClass("hidden");
+			index++;
+			var lt = index*5+6; 
+			var gt = index*5;
+			$(".add-pagination-project tr:lt("+lt+"):gt("+gt+")").removeClass("hidden");
+			$("li.project-list a").css("background", "white");
+			$("li.project-list[data-item="+index+"] a").css("background", "#ccc");
+		}
+	});	
+});

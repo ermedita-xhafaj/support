@@ -361,7 +361,7 @@ $info = array(
 //insert to ERP
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-include('oe_api.php');
+include('../oe_api.php');
 $valid_services = array("SCA" => "mail.message", "PIS"=>"project.issue"); //klasat e ERP  me te cilat do te punojme
 $oeapi = new OpenerpApi();
 
@@ -378,6 +378,8 @@ $params = array();   // array me vlerat e reply_message
 	$params['date'] =  hesk_date($ticket['dt'], true);
 	$params['res_id'] =  $data[0];
 	$params['model'] =  "project.issue";
+	$params['email_from'] =  $ticket['email'];
+	//$params['email_to'] =  $ticket['email'];
 	$data = $oeapi->create_record($params ,$valid_services["SCA"]);   // dergojme te dhenat e reply_message tek ceshtje e duhur
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
