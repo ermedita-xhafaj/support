@@ -107,14 +107,14 @@ $hesk_settings['kb_related']=5;
 // ==> EMAIL
 
 // --> Email sending
-$hesk_settings['smtp']=0;
-$hesk_settings['smtp_host_name']='mail.domain.com';
-$hesk_settings['smtp_host_port']=25;
+$hesk_settings['smtp']=1;
+$hesk_settings['smtp_host_name']='smtp.gmail.com';
+$hesk_settings['smtp_host_port']=587;
 $hesk_settings['smtp_timeout']=20;
 $hesk_settings['smtp_ssl']=0;
-$hesk_settings['smtp_tls']=0;
-$hesk_settings['smtp_user']='';
-$hesk_settings['smtp_password']='';
+$hesk_settings['smtp_tls']=1;
+$hesk_settings['smtp_user']='commprog75@gmail.com';
+$hesk_settings['smtp_password']='commprog123';
 
 // --> Email piping
 $hesk_settings['email_piping']=0;

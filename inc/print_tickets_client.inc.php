@@ -125,6 +125,7 @@ if (isset($_POST['submitbutton_tickets'])){
 				$sql .= "'1'='1'";
 			}
 		}
+		
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +184,7 @@ if(empty($_POST)){
 	$sql .= "`status` IN ('" . implode("','", array_keys($status) ) . "') ";
 }
 }
+$sql .= " ORDER BY `id` DESC";
 
 // --> TICKET PRIORITY
 $possible_priority = array(

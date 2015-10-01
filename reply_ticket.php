@@ -287,7 +287,8 @@ $ticket = hesk_ticketToPlain($info, 1, 0);
 // --> If ticket is assigned just notify the owner
 if ($ticket['owner'])
 {
-	hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my');
+	//hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my');
+	hesk_notifyCustomer_multiple('new_reply_by_customer',$array_email);
 }
 // --> No owner assigned, find and notify appropriate staff
 else
